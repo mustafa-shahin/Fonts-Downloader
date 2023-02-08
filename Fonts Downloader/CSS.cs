@@ -17,7 +17,7 @@ namespace Fonts_Downloader
         private List<string> _FontWeight = new List<string>();
         private List<string> _Styles = new List<string>();
         public List<string> Styles { get { return _Styles; } }
-        private string Fontface = "@font-face {", Fontfamily = "\nfont-family:", fontStyle = "\nfont-style:", fontweight = "\nfont-weight:", _FontStyle, OldFont, FontFileStyle;
+        private string Fontface = "@font-face {", Fontfamily = "\nfont-family:", fontStyle = "\nfont-style:", fontweight = "\nfont-weight:", _FontStyle, OldFont;
         public string FontFace { get { return Fontface; } }
         public string FontFamily { get { return Fontfamily; } }
         public string Fontstyle { get { return fontStyle; } }

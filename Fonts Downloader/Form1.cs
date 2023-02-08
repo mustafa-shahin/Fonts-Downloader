@@ -16,15 +16,13 @@ namespace Fonts_Downloader
     public partial class Form1 : Form
     {
         private string[] FontFileStyles = { "Thin", "ExtraLight", "Light", "Regular", "Medium", "SemiBold", "Bold", "ExtraBold", "Black" };
-        private string FontFileStyle;
-        private string FolderName, FontName;
+        private string FolderName, FontName,FontStyle, FontFileStyle;
         private FontsCombox Res = new FontsCombox();
         private new readonly SizeStyles Size = new SizeStyles();
         private List<Item> Items = new List<Item>();
         private List<string> SubSets = new List<string>();
         private CSS css = new CSS();
         private List<string> FontWeight = new List<string>();
-        private string FontStyle;
         FontFiles file = new FontFiles();
         public Form1()
         {           
