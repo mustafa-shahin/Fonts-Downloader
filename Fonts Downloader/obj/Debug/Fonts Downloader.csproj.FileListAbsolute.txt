@@ -1,0 +1,13 @@
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Fonts Downloader.exe.config
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Fonts Downloader.exe
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Fonts Downloader.pdb
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Newtonsoft.Json.dll
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Newtonsoft.Json.xml
+D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.csproj.AssemblyReference.cache
+D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.csproj.SuggestedBindingRedirects.cache
+D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts_Downloader.Properties.Resources.resources
+D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.csproj.GenerateResource.cache
+D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.csproj.CoreCompileInputs.cache
+D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.csproj.CopyComplete
+D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.exe
+D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.pdb
