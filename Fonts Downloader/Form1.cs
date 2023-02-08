@@ -16,7 +16,7 @@ namespace Fonts_Downloader
     public partial class Form1 : Form
     {
         private string[] FontFileStyles = { "Thin", "ExtraLight", "Light", "Regular", "Medium", "SemiBold", "Bold", "ExtraBold", "Black" };
-        private string FolderName, FontName,FontStyle, FontFileStyle;
+        private string FolderName, FontName, FontStyle, FontFileStyle;
         private FontsCombox Res = new FontsCombox();
         private new readonly SizeStyles Size = new SizeStyles();
         private List<Item> Items = new List<Item>();
@@ -25,11 +25,11 @@ namespace Fonts_Downloader
         private List<string> FontWeight = new List<string>();
         FontFiles file = new FontFiles();
         public Form1()
-        {           
+        {
             InitializeComponent();
-            _ = Res.resAsync(FontBox1);         
+            _ = Res.resAsync(FontBox1);
             SubSets = Size.SubsetList;
-            Items = Res.AllList;           
+            Items = Res.AllList;
         }
         private void SelectFolder_Click(object sender, EventArgs e)
         {
@@ -44,12 +44,12 @@ namespace Fonts_Downloader
 
 
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
-        {           
+        {
             Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items);
         }
         private void CopyFont_Click(object sender, EventArgs e)
         {
-            
+
             if (FontBox1.SelectedItem != null)
             {
                 List<string> links = new List<string>();
@@ -63,9 +63,9 @@ namespace Fonts_Downloader
                         file.Delete();
                     }
                 }
-                css.CreateCSS(SizeAndStyle, SubSets, FolderName, FontName,FontFileStyle);
+                css.CreateCSS(SizeAndStyle, SubSets, FolderName, FontName, FontFileStyle);
                 FontWeight = css.__FontWeight;
-                file.FileLinks(SizeAndStyle, FontStyle, FontWeight, FontFileStyle, FontFileStyles, SelectedFont, FolderName, FontName, Res);              
+                file.FileLinks(SizeAndStyle, FontStyle, FontWeight, FontFileStyle, FontFileStyles, SelectedFont, FolderName, FontName, Res);
             }
         }
     }

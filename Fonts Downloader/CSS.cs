@@ -26,7 +26,6 @@ namespace Fonts_Downloader
         public List<string> __FontWeight { get { return _FontWeight; } }
         public void CreateCSS(CheckedListBox SizeAndStyle, List<string> SubSet, string FolderName, string FontName, string FontFileStyle)
         {
-
             List<string> Css = new List<string>();
             if (_FontWeight.Any())
             {
@@ -110,8 +109,5 @@ namespace Fonts_Downloader
                 }
             }
         }
-
-
-
     }
 }

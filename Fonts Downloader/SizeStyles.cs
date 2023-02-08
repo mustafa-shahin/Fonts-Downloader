@@ -46,7 +46,7 @@ namespace Fonts_Downloader
                     }
                 }
             }
-            old = SelectedFont.Text;            
+            old = SelectedFont.Text;
         }
     }
 }
