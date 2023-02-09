@@ -52,7 +52,6 @@ namespace Fonts_Downloader
 
             if (FontBox1.SelectedItem != null)
             {
-                List<string> links = new List<string>();
                 FontName = FontBox1.SelectedItem.ToString();
                 Directory.CreateDirectory($"{FolderName}\\{FontName.Replace(" ", "")}");
                 DirectoryInfo di = new DirectoryInfo($"{FolderName}\\{FontName.Replace(" ", "")}");
@@ -64,7 +63,7 @@ namespace Fonts_Downloader
                     }
                 }
                 css.CreateCSS(SizeAndStyle, SubSets, FolderName, FontName, FontFileStyle);
-                FontWeight = css.__FontWeight;
+                FontWeight = css.FontWeight;
                 file.FileLinks(SizeAndStyle, FontStyle, FontWeight, FontFileStyle, FontFileStyles, SelectedFont, FolderName, FontName, Res);
             }
         }
