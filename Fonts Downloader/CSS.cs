@@ -14,7 +14,7 @@ namespace Fonts_Downloader
     internal class CSS
     {
         private string[] FontFileStyles = { "Thin", "ExtraLight", "Light", "Regular", "Medium", "SemiBold", "Bold", "ExtraBold", "Black" };
-        private List<string> Fontweight = new List<string>();
+        private List<string> _FontWeight = new List<string>();
         private List<string> _Styles = new List<string>();
         public List<string> Styles { get { return _Styles; } }
         private string Fontface = "@font-face {", Fontfamily = "\nfont-family:", fontStyle = "\nfont-style:", fontweight = "\nfont-weight:", _FontStyle, OldFont;
@@ -23,13 +23,13 @@ namespace Fonts_Downloader
         public string Fontstyle { get { return fontStyle; } }
         public string FontWeight { get { return fontweight; } }
         public string FontStyles { set { this._FontStyle = value; } get { return this._FontStyle; } }
-        public List<string> FontWeights { get { return Fontweight; } }
+        public List<string> __FontWeight { get { return _FontWeight; } }
         public void CreateCSS(CheckedListBox SizeAndStyle, List<string> SubSet, string FolderName, string FontName, string FontFileStyle)
         {
             List<string> Css = new List<string>();
-            if (Fontweight.Any())
+            if (_FontWeight.Any())
             {
-                Fontweight.Clear();
+                _FontWeight.Clear();
             }
             if (SizeAndStyle.CheckedItems.Count != 0)
             {
@@ -48,12 +48,12 @@ namespace Fonts_Downloader
                     if (!SizeAndStyle.CheckedItems[i].Equals(false))
                     {
                         _Styles.Add(_FontStyle);
-                        Fontweight.Add(SizeAndStyle.CheckedItems[i].ToString().Replace("italic", ""));
+                        _FontWeight.Add(SizeAndStyle.CheckedItems[i].ToString().Replace("italic", ""));
                     }
                     else
                     {
 
-                        Fontweight.Remove(SizeAndStyle.CheckedItems[i].ToString());
+                        _FontWeight.Remove(SizeAndStyle.CheckedItems[i].ToString());
                     }
                     OldFont = FontName;
                     if (FontName != OldFont)
@@ -61,37 +61,37 @@ namespace Fonts_Downloader
                     }
                     else
                     {
-                        for (int j = 0; j <= Fontweight.Count; j++)
+                        for (int j = 0; j <= _FontWeight.Count; j++)
                         {
-                            if (Fontweight[i] == "100")
+                            if (_FontWeight[i] == "100")
                                 FontFileStyle = FontFileStyles[0];
 
-                            else if (Fontweight[i] == "200")
+                            else if (_FontWeight[i] == "200")
                                 FontFileStyle = FontFileStyles[1];
 
-                            else if (Fontweight[i] == "300")
+                            else if (_FontWeight[i] == "300")
                                 FontFileStyle = FontFileStyles[2];
 
-                            else if (Fontweight[i] == "400")
+                            else if (_FontWeight[i] == "400")
                                 FontFileStyle = FontFileStyles[3];
-                            else if (Fontweight[i] == "500")
+                            else if (_FontWeight[i] == "500")
                                 FontFileStyle = FontFileStyles[4];
 
-                            else if (Fontweight[i] == "600")
+                            else if (_FontWeight[i] == "600")
                                 FontFileStyle = FontFileStyles[5];
 
-                            else if (Fontweight[i] == "700")
+                            else if (_FontWeight[i] == "700")
                                 FontFileStyle = FontFileStyles[6];
 
-                            else if (Fontweight[i] == "800")
+                            else if (_FontWeight[i] == "800")
                                 FontFileStyle = FontFileStyles[7];
 
-                            else if (Fontweight[i] == "900")
+                            else if (_FontWeight[i] == "900")
                                 FontFileStyle = FontFileStyles[8];
                         }
                         foreach (var sub in SubSet)
                         {
-                            string css = $"/*{sub}*/" + "\n" + FontFace + FontFamily + $"'{FontName}';" + $"{fontStyle}" + $"{_FontStyle};" + $"{fontweight}" + $"{Fontweight[i]};" + "\r\nfont-stretch: 100%;" + "\r\n" + $"src: url('{FontName.Replace(" ", "")}-{_FontStyle.Substring(0, 1).ToUpper() + _FontStyle.Substring(1)}-{FontFileStyle}.ttf')" + "\r\n}";
+                            string css = $"/*{sub}*/" + "\n" + FontFace + FontFamily + $"'{FontName}';" + $"{fontStyle}" + $"{_FontStyle};" + $"{fontweight}" + $"{_FontWeight[i]};" + "\r\nfont-stretch: 100%;" + "\r\n" + $"src: url('{FontName.Replace(" ", "")}-{_FontStyle.Substring(0, 1).ToUpper() + _FontStyle.Substring(1)}-{FontFileStyle}.ttf')" + "\r\n}";
                             Css.Add(css);
                         }
                         if (i == SizeAndStyle.CheckedItems.Count)

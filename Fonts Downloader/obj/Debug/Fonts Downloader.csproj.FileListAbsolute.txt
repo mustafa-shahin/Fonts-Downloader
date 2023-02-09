@@ -11,4 +11,3 @@ D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.csproj.CoreC
 D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.csproj.CopyComplete
 D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.exe
 D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.pdb
-D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts_Downloader.Form1.resources
