@@ -15,7 +15,7 @@ namespace Fonts_Downloader
 {
     public partial class Form1 : Form
     {
-         private string FolderName, FontStyle, FontFileStyle;
+        private string FolderName, FontStyle, FontFileStyle;
         private FontsCombox Res = new FontsCombox();
         private new readonly SizeStyles Size = new SizeStyles();
         private List<Item> Items = new List<Item>();
@@ -43,7 +43,7 @@ namespace Fonts_Downloader
         {
             Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items);
         }
-             private void CopyFont_Click(object sender, EventArgs e)
+        private void CopyFont_Click(object sender, EventArgs e)
         {
             string[] FontFileStyles = { "Thin", "ExtraLight", "Light", "Regular", "Medium", "SemiBold", "Bold", "ExtraBold", "Black" };
             var FontWeight = new List<string>();
@@ -56,12 +56,13 @@ namespace Fonts_Downloader
                 DirectoryInfo di = new DirectoryInfo($"{FolderName}\\{FontName.Replace(" ", "")}");
                 foreach (FileInfo file in di.EnumerateFiles())
                 {
-                    if (file.Name.Contains(".ttf"))
+                    if (file.Name.Contains(".ttf") || file.Name.Contains(".html"))
                     {
                         file.Delete();
                     }
                 }
                 css.CreateCSS(SizeAndStyle, SubSets, FolderName, FontName, FontFileStyle);
+                css.CreateHtml(SizeAndStyle, FolderName, FontName);
                 FontWeight = css.FontWeight;
                 File.FileLinks(SizeAndStyle, FontStyle, FontWeight, FontFileStyle, FontFileStyles, SelectedFont, FolderName, FontName, Res);
             }

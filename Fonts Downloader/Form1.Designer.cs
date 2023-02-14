@@ -35,6 +35,7 @@ namespace Fonts_Downloader
             this.FontBox1 = new System.Windows.Forms.ComboBox();
             this.SelectedFont = new System.Windows.Forms.Label();
             this.CopyFont = new System.Windows.Forms.Button();
+            this.webView = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.SuspendLayout();
             // 
             // SizeAndStyle
@@ -102,6 +103,17 @@ namespace Fonts_Downloader
             this.CopyFont.UseVisualStyleBackColor = true;
             this.CopyFont.Click += new System.EventHandler(this.CopyFont_Click);
             // 
+            // webView21
+            // 
+            this.webView.AllowExternalDrop = true;
+            this.webView.CreationProperties = null;
+            this.webView.DefaultBackgroundColor = System.Drawing.Color.White;
+            this.webView.Location = new System.Drawing.Point(369, 92);
+            this.webView.Name = "webView21";
+            this.webView.Size = new System.Drawing.Size(519, 431);
+            this.webView.TabIndex = 35;
+            this.webView.ZoomFactor = 1D;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -128,5 +140,6 @@ namespace Fonts_Downloader
         private ComboBox FontBox1;
         private Label SelectedFont;
         private Button CopyFont;
+        private Microsoft.Web.WebView2.WinForms.WebView2 webView;
     }
 }

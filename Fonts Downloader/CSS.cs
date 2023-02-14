@@ -23,6 +23,14 @@ namespace Fonts_Downloader
         public string Fontstyle { get { return fontStyle; } }
         public string FontStyles { set { this._FontStyle = value; } get { return this._FontStyle; } }
         public List<string> FontWeight { get { return FontWeights; } }
+
+        private string StyleTagStart = "<style>";
+        private string StyleTagEnd = "</style>";
+        private string H1TagStart = "<h1>";
+        private string H1TagEnd = "</h1>";
+        private string P_TagStart = "<p class=";
+        private string P_TagEnd = "</p>";
+        private string Class = "class = ";
         public void CreateCSS(CheckedListBox SizeAndStyle, List<string> SubSet, string FolderName, string FontName, string FontFileStyle)
         {
             List<string> Css = new List<string>();
@@ -88,6 +96,11 @@ namespace Fonts_Downloader
                             else if (FontWeights[i] == "900")
                                 FontFileStyle = FontFileStyles[8];
                         }
+                        //foreach (var size in FontWeights)
+                        //{
+                        //    string html = $"{StyleTagStart}" + $"\n p.size" + "{" + FontFamily + $"'{FontName}';" + $"{fontStyle}" + $"{_FontStyle};" + $"{fontweight}" + $"{FontWeights[i]};" + "\r\nfont-stretch: 100%;" + "\r\n" + "}";
+                        //    stylescc.Add(html);
+                        //}
                         foreach (var sub in SubSet)
                         {
                             string css = $"/*{sub}*/" + "\n" + FontFace + FontFamily + $"'{FontName}';" + $"{fontStyle}" + $"{_FontStyle};" + $"{fontweight}" + $"{FontWeights[i]};" + "\r\nfont-stretch: 100%;" + "\r\n" + $"src: url('{FontName.Replace(" ", "")}-{_FontStyle.Substring(0, 1).ToUpper() + _FontStyle.Substring(1)}-{FontFileStyle}.ttf')" + "\r\n}";
@@ -100,13 +113,123 @@ namespace Fonts_Downloader
                     }
                 }
             }
-            using (StreamWriter writer = new StreamWriter($"{FolderName}\\{FontName.Replace(" ", "")}\\{FontName.Replace(" ", "")}.css", false))
+            //using (StreamWriter writer = new StreamWriter($"{FolderName}\\{FontName.Replace(" ", "")}\\{FontName.Replace(" ", "")}.html", false))
+            //{
+            //    foreach (var str in stylescc)
+            //    {
+            //        writer.WriteLine(str);
+            //    }
+            //}
+            //using (StreamWriter writer = new StreamWriter($"{FolderName}\\{FontName.Replace(" ", "")}\\{FontName.Replace(" ", "")}.css", false))
+            //{
+            //    foreach (var str in Css)
+            //    {
+            //        writer.WriteLine(str);
+            //    }
+            //}
+        }
+        public void CreateHtml(CheckedListBox SizeAndStyle, string FolderName, string FontName)
+        {
+            List<string> PTag = new List<string>();
+            List<string> styles = new List<string>();
+            if (FontWeights.Any() || _Styles.Any())
             {
-                foreach (var str in Css)
+                FontWeights.Clear();
+                _Styles.Clear();
+            }
+            for (int i = 0; i < SizeAndStyle.CheckedItems.Count; i++)
+            {
+                if (!SizeAndStyle.CheckedItems[i].ToString().Contains("italic"))
                 {
-                    writer.WriteLine(str);
+                    _FontStyle = "normal";
+
+                }
+                else if (SizeAndStyle.CheckedItems[i].ToString().Contains("italic"))
+                {
+                    _FontStyle = "italic";
+
+                }
+                if (!SizeAndStyle.CheckedItems[i].Equals(false))
+                {
+                    _Styles.Add(_FontStyle);
+                    FontWeights.Add(SizeAndStyle.CheckedItems[i].ToString().Replace("italic", ""));
+                }
+                else
+                {
+
+                    FontWeights.Remove(SizeAndStyle.CheckedItems[i].ToString());
+                }
+                if (FontName != OldFont)
+                {
+                }
+                else
+                {
+                    string html = "\np." + "size" + $"{FontWeights[i]}{_FontStyle}" + "{" + $"{FontFamily}" + $"'{FontName}';" + $"{fontStyle}" + $"{_FontStyle};" + $"{fontweight}" + $"{FontWeights[i]};" + "\r\nfont-stretch: 100%;" + "\n}\n";
+                    string pTag = "<p " +"class =\"" + "size"+ $"{FontWeights[i]}{_FontStyle}\">"+ $"{FontName}: " + "Whereas recognition of the inherent dignity" +"</p>";
+                    if (i == 0) { html = StyleTagStart + html; }                   
+                    styles.Add(html);
+                    PTag.Add(pTag);
+                }
+
+            }
+
+
+
+            using (StreamWriter writer1 = new StreamWriter($"{FolderName}\\{FontName.Replace(" ", "")}\\{FontName.Replace(" ", "")}.html", false))
+            {
+                for (int i = 0; i < styles.Count;i++)
+                {
+                    writer1.WriteLine(styles[i]);
+                    if(i == styles.Count - 1) { writer1.WriteLine(StyleTagEnd); }
+                }
+                for (int i = 0; i < styles.Count; i++)
+                {
+                    writer1.WriteLine(PTag[i]);
                 }
             }
         }
     }
 }
+
+/*
+ 
+              
+                for (int j = 0; j < FontWeights.Count; j++)
+                {
+                if (!SizeAndStyle.CheckedItems[j].ToString().Contains("italic"))
+                {
+                    _FontStyle = "normal";
+
+                }
+                else if (SizeAndStyle.CheckedItems[j].ToString().Contains("italic"))
+                {
+                    _FontStyle = "italic";
+
+                }
+                if (!SizeAndStyle.CheckedItems[j].Equals(false))
+                {
+                   
+                    FontWeights.Add(SizeAndStyle.CheckedItems[j].ToString().Replace("italic", ""));
+                }
+                else
+                {
+
+                    FontWeights.Remove(SizeAndStyle.CheckedItems[j].ToString());
+                }
+                if (FontName != OldFont)
+                    {
+                    }
+                    else
+                    {
+                        string html = $"\np." + "size" + $"{FontWeights[j]}" + "{" + $"{FontFamily}" + $"'{FontName}';" + $"{fontStyle}" + $"{_FontStyle};" + $"{fontweight}" + $"{FontWeights[j]};" + "\r\nfont-stretch: 100%;" + "\n}\n";
+                        if (j == 0) { html = StyleTagStart + html; }
+                        if (j == FontWeights.Count - 1) { html += StyleTagEnd; }
+                        styles.Add(html);
+                    }
+
+                }
+ 
+ 
+ 
+ 
+ */
