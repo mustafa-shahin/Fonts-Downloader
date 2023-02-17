@@ -33,13 +33,13 @@ namespace Fonts_Downloader
                 }
                 else
                 {
-                    WgtItalic.Add(variant.ToString().Replace("italic", ""));
+                    WgtItalic.Add("1,"+variant.ToString().Replace("italic", ""));
                 }
             }
             string PTagItalic, PTagNormal, html;
             string Italics = string.Join(";", WgtItalic);
             string Normals = string.Join(";", WgtNormal);
-            string GoogleFontLinkItalics = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont.Text}:wght@{Italics}&display=swap\" rel=\"stylesheet\">";
+            string GoogleFontLinkItalics = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont.Text}:ital,wght@{Italics}&display=swap\" rel=\"stylesheet\">";
             string GoogleFontLinkItalicsNormals = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont.Text}:wght@{Normals}&display=swap\" rel=\"stylesheet\">";
             List<string> PTag = new List<string>();
             List<string> styles = new List<string>();
