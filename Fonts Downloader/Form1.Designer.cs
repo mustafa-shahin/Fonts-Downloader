@@ -35,7 +35,8 @@ namespace Fonts_Downloader
             this.FontBox1 = new System.Windows.Forms.ComboBox();
             this.SelectedFont = new System.Windows.Forms.Label();
             this.CopyFont = new System.Windows.Forms.Button();
-            this.webView = new Microsoft.Web.WebView2.WinForms.WebView2();
+            this.webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
+            ((System.ComponentModel.ISupportInitialize)(this.webView21)).BeginInit();
             this.SuspendLayout();
             // 
             // SizeAndStyle
@@ -105,20 +106,21 @@ namespace Fonts_Downloader
             // 
             // webView21
             // 
-            this.webView.AllowExternalDrop = true;
-            this.webView.CreationProperties = null;
-            this.webView.DefaultBackgroundColor = System.Drawing.Color.White;
-            this.webView.Location = new System.Drawing.Point(369, 92);
-            this.webView.Name = "webView21";
-            this.webView.Size = new System.Drawing.Size(519, 431);
-            this.webView.TabIndex = 35;
-            this.webView.ZoomFactor = 1D;
+            this.webView21.AllowExternalDrop = true;
+            this.webView21.CreationProperties = null;
+            this.webView21.DefaultBackgroundColor = System.Drawing.Color.White;
+            this.webView21.Location = new System.Drawing.Point(327, 74);
+            this.webView21.Name = "webView21";
+            this.webView21.Size = new System.Drawing.Size(445, 342);
+            this.webView21.TabIndex = 35;
+            this.webView21.ZoomFactor = 1D;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 428);
+            this.Controls.Add(this.webView21);
             this.Controls.Add(this.CopyFont);
             this.Controls.Add(this.SelectedFont);
             this.Controls.Add(this.FontBox1);
@@ -128,6 +130,7 @@ namespace Fonts_Downloader
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "Fonts";
+            ((System.ComponentModel.ISupportInitialize)(this.webView21)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -140,6 +143,6 @@ namespace Fonts_Downloader
         private ComboBox FontBox1;
         private Label SelectedFont;
         private Button CopyFont;
-        private Microsoft.Web.WebView2.WinForms.WebView2 webView;
+        private Microsoft.Web.WebView2.WinForms.WebView2 webView21;
     }
 }

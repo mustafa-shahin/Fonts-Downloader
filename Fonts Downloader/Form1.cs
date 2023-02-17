@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Web.WebView2.WinForms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,6 +19,7 @@ namespace Fonts_Downloader
         private string FolderName, FontStyle, FontFileStyle;
         private FontsCombox Res = new FontsCombox();
         private new readonly SizeStyles Size = new SizeStyles();
+        private HtmlFile Document = new HtmlFile();
         private List<Item> Items = new List<Item>();
         private List<string> SubSets = new List<string>();
         public Form1()
@@ -41,7 +43,8 @@ namespace Fonts_Downloader
 
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items);
+               
+            Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items, FolderName);          
         }
         private void CopyFont_Click(object sender, EventArgs e)
         {
@@ -62,9 +65,9 @@ namespace Fonts_Downloader
                     }
                 }
                 css.CreateCSS(SizeAndStyle, SubSets, FolderName, FontName, FontFileStyle);
-                css.CreateHtml(SizeAndStyle, FolderName, FontName);
                 FontWeight = css.FontWeight;
                 File.FileLinks(SizeAndStyle, FontStyle, FontWeight, FontFileStyle, FontFileStyles, SelectedFont, FolderName, FontName, Res);
+                Document.CreateHtml(SelectedFont, SizeAndStyle, FolderName);
             }
         }
     }
