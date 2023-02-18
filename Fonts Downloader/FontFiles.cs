@@ -154,23 +154,23 @@ namespace Fonts_Downloader
 
         public void FileDownload(string SelectedFont, string folderName, string FontName, string FontStyle, string FontFileStyle, List<string> links)
         {
-            foreach (var link in links)
-            {
-                if (!string.IsNullOrEmpty(link) && link.Replace("/", " ").Contains(SelectedFont.ToLower().Replace(" ", "")))
-                {
-                    string[] FontNameInLink = link.ToLower().Split('/');
-                    foreach (string fontName in FontNameInLink)
-                    {
-                        if (fontName == SelectedFont.ToLower().Replace(" ", ""))
-                        {
-                            WebClient wc = new WebClient();
-                            Uri url = new Uri(link);
-                            wc.DownloadFile(url,
-                                $@"{$"{folderName}\\{FontName.Replace(" ", "")}"}" + $"\\{FontName.Replace(" ", "")}-{FontStyle.Substring(0, 1).ToUpper() + FontStyle.Substring(1)}-{FontFileStyle}.ttf");
-                        }
-                    }
-                }
-            }
+            //foreach (var link in links)
+            //{
+            //    if (!string.IsNullOrEmpty(link) && link.Replace("/", " ").Contains(SelectedFont.ToLower().Replace(" ", "")))
+            //    {
+            //        string[] FontNameInLink = link.ToLower().Split('/');
+            //        foreach (string fontName in FontNameInLink)
+            //        {
+            //            if (fontName == SelectedFont.ToLower().Replace(" ", ""))
+            //            {
+            //                WebClient wc = new WebClient();
+            //                Uri url = new Uri(link);
+            //                wc.DownloadFile(url,
+            //                    $@"{$"{folderName}\\{FontName.Replace(" ", "")}"}" + $"\\{FontName.Replace(" ", "")}-{FontStyle.Substring(0, 1).ToUpper() + FontStyle.Substring(1)}-{FontFileStyle}.ttf");
+            //            }
+            //        }
+            //    }
+            //}
 
         }
     }

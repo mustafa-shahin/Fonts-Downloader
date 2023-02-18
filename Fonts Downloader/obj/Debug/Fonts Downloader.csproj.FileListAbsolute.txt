@@ -1,7 +1,16 @@
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\runtimes\win-x86\native\WebView2Loader.dll
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\runtimes\win-x64\native\WebView2Loader.dll
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\runtimes\win-arm64\native\WebView2Loader.dll
 D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Fonts Downloader.exe.config
 D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Fonts Downloader.exe
 D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Fonts Downloader.pdb
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Microsoft.Web.WebView2.Core.dll
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Microsoft.Web.WebView2.WinForms.dll
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Microsoft.Web.WebView2.Wpf.dll
 D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Newtonsoft.Json.dll
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Microsoft.Web.WebView2.Core.xml
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Microsoft.Web.WebView2.WinForms.xml
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Microsoft.Web.WebView2.Wpf.xml
 D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Newtonsoft.Json.xml
 D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.csproj.AssemblyReference.cache
 D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.csproj.SuggestedBindingRedirects.cache
