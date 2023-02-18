@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace Fonts_Downloader
 {
@@ -43,16 +44,16 @@ namespace Fonts_Downloader
             // 
             this.SizeAndStyle.CheckOnClick = true;
             this.SizeAndStyle.FormattingEnabled = true;
-            this.SizeAndStyle.Location = new System.Drawing.Point(12, 137);
+            this.SizeAndStyle.Location = new System.Drawing.Point(12, 87);
             this.SizeAndStyle.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.SizeAndStyle.Name = "SizeAndStyle";
-            this.SizeAndStyle.Size = new System.Drawing.Size(241, 225);
+            this.SizeAndStyle.Size = new System.Drawing.Size(241, 310);
             this.SizeAndStyle.TabIndex = 15;
             // 
             // SelectFolder
             // 
             this.SelectFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SelectFolder.Location = new System.Drawing.Point(12, 11);
+            this.SelectFolder.Location = new System.Drawing.Point(498, 23);
             this.SelectFolder.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.SelectFolder.Name = "SelectFolder";
             this.SelectFolder.Size = new System.Drawing.Size(121, 32);
@@ -64,7 +65,7 @@ namespace Fonts_Downloader
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(155, 11);
+            this.textBox1.Location = new System.Drawing.Point(625, 23);
             this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
@@ -75,7 +76,7 @@ namespace Fonts_Downloader
             // 
             this.FontBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FontBox1.FormattingEnabled = true;
-            this.FontBox1.Location = new System.Drawing.Point(12, 74);
+            this.FontBox1.Location = new System.Drawing.Point(12, 23);
             this.FontBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.FontBox1.Name = "FontBox1";
             this.FontBox1.Size = new System.Drawing.Size(242, 28);
@@ -86,7 +87,7 @@ namespace Fonts_Downloader
             // 
             this.SelectedFont.AutoSize = true;
             this.SelectedFont.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SelectedFont.Location = new System.Drawing.Point(8, 115);
+            this.SelectedFont.Location = new System.Drawing.Point(12, 65);
             this.SelectedFont.Name = "SelectedFont";
             this.SelectedFont.Size = new System.Drawing.Size(42, 20);
             this.SelectedFont.TabIndex = 33;
@@ -95,7 +96,7 @@ namespace Fonts_Downloader
             // CopyFont
             // 
             this.CopyFont.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CopyFont.Location = new System.Drawing.Point(12, 366);
+            this.CopyFont.Location = new System.Drawing.Point(12, 401);
             this.CopyFont.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.CopyFont.Name = "CopyFont";
             this.CopyFont.Size = new System.Drawing.Size(241, 51);
@@ -109,9 +110,9 @@ namespace Fonts_Downloader
             this.webView21.AllowExternalDrop = true;
             this.webView21.CreationProperties = null;
             this.webView21.DefaultBackgroundColor = System.Drawing.Color.White;
-            this.webView21.Location = new System.Drawing.Point(327, 74);
+            this.webView21.Location = new System.Drawing.Point(259, 87);
             this.webView21.Name = "webView21";
-            this.webView21.Size = new System.Drawing.Size(915, 746);
+            this.webView21.Size = new System.Drawing.Size(983, 733);
             this.webView21.TabIndex = 35;
             this.webView21.ZoomFactor = 1D;
             this.webView21.CoreWebView2InitializationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs>(this.webView21_CoreWebView2InitializationCompleted);
@@ -128,7 +129,9 @@ namespace Fonts_Downloader
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.SelectFolder);
             this.Controls.Add(this.SizeAndStyle);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Fonts";
             ((System.ComponentModel.ISupportInitialize)(this.webView21)).EndInit();
