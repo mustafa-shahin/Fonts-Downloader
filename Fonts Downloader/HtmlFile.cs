@@ -14,8 +14,6 @@ namespace Fonts_Downloader
 {
     internal class HtmlFile
     {
-
-
         private List<string> WgtItalic = new List<string>();
         private List<string> WgtNormal = new List<string>();
         public void CreateHtml(Label SelectedFont, CheckedListBox SizeAndStyle, string FolderName)
@@ -71,7 +69,7 @@ namespace Fonts_Downloader
                     H1TagsCSS.Add(H1Italic);
 
                     //H1 tag italic html
-                    H1TagItalic = $"<h1 class = 'size{wgt.Replace("1,", "")}italic'>" + $"{SelectedFont.Text}" + " " + $"{wgt.Replace("1,", "")}" + "</h1>";
+                    H1TagItalic = $"<h1 class = 'size{wgt.Replace("1,", "")}italic'>" + $"{SelectedFont.Text}" + " " + $"{wgt.Replace("1,", "")} Italic" + "</h1>";
                     H1Tags.Add(H1TagItalic);
 
                 }
@@ -93,7 +91,7 @@ namespace Fonts_Downloader
                     H1TagsCSS.Add(H1Normal);
 
                     //H1 tag normal html
-                    H1TagNormal = $"<h1 class = 'size{wgt}normal'>" + $"{SelectedFont.Text}" + " " + $"{wgt.Replace("1,", "")}" + "</h1>";
+                    H1TagNormal = $"<h1 class = 'size{wgt}normal'>" + $"{SelectedFont.Text}" + " " + $"{wgt.Replace("1,", "")} Normal" + "</h1>";
                     H1Tags.Add(H1TagNormal);
                 }
             }
@@ -133,8 +131,11 @@ namespace Fonts_Downloader
                         writer.WriteLine(BodyTagEnd);
                     }
                 }
-
             }
+            WgtItalic.Clear();
+            WgtNormal.Clear();
+            Italics = string.Empty;
+            Normals = string.Empty;
         }
     }
 }
