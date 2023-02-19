@@ -50,7 +50,9 @@ namespace Fonts_Downloader
 
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            Key= textBox1.Text;
+            //if (ensure)
+            //    webView21.CoreWebView2.Navigate("file:///C:/html/index.html");
+            Key = textBox1.Text;
             Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items, FolderName);
             Document.CreateHtml(SelectedFont, SizeAndStyle, FolderName);
             string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
