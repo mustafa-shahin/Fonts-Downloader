@@ -223,6 +223,7 @@ namespace Fonts_Downloader
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Fonts";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.webView21)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

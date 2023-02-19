@@ -55,11 +55,11 @@ namespace Fonts_Downloader
             Key = textBox1.Text;
             Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items, FolderName);
             Document.CreateHtml(SelectedFont, SizeAndStyle, FolderName);
-            string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
-            string NewPath = Path.Combine(path, "html", "index.html");
-            string text = System.IO.File.ReadAllText(NewPath);
+            //string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
+            //string NewPath = Path.Combine(path, "html", "index.html");
+            //string text = System.IO.File.ReadAllText(NewPath);
             if (ensure)
-                webView21.CoreWebView2.NavigateToString(text);
+                webView21.CoreWebView2.Navigate("file:///C:/FontDownlaoder/index.html");
 
         }
 
@@ -67,6 +67,12 @@ namespace Fonts_Downloader
         {
             Key= textBox2.Text;
             _ = Res.resAsync(FontBox1, Key);
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            System.IO.File.Delete(@"C:/FontDownlaoder/index.html");
+            System.IO.Directory.Delete(@"C:/FontDownlaoder");
         }
 
         private void CopyFont_Click(object sender, EventArgs e)

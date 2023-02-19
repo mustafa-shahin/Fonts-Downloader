@@ -37,8 +37,10 @@ namespace Fonts_Downloader
             string GoogleFontLinkItalics = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont.Text}:ital,wght@{Italics}&display=swap\" rel=\"stylesheet\">";
             string GoogleFontLinkItalicsNormals = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont.Text}:wght@{Normals}&display=swap\" rel=\"stylesheet\">";
             string FontFamliyStyle = $"font-family: '{SelectedFont.Text}', sans-serif;";
-            string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
-            string NewPath = Path.Combine(path, "html", "index.html");
+            //string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
+            //string NewPath = Path.Combine(path, "html", "index.html");
+            string Path = @"C:\FontDownlaoder";
+            System.IO.Directory.CreateDirectory(Path);
             string BodyStyle = "body{\n" + FontFamliyStyle + "\n" + FontColor + "\n"+ "}";
             string BodyTagStart = "<body>" + "\n";
             List<string> PTagCSS = new List<string>();
@@ -50,7 +52,7 @@ namespace Fonts_Downloader
             string HeadEnd = "</head>";
             string StyleTagStart = "<style>";
             string  H1Italic, H1Normal,H1TagItalic, H1TagNormal;
-            string BodyTagEnd = "<bod/>";
+            string BodyTagEnd = "</body>";
 
             if (WgtItalic.Any())
             {
@@ -97,7 +99,7 @@ namespace Fonts_Downloader
             }
 
           
-            using (StreamWriter writer = new StreamWriter(NewPath, false))
+            using (StreamWriter writer = new StreamWriter($"{Path}\\index.html", false))
 
             {
                 for (int i = 0; i < PTagCSS.Count; i++)
@@ -113,8 +115,12 @@ namespace Fonts_Downloader
                         {
                             writer.WriteLine(GoogleFontLinkItalicsNormals);
                         }
-                        writer.WriteLine(HeadEnd + "\n" + StyleTagStart + "\n" + BodyStyle);
+                        writer.WriteLine(HeadEnd);
+                        
                     }
+                    if (i == 0)
+                        writer.WriteLine(StyleTagStart + "\n" + BodyStyle);
+
                     writer.WriteLine(PTagCSS[i]);
                     writer.WriteLine(H1TagsCSS[i]);
                     if (i == PTagCSS.Count - 1)
