@@ -240,9 +240,9 @@ namespace Fonts_Downloader
         private List<string> Subset = new List<string>();
         public List<Item> AllList { get { return allList; } }
         public List<string> SubsetList { get { return Subset; } }
-        public async Task resAsync(ComboBox FontBox)
+        public async Task resAsync(ComboBox FontBox, string Key)
         {
-            var result = await Api.Get(@"https://www.googleapis.com/webfonts/v1/webfonts?sort=alpha&key=AIzaSyAqJjXvZM2dI_6z001qfuUSRNvCk40JjlY");
+            var result = await Api.Get($@"https://www.googleapis.com/webfonts/v1/webfonts?sort=alpha&key={Key}");
             if (result.Success)
             {
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.

@@ -25,14 +25,15 @@ namespace Fonts_Downloader
         private List<Item> Items = new List<Item>();
         private List<string> SubSets = new List<string>();
         private bool ensure = false;
+        private string Key=" ";
         
         public Form1()
         {
-            InitializeComponent();
-            _ = Res.resAsync(FontBox1);
+            InitializeComponent();                      
             SubSets = Size.SubsetList;
             Items = Res.AllList;
             webView21.EnsureCoreWebView2Async();
+            webView21.BackColor = Color.FromArgb(45, 62, 79);
         }
         private void SelectFolder_Click(object sender, EventArgs e)
         {
@@ -49,7 +50,9 @@ namespace Fonts_Downloader
 
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-               
+            //if (ensure)
+            //    webView21.CoreWebView2.Navigate("file:///C:/html/index.html");
+            Key = textBox1.Text;
             Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items, FolderName);
             Document.CreateHtml(SelectedFont, SizeAndStyle, FolderName);
             string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
@@ -59,6 +62,13 @@ namespace Fonts_Downloader
                 webView21.CoreWebView2.NavigateToString(text);
 
         }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            Key= textBox2.Text;
+            _ = Res.resAsync(FontBox1, Key);
+        }
+
         private void CopyFont_Click(object sender, EventArgs e)
         {          
             //webView21.CoreWebView2.NavigateToString(reader.ReadToEnd());

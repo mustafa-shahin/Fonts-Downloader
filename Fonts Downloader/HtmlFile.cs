@@ -30,7 +30,7 @@ namespace Fonts_Downloader
                     WgtItalic.Add("1," + variant.ToString().Replace("italic", ""));
                 }
             }
-
+            string FontColor = "color: white;";
             string PTagItalic, PTagNormal, ParagrapphItalic, ParagrapphNormal, Lorem = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua";
             string Italics = string.Join(";", WgtItalic);
             string Normals = string.Join(";", WgtNormal);
@@ -39,7 +39,7 @@ namespace Fonts_Downloader
             string FontFamliyStyle = $"font-family: '{SelectedFont.Text}', sans-serif;";
             string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
             string NewPath = Path.Combine(path, "html", "index.html");
-            string BodyStyle = "body{\n" + FontFamliyStyle + "\n" + "}";
+            string BodyStyle = "body{\n" + FontFamliyStyle + "\n" + FontColor + "\n"+ "}";
             string BodyTagStart = "<body>" + "\n";
             List<string> PTagCSS = new List<string>();
             List<string> PTags = new List<string>();
