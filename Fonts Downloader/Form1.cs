@@ -28,11 +28,13 @@ namespace Fonts_Downloader
         
         public Form1()
         {
+            
             InitializeComponent();
             _ = Res.resAsync(FontBox1);
             SubSets = Size.SubsetList;
             Items = Res.AllList;
             webView21.EnsureCoreWebView2Async();
+            webView21.BackColor = Color.FromArgb(45, 62, 79);
         }
         private void SelectFolder_Click(object sender, EventArgs e)
         {
