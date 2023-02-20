@@ -46,12 +46,8 @@ namespace Fonts_Downloader
             textBox1.Text = FolderName;
         }
 
-   
-
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            //if (ensure)
-            //    webView21.CoreWebView2.Navigate("file:///C:/html/index.html");
             Key = textBox1.Text;
             Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items, FolderName);
             Document.CreateHtml(SelectedFont, SizeAndStyle, FolderName);
@@ -60,7 +56,6 @@ namespace Fonts_Downloader
             //string text = System.IO.File.ReadAllText(NewPath);
             if (ensure)
                 webView21.CoreWebView2.Navigate("file:///C:/FontDownlaoder/index.html");
-
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -95,7 +90,7 @@ namespace Fonts_Downloader
                 DirectoryInfo di = new DirectoryInfo($"{FolderName}\\{FontName.Replace(" ", "")}");
                 foreach (FileInfo file in di.EnumerateFiles())
                 {
-                    if (file.Name.Contains(".ttf") || file.Name.Contains(".html"))
+                    if (file.Name.Contains(".ttf"))
                     {
                         file.Delete();
                     }

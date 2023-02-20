@@ -5,8 +5,6 @@ namespace Fonts_Downloader
 {
     internal class SizeStyles
     {
-        private List<string> WgtItalic = new List<string>();
-        private List<string> WgtNormal = new List<string>();
         private string old = string.Empty;
         private List<string> Subset = new List<string>();
         public List<string> SubsetList { get { return Subset; } }
