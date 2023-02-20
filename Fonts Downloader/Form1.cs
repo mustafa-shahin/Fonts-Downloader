@@ -71,8 +71,14 @@ namespace Fonts_Downloader
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            System.IO.File.Delete(@"C:/FontDownlaoder/index.html");
-            System.IO.Directory.Delete(@"C:/FontDownlaoder");
+            if (System.IO.Directory.Exists(@"C:/FontDownlaoder"))
+            {
+                if (System.IO.File.Exists(@"C:/FontDownlaoder/index.html"))
+                {
+                    System.IO.File.Delete(@"C:/FontDownlaoder/index.html");
+                }            
+                System.IO.Directory.Delete(@"C:/FontDownlaoder");
+            }
         }
 
         private void CopyFont_Click(object sender, EventArgs e)
