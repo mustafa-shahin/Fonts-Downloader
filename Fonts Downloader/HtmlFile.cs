@@ -14,10 +14,11 @@ namespace Fonts_Downloader
 {
     internal class HtmlFile
     {
-        private List<string> WgtItalic = new List<string>();
-        private List<string> WgtNormal = new List<string>();
+  
         public void CreateHtml(Label SelectedFont, CheckedListBox SizeAndStyle, string FolderName)
         {
+              List<string> WgtItalic = new List<string>();
+              List<string> WgtNormal = new List<string>();
             foreach (var variant in SizeAndStyle.Items)
             {
                 if (!variant.ToString().Contains("italic"))
