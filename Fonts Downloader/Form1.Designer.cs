@@ -56,6 +56,7 @@ namespace Fonts_Downloader
             this.SizeAndStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(98)))), ((int)(((byte)(101)))));
             this.SizeAndStyle.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.SizeAndStyle.CheckOnClick = true;
+            this.SizeAndStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SizeAndStyle.ForeColor = System.Drawing.Color.White;
             this.SizeAndStyle.FormattingEnabled = true;
             this.SizeAndStyle.Location = new System.Drawing.Point(20, 82);
@@ -66,6 +67,7 @@ namespace Fonts_Downloader
             // 
             // SelectFolder
             // 
+            this.SelectFolder.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.SelectFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(114)))), ((int)(((byte)(66)))));
             this.SelectFolder.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(114)))), ((int)(((byte)(66)))));
             this.SelectFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -82,6 +84,7 @@ namespace Fonts_Downloader
             // 
             // SelectedFolder
             // 
+            this.SelectedFolder.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.SelectedFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(211)))), ((int)(((byte)(200)))));
             this.SelectedFolder.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.SelectedFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -151,6 +154,8 @@ namespace Fonts_Downloader
             // 
             // LeftPanel
             // 
+            this.LeftPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.LeftPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(62)))), ((int)(((byte)(79)))));
             this.LeftPanel.Controls.Add(this.CopyFont);
             this.LeftPanel.Controls.Add(this.SelectedFont);
@@ -163,6 +168,8 @@ namespace Fonts_Downloader
             // 
             // TopPanel
             // 
+            this.TopPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TopPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(62)))), ((int)(((byte)(79)))));
             this.TopPanel.Controls.Add(this.ApiKeyLabel);
             this.TopPanel.Controls.Add(this.ApiKeyBox);
@@ -175,6 +182,7 @@ namespace Fonts_Downloader
             // 
             // ApiKeyLabel
             // 
+            this.ApiKeyLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ApiKeyLabel.AutoSize = true;
             this.ApiKeyLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ApiKeyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -187,6 +195,7 @@ namespace Fonts_Downloader
             // 
             // ApiKeyBox
             // 
+            this.ApiKeyBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ApiKeyBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(211)))), ((int)(((byte)(200)))));
             this.ApiKeyBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.ApiKeyBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -200,6 +209,9 @@ namespace Fonts_Downloader
             // 
             // WebPanel
             // 
+            this.WebPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.WebPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(62)))), ((int)(((byte)(79)))));
             this.WebPanel.Controls.Add(this.webView21);
             this.WebPanel.ForeColor = System.Drawing.Color.White;
