@@ -1,4 +1,5 @@
-﻿using Microsoft.Web.WebView2.WinForms;
+﻿using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.WinForms;
 using Microsoft.Web.WebView2.Wpf;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -26,15 +28,18 @@ namespace Fonts_Downloader
         private List<string> SubSets = new List<string>();
         private bool ensure = false;
         private string Key=" ";
-        
+
         public Form1()
-        {
-            InitializeComponent();                      
-            SubSets = Size.SubsetList;
-            Items = Res.AllList;
+        { 
+            InitializeComponent();
             webView21.EnsureCoreWebView2Async();
+            Document.DefaultHtml();
+            SubSets = Size.SubsetList;
+            Items = Res.AllList;           
             webView21.BackColor = Color.FromArgb(45, 62, 79);
+            webView21.Source = new Uri("file:///C:/FontDownlaoder/index.html");
         }
+       
         private void SelectFolder_Click(object sender, EventArgs e)
         {
             var folderBrowserDialog = new FolderBrowserDialog();
@@ -49,13 +54,15 @@ namespace Fonts_Downloader
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             Key = ApiKeyBox.Text;
+            
             Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items, FolderName);
             Document.CreateHtml(SelectedFont, SizeAndStyle, FolderName);
             //string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
             //string NewPath = Path.Combine(path, "html", "index.html");
-            //string text = System.IO.File.ReadAllText(NewPath);
+            //string text = System.IO.File.ReadAllText(NewPath);           
             if (ensure)
                 webView21.CoreWebView2.Navigate("file:///C:/FontDownlaoder/index.html");
+          
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
