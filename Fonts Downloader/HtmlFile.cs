@@ -9,11 +9,34 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace Fonts_Downloader
 {
     internal class HtmlFile
     {
+        private string Path = @"C:\FontDownlaoder";
+        public void DefaultHtml()
+        {          
+            System.IO.Directory.CreateDirectory(Path);
+            string DefaultHtml = "<head>\r\n" +
+                "<link href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap\" rel=\"stylesheet\">\r\n" +
+                "</head>\r\n" +
+                "<style>\r\n" +
+                "body{\r\n" +
+                "font-family: 'Roboto', sans-serif;\r\n" +
+                "color:white!important;\r\n" +
+                "text-align: center !important;\r\n}\r\n\r\n" +
+                "h1{\r\nfont-weight: 700 !important;\r\n}\r\n" +
+                "</style>\r\n" +
+                "<body>\r\n" +
+                "<h1>Fonts Downloader </h1>\r\n" +
+                "</body>";
+            using (StreamWriter writer = new StreamWriter($"{Path}\\index.html", false))
+            {
+                writer.WriteLine(DefaultHtml);
+            }
+        }
   
         public void CreateHtml(Label SelectedFont, CheckedListBox SizeAndStyle, string FolderName)
         {
@@ -41,7 +64,7 @@ namespace Fonts_Downloader
             //string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
             //string NewPath = Path.Combine(path, "html", "index.html");
             string Path = @"C:\FontDownlaoder";
-            System.IO.Directory.CreateDirectory(Path);
+            System.IO.Directory.CreateDirectory(Path);          
             string BodyStyle = "body{\n" + FontFamliyStyle + "\n" + FontColor + "\n"+ "}";
             string BodyTagStart = "<body>" + "\n";
             List<string> PTagCSS = new List<string>();
@@ -98,8 +121,7 @@ namespace Fonts_Downloader
                     H1Tags.Add(H1TagNormal);
                 }
             }
-
-          
+            
             using (StreamWriter writer = new StreamWriter($"{Path}\\index.html", false))
 
             {
