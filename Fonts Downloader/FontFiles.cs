@@ -165,7 +165,7 @@ namespace Fonts_Downloader
                         {
                             WebClient wc = new WebClient();
                             Uri url = new Uri(link);
-                            wc.DownloadFile(url,
+                            wc.DownloadFileTaskAsync(url,
                                 $@"{$"{folderName}\\{FontName.Replace(" ", "")}"}" + $"\\{FontName.Replace(" ", "")}-{FontStyle.Substring(0, 1).ToUpper() + FontStyle.Substring(1)}-{FontFileStyle}.ttf");
                         }
                     }
