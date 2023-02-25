@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -109,7 +110,11 @@ namespace Fonts_Downloader
                     css.CreateCSS(SizeAndStyle, SubSets, FolderName, FontName, FontFileStyle);
                     FontWeight = css.FontWeight;
                     File.FileLinks(SizeAndStyle, FontStyle, FontWeight, FontFileStyle, FontFileStyles, SelectedFont, FolderName, FontName, Res);
-
+                    DialogResult dialogResult = MessageBox.Show("The Downlaod has been completed. Do you want to check downloaded files? ", "Download completed", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        Process.Start($"{FolderName}\\{FontName.Replace(" ", "")}");
+                    }
                 }
             }
             else
