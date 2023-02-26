@@ -234,7 +234,7 @@ namespace Fonts_Downloader
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
-            this.Text = "Fonts";
+            this.Text = "Fonts Downloader";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.webView21)).EndInit();
             this.LeftPanel.ResumeLayout(false);
