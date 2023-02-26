@@ -13,7 +13,7 @@ namespace Fonts_Downloader
 {
     internal class CSS
     {
-        private string[] FontFileStyles = { "Thin", "ExtraLight", "Light", "Regular", "Medium", "SemiBold", "Bold", "ExtraBold", "Black" };
+        private readonly string[] FontFileStyles = { "Thin", "ExtraLight", "Light", "Regular", "Medium", "SemiBold", "Bold", "ExtraBold", "Black" };
         private List<string> FontWeights = new List<string>();
         private List<string> _Styles = new List<string>();
         public List<string> Styles { get { return _Styles; } }
@@ -25,7 +25,7 @@ namespace Fonts_Downloader
         public List<string> FontWeight { get { return FontWeights; } }
         public void CreateCSS(CheckedListBox SizeAndStyle, List<string> SubSet, string FolderName, string FontName, string FontFileStyle)
         {
-            List<string> Css = new List<string>();
+            var Css = new List<string>();
             if (FontWeights.Any())
             {
                 FontWeights.Clear();
