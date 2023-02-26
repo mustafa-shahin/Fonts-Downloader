@@ -40,9 +40,9 @@ namespace Fonts_Downloader
                         Subset.Add(item.subsets[i]);
                     }
                 }
-            }           
-             old = SelectedFont.Text;
-        }        
+            }
+            old = SelectedFont.Text;
+        }
     }
 }
 

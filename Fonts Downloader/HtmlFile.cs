@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace Fonts_Downloader
 {
@@ -17,7 +9,7 @@ namespace Fonts_Downloader
     {
         private string Path = @"C:\FontDownlaoder";
         public void DefaultHtml()
-        {          
+        {
             System.IO.Directory.CreateDirectory(Path);
             string DefaultHtml = "<head>\r\n" +
                 "<link href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap\" rel=\"stylesheet\">\r\n" +
@@ -37,11 +29,11 @@ namespace Fonts_Downloader
                 writer.WriteLine(DefaultHtml);
             }
         }
-  
+
         public void CreateHtml(Label SelectedFont, CheckedListBox SizeAndStyle, string FolderName)
         {
-              List<string> WgtItalic = new List<string>();
-              List<string> WgtNormal = new List<string>();
+            List<string> WgtItalic = new List<string>();
+            List<string> WgtNormal = new List<string>();
             foreach (var variant in SizeAndStyle.Items)
             {
                 if (!variant.ToString().Contains("italic"))
@@ -64,8 +56,8 @@ namespace Fonts_Downloader
             //string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
             //string NewPath = Path.Combine(path, "html", "index.html");
             string Path = @"C:\FontDownlaoder";
-            System.IO.Directory.CreateDirectory(Path);          
-            string BodyStyle = "body{\n" + FontFamliyStyle + "\n" + FontColor + "\n"+ "}";
+            System.IO.Directory.CreateDirectory(Path);
+            string BodyStyle = "body{\n" + FontFamliyStyle + "\n" + FontColor + "\n" + "}";
             string BodyTagStart = "<body>" + "\n";
             List<string> PTagCSS = new List<string>();
             List<string> PTags = new List<string>();
@@ -75,7 +67,7 @@ namespace Fonts_Downloader
             string HeadStart = "<head>";
             string HeadEnd = "</head>";
             string StyleTagStart = "<style>";
-            string  H1Italic, H1Normal,H1TagItalic, H1TagNormal;
+            string H1Italic, H1Normal, H1TagItalic, H1TagNormal;
             string BodyTagEnd = "</body>";
 
             if (WgtItalic.Any())
@@ -83,7 +75,7 @@ namespace Fonts_Downloader
                 foreach (string wgt in WgtItalic)
                 {
                     //P tag italic  styling
-                    PTagItalic = "\np." + "size" + $"{wgt.Replace("1,", "")}italic" +"{\n" + "font-family:" + $"'{SelectedFont.Text}';\n" + "font-style: italic;\n" + "font-weight:" + $"{wgt.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
+                    PTagItalic = "\np." + "size" + $"{wgt.Replace("1,", "")}italic" + "{\n" + "font-family:" + $"'{SelectedFont.Text}';\n" + "font-style: italic;\n" + "font-weight:" + $"{wgt.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
                     PTagCSS.Add(PTagItalic);
 
                     //P tag italic tag html
@@ -105,7 +97,7 @@ namespace Fonts_Downloader
                 foreach (string wgt in WgtNormal)
                 {
                     //P tag normal styling
-                    PTagNormal = "\np." + "size" + $"{wgt}normal"+ "{\n" + "font-family:" + $"'{SelectedFont.Text}';\n" + "font-style: normal;\n" + "font-weight:" + $"{wgt};" + "\r\nfont-stretch: 100%;" + "\n}";
+                    PTagNormal = "\np." + "size" + $"{wgt}normal" + "{\n" + "font-family:" + $"'{SelectedFont.Text}';\n" + "font-style: normal;\n" + "font-weight:" + $"{wgt};" + "\r\nfont-stretch: 100%;" + "\n}";
                     PTagCSS.Add(PTagNormal);
 
                     //P tag normal html
@@ -121,7 +113,7 @@ namespace Fonts_Downloader
                     H1Tags.Add(H1TagNormal);
                 }
             }
-            
+
             using (StreamWriter writer = new StreamWriter($"{Path}\\index.html", false))
 
             {
@@ -139,7 +131,7 @@ namespace Fonts_Downloader
                             writer.WriteLine(GoogleFontLinkItalicsNormals);
                         }
                         writer.WriteLine(HeadEnd);
-                        
+
                     }
                     if (i == 0)
                         writer.WriteLine(StyleTagStart + "\n" + BodyStyle);
