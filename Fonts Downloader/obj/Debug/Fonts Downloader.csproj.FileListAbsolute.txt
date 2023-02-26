@@ -20,3 +20,9 @@ D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.csproj.CoreC
 D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.csproj.CopyComplete
 D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.exe
 D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.pdb
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Fonts Downloader.exe.manifest
+D:\git\Fonts Downloader\Fonts Downloader\bin\Debug\Fonts Downloader.application
+D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts_Downloader.Form1.resources
+D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.TrustInfo.xml
+D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.exe.manifest
+D:\git\Fonts Downloader\Fonts Downloader\obj\Debug\Fonts Downloader.application
