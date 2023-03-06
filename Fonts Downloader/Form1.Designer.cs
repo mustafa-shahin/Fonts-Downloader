@@ -62,7 +62,7 @@ namespace Fonts_Downloader
             this.SizeAndStyle.Location = new System.Drawing.Point(20, 82);
             this.SizeAndStyle.Margin = new System.Windows.Forms.Padding(3, 3, 3, 2);
             this.SizeAndStyle.Name = "SizeAndStyle";
-            this.SizeAndStyle.Size = new System.Drawing.Size(237, 357);
+            this.SizeAndStyle.Size = new System.Drawing.Size(237, 350);
             this.SizeAndStyle.TabIndex = 15;
             // 
             // SelectFolder
@@ -73,7 +73,7 @@ namespace Fonts_Downloader
             this.SelectFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SelectFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SelectFolder.ForeColor = System.Drawing.Color.White;
-            this.SelectFolder.Location = new System.Drawing.Point(131, 28);
+            this.SelectFolder.Location = new System.Drawing.Point(131, 15);
             this.SelectFolder.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.SelectFolder.Name = "SelectFolder";
             this.SelectFolder.Size = new System.Drawing.Size(121, 32);
@@ -88,7 +88,7 @@ namespace Fonts_Downloader
             this.SelectedFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(211)))), ((int)(((byte)(200)))));
             this.SelectedFolder.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.SelectedFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SelectedFolder.Location = new System.Drawing.Point(272, 28);
+            this.SelectedFolder.Location = new System.Drawing.Point(272, 15);
             this.SelectedFolder.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.SelectedFolder.Multiline = true;
             this.SelectedFolder.Name = "SelectedFolder";
@@ -187,7 +187,7 @@ namespace Fonts_Downloader
             this.ApiKeyLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ApiKeyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ApiKeyLabel.ForeColor = System.Drawing.Color.White;
-            this.ApiKeyLabel.Location = new System.Drawing.Point(186, 70);
+            this.ApiKeyLabel.Location = new System.Drawing.Point(186, 60);
             this.ApiKeyLabel.Name = "ApiKeyLabel";
             this.ApiKeyLabel.Size = new System.Drawing.Size(66, 20);
             this.ApiKeyLabel.TabIndex = 35;
@@ -199,7 +199,7 @@ namespace Fonts_Downloader
             this.ApiKeyBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(211)))), ((int)(((byte)(200)))));
             this.ApiKeyBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.ApiKeyBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ApiKeyBox.Location = new System.Drawing.Point(272, 66);
+            this.ApiKeyBox.Location = new System.Drawing.Point(272, 56);
             this.ApiKeyBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ApiKeyBox.Multiline = true;
             this.ApiKeyBox.Name = "ApiKeyBox";
