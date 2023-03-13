@@ -57,7 +57,7 @@ namespace Fonts_Downloader
             Key = ApiKeyBox.Text;
             
             Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items, FolderName);
-            Document.CreateHtml(SelectedFont, SizeAndStyle, FolderName);
+            Document.CreateHtml(SelectedFont, SizeAndStyle);
             //string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
             //string NewPath = Path.Combine(path, "html", "index.html");
             //string text = System.IO.File.ReadAllText(NewPath);           

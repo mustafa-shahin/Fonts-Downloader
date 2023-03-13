@@ -30,7 +30,7 @@ namespace Fonts_Downloader
             }
         }
 
-        public void CreateHtml(Label SelectedFont, CheckedListBox SizeAndStyle, string FolderName)
+        public void CreateHtml(Label SelectedFont, CheckedListBox SizeAndStyle)
         {
             List<string> WgtItalic = new List<string>();
             List<string> WgtNormal = new List<string>();
@@ -53,10 +53,6 @@ namespace Fonts_Downloader
             string GoogleFontLinkItalics = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont.Text}:ital,wght@{Italics}&display=swap\" rel=\"stylesheet\">";
             string GoogleFontLinkItalicsNormals = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont.Text}:wght@{Normals}&display=swap\" rel=\"stylesheet\">";
             string FontFamliyStyle = $"font-family: '{SelectedFont.Text}', sans-serif;";
-            //string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
-            //string NewPath = Path.Combine(path, "html", "index.html");
-            string Path = @"C:\FontDownlaoder";
-            System.IO.Directory.CreateDirectory(Path);
             string BodyStyle = "body{\n" + FontFamliyStyle + "\n" + FontColor + "\n" + "}";
             string BodyTagStart = "<body>" + "\n";
             List<string> PTagCSS = new List<string>();
@@ -155,8 +151,6 @@ namespace Fonts_Downloader
             }
             WgtItalic.Clear();
             WgtNormal.Clear();
-            Italics = string.Empty;
-            Normals = string.Empty;
         }
     }
 }
