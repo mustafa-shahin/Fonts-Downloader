@@ -23,8 +23,9 @@ namespace Fonts_Downloader
         public string Fontstyle { get { return fontStyle; } }
         public string FontStyles { set { this._FontStyle = value; } get { return this._FontStyle; } }
         public List<string> FontWeight { get { return FontWeights; } }
-        public void CreateCSS(CheckedListBox SizeAndStyle, List<string> SubSet, string FolderName, string FontName, string FontFileStyle)
+        public void CreateCSS(CheckedListBox SizeAndStyle, List<string> SubSet, string FolderName, string FontName)
         {
+            string FontFileStyle="";
             var Css = new List<string>();
             if (FontWeights.Any())
             {

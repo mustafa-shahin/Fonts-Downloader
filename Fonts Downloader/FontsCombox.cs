@@ -8,6 +8,17 @@ namespace Fonts_Downloader
     public class FontsCombox
     {
         private List<string> links_100 = new List<string>();
+        public List<string> Links_100
+        {
+            get
+            {
+                return this.links_100;
+            }
+            set
+            {
+                this.links_100 = value;
+            }
+        }
 
         private List<string> links_100italic = new List<string>();
         public List<string> Links_100italic
@@ -309,17 +320,6 @@ namespace Fonts_Downloader
                 {
                     FontBox.Items.Add(allList[i].family);
                 }
-            }
-        }
-        public List<string> Links_100
-        {
-            get
-            {
-                return this.links_100;
-            }
-            set
-            {
-                this.links_100 = value;
             }
         }
     }
