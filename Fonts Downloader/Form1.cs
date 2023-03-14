@@ -21,8 +21,8 @@ namespace Fonts_Downloader
 {
     public partial class Form1 : Form
     {
-        private string FolderName, FontStyle, FontFileStyle;
-        private FontsCombox Res = new FontsCombox();
+        private string FolderName;
+        private FontsCombox ApiResult = new FontsCombox();
         private new readonly SizeStyles Size = new SizeStyles();
         private HtmlFile Document = new HtmlFile();
         private List<Item> Items = new List<Item>();
@@ -36,7 +36,7 @@ namespace Fonts_Downloader
             webView21.EnsureCoreWebView2Async();
             Document.DefaultHtml();
             SubSets = Size.SubsetList;
-            Items = Res.AllList;           
+            Items = ApiResult.AllList;           
             webView21.BackColor = Color.FromArgb(45, 62, 79);
             webView21.Source = new Uri("file:///C:/FontDownlaoder/index.html");
         }
@@ -71,7 +71,7 @@ namespace Fonts_Downloader
             Key = ApiKeyBox.Text;
             if (!string.IsNullOrEmpty(Key))
             {
-                _ = Res.resAsync(FontBox1, Key);
+                _ = ApiResult.resAsync(FontBox1, Key);
             }
         }
 
@@ -91,7 +91,6 @@ namespace Fonts_Downloader
         {
             if (!string.IsNullOrEmpty(FolderName))
             {
-                string[] FontFileStyles = { "Thin", "ExtraLight", "Light", "Regular", "Medium", "SemiBold", "Bold", "ExtraBold", "Black" };
                 var FontWeight = new List<string>();
                 var css = new CSS();
                 var File = new FontFiles();
@@ -107,9 +106,9 @@ namespace Fonts_Downloader
                             file.Delete();
                         }
                     }
-                    css.CreateCSS(SizeAndStyle, SubSets, FolderName, FontName, FontFileStyle);
+                    css.CreateCSS(SizeAndStyle, SubSets, FolderName, FontName);
                     FontWeight = css.FontWeight;
-                    File.FileLinks(SizeAndStyle, FontStyle, FontWeight, FontFileStyle, FontFileStyles, SelectedFont, FolderName, FontName, Res);
+                    File.FileLinks(SizeAndStyle, FontWeight, SelectedFont, FolderName, FontName, ApiResult);
                     DialogResult dialogResult = MessageBox.Show("The Downlaod has been completed. Do you want to check downloaded files? ", "Download completed", MessageBoxButtons.YesNo);
                     if (dialogResult == DialogResult.Yes)
                     {
@@ -121,9 +120,8 @@ namespace Fonts_Downloader
             {
                 MessageBox.Show("Please select a folder ");
             }
-
         }
-        private void webView21_CoreWebView2InitializationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs e)
+        private void webView21_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
             ensure = true;  
         }
