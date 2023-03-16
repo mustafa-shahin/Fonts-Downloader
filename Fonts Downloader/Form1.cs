@@ -1,21 +1,10 @@
 ﻿using Microsoft.Web.WebView2.Core;
-using Microsoft.Web.WebView2.WinForms;
-using Microsoft.Web.WebView2.Wpf;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Net.WebRequestMethods;
 
 namespace Fonts_Downloader
 {
@@ -56,7 +45,7 @@ namespace Fonts_Downloader
         {
             Key = ApiKeyBox.Text;
             
-            Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items, FolderName);
+            Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items);
             Document.CreateHtml(SelectedFont, SizeAndStyle);
             //string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
             //string NewPath = Path.Combine(path, "html", "index.html");
@@ -77,13 +66,13 @@ namespace Fonts_Downloader
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (System.IO.Directory.Exists(@"C:/FontDownlaoder"))
+            if (Directory.Exists(@"C:/FontDownlaoder"))
             {
                 if (System.IO.File.Exists(@"C:/FontDownlaoder/index.html"))
                 {
                     System.IO.File.Delete(@"C:/FontDownlaoder/index.html");
                 }            
-                System.IO.Directory.Delete(@"C:/FontDownlaoder");
+                Directory.Delete(@"C:/FontDownlaoder");
             }
         }
 

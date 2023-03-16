@@ -8,7 +8,7 @@ namespace Fonts_Downloader
         private string old = string.Empty;
         private List<string> Subset = new List<string>();
         public List<string> SubsetList { get { return Subset; } }
-        public void SizeStylesLoad(ComboBox FontBox, Label SelectedFont, CheckedListBox SizeAndStyle, List<Item> Items, string FolderName)
+        public void SizeStylesLoad(ComboBox FontBox, Label SelectedFont, CheckedListBox SizeAndStyle, List<Item> Items)
         {
             if (FontBox.SelectedIndex > -1)
             {
