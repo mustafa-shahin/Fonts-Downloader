@@ -23,7 +23,8 @@ namespace Fonts_Downloader
                 "</style>\r\n" +
                 "<body>\r\n" +
                 "<h1>Fonts Downloader </h1>\r\n" +
-                "</body>";
+                "<h3>The programm will create in C drive a folder named FontDownlaoder to render the fonts and after closing the program the folder will be deleted </h3>\n"
+                + "</body>";
             using (StreamWriter writer = new StreamWriter($"{Path}\\index.html", false))
             {
                 writer.WriteLine(DefaultHtml);
