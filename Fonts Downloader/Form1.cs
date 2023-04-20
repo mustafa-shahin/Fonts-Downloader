@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Fonts_Downloader
@@ -97,12 +98,17 @@ namespace Fonts_Downloader
                     }
                     css.CreateCSS(SizeAndStyle, SubSets, FolderName, FontName);
                     FontWeight = css.FontWeight;
-                    File.FileLinks(SizeAndStyle, FontWeight, SelectedFont, FolderName, FontName, ApiResult);
-                    DialogResult dialogResult = MessageBox.Show("The Downlaod has been completed. Do you want to check downloaded files? ", "Download completed", MessageBoxButtons.YesNo);
-                    if (dialogResult == DialogResult.Yes)
+                    if (FontWeight.Any())
                     {
-                        Process.Start($"{FolderName}\\{FontName.Replace(" ", "")}");
-                    }
+                        File.FileLinks(SizeAndStyle, FontWeight, SelectedFont, FolderName, FontName, ApiResult);
+                        DialogResult dialogResult = MessageBox.Show("The Downlaod has been completed. Do you want to check downloaded files? ", "Download completed", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            Process.Start($"{FolderName}\\{FontName.Replace(" ", "")}");
+                        }
+                    }                      
+                    else
+                        MessageBox.Show("Please choose a font weight to downlaod");                 
                 }
             }
             else
