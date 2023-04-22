@@ -321,6 +321,10 @@ namespace Fonts_Downloader
                     FontBox.Items.Add(allList[i].family);
                 }
             }
+            else
+            {
+                MessageBox.Show(result.Message);
+            }
         }
     }
 }
