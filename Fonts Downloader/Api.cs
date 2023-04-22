@@ -15,7 +15,8 @@ namespace Fonts_Downloader
                     return new ApiResponse { Response = await request.Content.ReadAsStringAsync() };
                 }
                 else
-                    return new ApiResponse { Message = request.ReasonPhrase };
+                    //return new ApiResponse { Message = request.ReasonPhrase };
+                    return new ApiResponse { Message = "Please check your api key" };
             }
 
         }
