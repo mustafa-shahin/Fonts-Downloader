@@ -72,7 +72,7 @@ namespace Fonts_Downloader
                 if (System.IO.File.Exists(@"C:/FontDownlaoder/index.html"))
                 {
                     System.IO.File.Delete(@"C:/FontDownlaoder/index.html");
-                }            
+                }
                 Directory.Delete(@"C:/FontDownlaoder");
             }
         }
@@ -88,14 +88,6 @@ namespace Fonts_Downloader
                 {
                     string FontName = SelectedFont.Text;
                     Directory.CreateDirectory($"{FolderName}\\{FontName.Replace(" ", "")}");
-                    DirectoryInfo di = new DirectoryInfo($"{FolderName}\\{FontName.Replace(" ", "")}");
-                    foreach (FileInfo file in di.EnumerateFiles())
-                    {
-                        if (file.Name.Contains(".ttf"))
-                        {
-                            file.Delete();
-                        }
-                    }
                     css.CreateCSS(SizeAndStyle, SubSets, FolderName, FontName);
                     FontWeight = css.FontWeight;
                     if (FontWeight.Any())
