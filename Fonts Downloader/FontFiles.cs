@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Windows.Forms;
 
@@ -154,15 +155,18 @@ namespace Fonts_Downloader
             {
                 if (!string.IsNullOrEmpty(link) && link.Replace("/", " ").Contains(SelectedFont.ToLower().Replace(" ", "")))
                 {
-                    string[] FontNameInLink = link.ToLower().Split('/');
-                    foreach (string fontName in FontNameInLink)
+                    string[] FontFileLinks = link.ToLower().Split('/');
+                    foreach (string fontName in FontFileLinks)
                     {
                         if (fontName == SelectedFont.ToLower().Replace(" ", ""))
                         {
+                            var FaileName = $@"{$"{folderName}\\{FontName.Replace(" ", "")}"}" + $"\\{FontName.Replace(" ", "")}-{FontStyle.Substring(0, 1).ToUpper() + FontStyle.Substring(1)}-{FontFileStyle}.ttf";                          
                             WebClient wc = new WebClient();
-                            Uri url = new Uri(link);
-                            wc.DownloadFileTaskAsync(url,
-                                $@"{$"{folderName}\\{FontName.Replace(" ", "")}"}" + $"\\{FontName.Replace(" ", "")}-{FontStyle.Substring(0, 1).ToUpper() + FontStyle.Substring(1)}-{FontFileStyle}.ttf");
+                            Uri url = new Uri(link);                           
+                                if (!File.Exists(FaileName))
+                                {
+                                    wc.DownloadFileTaskAsync(url, FaileName);
+                                }                                                                                     
                         }
                     }
                 }

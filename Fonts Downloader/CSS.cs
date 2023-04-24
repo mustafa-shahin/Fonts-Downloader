@@ -96,13 +96,17 @@ namespace Fonts_Downloader
                     }
                 }
             }
-            using (StreamWriter writer = new StreamWriter($"{FolderName}\\{FontName.Replace(" ", "")}\\{FontName.Replace(" ", "")}.css", false))
+            if(FontWeight.Any())
             {
-                foreach (var str in Css)
+                using (StreamWriter writer = new StreamWriter($"{FolderName}\\{FontName.Replace(" ", "")}\\{FontName.Replace(" ", "")}.css", false))
                 {
-                    writer.WriteLine(str);
+                    foreach (var str in Css)
+                    {
+                        writer.WriteLine(str);
+                    }
                 }
             }
+
         }
     }
 }
