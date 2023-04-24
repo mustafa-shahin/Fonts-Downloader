@@ -87,11 +87,10 @@ namespace Fonts_Downloader
                 if (FontBox1.SelectedItem != null)
                 {
                     string FontName = SelectedFont.Text;
-                    Directory.CreateDirectory($"{FolderName}\\{FontName.Replace(" ", "")}");
                     css.CreateCSS(SizeAndStyle, SubSets, FolderName, FontName);
                     FontWeight = css.FontWeight;
                     if (FontWeight.Any())
-                    {
+                    {                      
                         File.FileLinks(SizeAndStyle, FontWeight, SelectedFont, FolderName, FontName, ApiResult);
                         DialogResult dialogResult = MessageBox.Show("The Downlaod has been completed. Do you want to check downloaded files? ", "Download completed", MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.Yes)
@@ -100,7 +99,7 @@ namespace Fonts_Downloader
                         }
                     }                      
                     else
-                        MessageBox.Show("Please choose a font weight to downlaod");                 
+                        MessageBox.Show("Please choose a font weight");                 
                 }
             }
             else

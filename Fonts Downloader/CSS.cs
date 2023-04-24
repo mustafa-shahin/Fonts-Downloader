@@ -98,6 +98,7 @@ namespace Fonts_Downloader
             }
             if(FontWeight.Any())
             {
+                Directory.CreateDirectory($"{FolderName}\\{FontName.Replace(" ", "")}");
                 using (StreamWriter writer = new StreamWriter($"{FolderName}\\{FontName.Replace(" ", "")}\\{FontName.Replace(" ", "")}.css", false))
                 {
                     foreach (var str in Css)
