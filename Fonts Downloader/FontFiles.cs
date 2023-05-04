@@ -11,19 +11,11 @@ namespace Fonts_Downloader
 
         public void FileLinks(CheckedListBox SizeAndStyle, List<string> FontWeight, Label SelectedFont, string FolderName,  FontsCombox ApiResult)
         {
-            string FontStyle="";
             string[] FontFileStyles = { "Thin", "ExtraLight", "Light", "Regular", "Medium", "SemiBold", "Bold", "ExtraBold", "Black" };
             string FontFileStyle;
             for (int i = 0; i < SizeAndStyle.CheckedItems.Count; i++)
             {
-                if (!SizeAndStyle.CheckedItems[i].ToString().Contains("italic"))
-                {
-                    FontStyle = "normal";
-                }
-                else if (SizeAndStyle.CheckedItems[i].ToString().Contains("italic"))
-                {
-                    FontStyle = "italic";
-                }
+                string FontStyle = SizeAndStyle.CheckedItems[i].ToString().Contains("italic") ? "italic" : "normal";
                 for (int j = 0; j <= FontWeight.Count; j++)
                 {
                     if (FontStyle == "normal")
