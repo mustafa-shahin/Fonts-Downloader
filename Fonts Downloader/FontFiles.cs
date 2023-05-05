@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Windows.Forms;
@@ -9,146 +11,61 @@ namespace Fonts_Downloader
     internal class FontFiles
     {
 
-        public void FileLinks(CheckedListBox SizeAndStyle, List<string> FontWeight, Label SelectedFont, string FolderName,  FontsCombox ApiResult)
+        public void FileLinks(CheckedListBox SizeAndStyle, List<string> FontWeight, Label SelectedFont, string FolderName, FontsCombox ApiResult)
         {
-            string FontStyle="";
-            string[] FontFileStyles = { "Thin", "ExtraLight", "Light", "Regular", "Medium", "SemiBold", "Bold", "ExtraBold", "Black" };
-            string FontFileStyle;
+            var Styles = new Dictionary<string, Dictionary<string, List<string>>>
+            {
+                { "normal", new Dictionary<string, List<string>>
+                    {
+                        { "100", ApiResult.Links_100 },
+                        { "200", ApiResult.Links_200 },
+                        { "300", ApiResult.Links_300 },
+                        { "400", ApiResult.Links_regular },
+                        { "500", ApiResult.Links_500 },
+                        { "600", ApiResult.Links_600 },
+                        { "700", ApiResult.Links_700 },
+                        { "800", ApiResult.Links_800 },
+                        { "900", ApiResult.Links_900 },
+                    }
+                },
+                { "italic", new Dictionary<string, List<string>>
+                    {
+                        { "100", ApiResult.Links_100italic },
+                        { "200", ApiResult.Links_200italic },
+                        { "300", ApiResult.Links_300italic },
+                        { "400", ApiResult.Links_italic },
+                        { "500", ApiResult.Links_500italic },
+                        { "600", ApiResult.Links_600italic },
+                        { "700", ApiResult.Links_700italic },
+                        { "800", ApiResult.Links_800italic },
+                        { "900", ApiResult.Links_900italic },
+                    }
+                },
+            };
+            var FontFileStyles = new Dictionary<string, string>
+            {
+                    { "100", "Thin" },
+                    { "200", "ExtraLight" },
+                    { "300", "Light" },
+                    { "400", "Regular" },
+                    { "500", "Medium" },
+                    { "600", "SemiBold" },
+                    { "700", "ExtraBold" },
+                    { "800", "ExtraBold" },
+                    { "900", "Black" },
+            };
             for (int i = 0; i < SizeAndStyle.CheckedItems.Count; i++)
             {
-                if (!SizeAndStyle.CheckedItems[i].ToString().Contains("italic"))
+                string FontStyle = SizeAndStyle.CheckedItems[i].ToString().Contains("italic") ? "italic" : "normal";
+                for (int j = 0; j < FontWeight.Count; j++)
                 {
-                    FontStyle = "normal";
-                }
-                else if (SizeAndStyle.CheckedItems[i].ToString().Contains("italic"))
-                {
-                    FontStyle = "italic";
-                }
-                for (int j = 0; j <= FontWeight.Count; j++)
-                {
-                    if (FontStyle == "normal")
+                    if (Styles[FontStyle].ContainsKey(FontWeight[j]))
                     {
-                        if (FontWeight[i] == "100")
-                        {
-                            FontFileStyle = FontFileStyles[0];
-                            var links = ApiResult.Links_100;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "200")
-                        {
-                            FontFileStyle = FontFileStyles[1];
-                            var links = ApiResult.Links_200;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "300")
-                        {
-                            FontFileStyle = FontFileStyles[2];
-                            var links = ApiResult.Links_300;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "400")
-                        {
-                            FontFileStyle = FontFileStyles[3];
-                            var links = ApiResult.Links_regular;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "500")
-                        {
-                            FontFileStyle = FontFileStyles[4];
-                            var links = ApiResult.Links_500;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "600")
-                        {
-                            FontFileStyle = FontFileStyles[5];
-                            var links = ApiResult.Links_600;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "700")
-                        {
-                            FontFileStyle = FontFileStyles[6];
-                            var links = ApiResult.Links_700;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "800")
-                        {
-                            FontFileStyle = FontFileStyles[7];
-                            var links = ApiResult.Links_800;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "900")
-                        {
-                            FontFileStyle = FontFileStyles[8];
-                            var links = ApiResult.Links_900;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
+                        FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyles[FontWeight[j]], Styles[FontStyle][FontWeight[j]]);
                     }
-                    else if (FontStyle == "italic")
-                    {
-                        if (FontWeight[i] == "100")
-                        {
-                            FontFileStyle = FontFileStyles[0];
-                            var links = ApiResult.Links_100italic;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "200")
-                        {
-                            FontFileStyle = FontFileStyles[1];
-                            var links = ApiResult.Links_200italic;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "300")
-                        {
-                            FontFileStyle = FontFileStyles[2];
-                            var links = ApiResult.Links_300italic;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "400")
-                        {
-                            FontFileStyle = FontFileStyles[3];
-                            var links = ApiResult.Links_italic;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "500")
-                        {
-                            FontFileStyle = FontFileStyles[4];
-                            var links = ApiResult.Links_500italic;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "600")
-                        {
-                            FontFileStyle = FontFileStyles[5];
-                            var links = ApiResult.Links_600italic;
-                            FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "700")
-                        {
-                            FontFileStyle = FontFileStyles[6];
-                            var links = ApiResult.Links_700italic;
-                            FileDownload(SelectedFont.Text, FolderName,  FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "800")
-                        {
-                            FontFileStyle = FontFileStyles[7];
-                            var links = ApiResult.Links_800italic;
-                            FileDownload(SelectedFont.Text, FolderName,  FontStyle, FontFileStyle, links);
-                        }
-                        else if (FontWeight[i] == "900")
-                        {
-                            FontFileStyle = FontFileStyles[8];
-                            var links = ApiResult.Links_900italic;
-                            FileDownload(SelectedFont.Text, FolderName,  FontStyle, FontFileStyle, links);
-                        }
-                    }
-                }
-                if (i == SizeAndStyle.CheckedItems.Count)
-                {
-                    break;
                 }
             }
         }
-
-
         private void FileDownload(string SelectedFont, string folderName, string FontStyle, string FontFileStyle, List<string> links)
         {
             foreach (var link in links)
@@ -160,13 +77,14 @@ namespace Fonts_Downloader
                     {
                         if (fontName == SelectedFont.ToLower().Replace(" ", ""))
                         {
-                            var FaileName = $@"{$"{folderName}\\{SelectedFont.Replace(" ", "")}"}" + $"\\{SelectedFont.Replace(" ", "")}-{FontStyle.Substring(0, 1).ToUpper() + FontStyle.Substring(1)}-{FontFileStyle}.ttf";                          
+                            var FaileName = $@"{$"{folderName}\\{SelectedFont.Replace(" ", "")}"}" + $"\\{SelectedFont.Replace(" ", "")}-" +
+                                $"{FontStyle.Substring(0, 1).ToUpper() + FontStyle.Substring(1)}-{FontFileStyle}.ttf";
                             WebClient wc = new WebClient();
-                            Uri url = new Uri(link);                           
-                                if (!File.Exists(FaileName))
-                                {
-                                    wc.DownloadFileTaskAsync(url, FaileName);
-                                }                                                                                     
+                            Uri url = new Uri(link);
+                            if (!File.Exists(FaileName))
+                            {
+                                wc.DownloadFileTaskAsync(url, FaileName);
+                            }
                         }
                     }
                 }
