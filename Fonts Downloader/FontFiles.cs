@@ -54,14 +54,14 @@ namespace Fonts_Downloader
                     { "800", "ExtraBold" },
                     { "900", "Black" },
             };
-            for (int i = 0; i < SizeAndStyle.CheckedItems.Count; i++)
+            foreach (string checkedItem in SizeAndStyle.CheckedItems)
             {
-                string FontStyle = SizeAndStyle.CheckedItems[i].ToString().Contains("italic") ? "italic" : "normal";
-                for (int j = 0; j < FontWeight.Count; j++)
+                string fontStyle = checkedItem.Contains("italic") ? "italic" : "normal";
+                foreach (string fontWeight in FontWeight)
                 {
-                    if (Styles[FontStyle].ContainsKey(FontWeight[j]))
+                    if (Styles[fontStyle].ContainsKey(fontWeight))
                     {
-                        FileDownload(SelectedFont.Text, FolderName, FontStyle, FontFileStyles[FontWeight[j]], Styles[FontStyle][FontWeight[j]]);
+                        FileDownload(SelectedFont.Text, FolderName, fontStyle, FontFileStyles[fontWeight], Styles[fontStyle][fontWeight]);
                     }
                 }
             }
