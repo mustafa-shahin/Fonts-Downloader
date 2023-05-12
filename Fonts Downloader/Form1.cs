@@ -44,10 +44,18 @@ namespace Fonts_Downloader
 
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            Key = ApiKeyBox.Text;
-            
-            Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items);
-            Document.CreateHtml(SelectedFont, SizeAndStyle);
+            Key = ApiKeyBox.Text;           
+            if (Api.IsInternetAvailable())
+            {
+                Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items);
+                Document.CreateHtml(SelectedFont, SizeAndStyle);
+            }
+            else
+            {
+                SizeAndStyle.Items.Clear(); 
+                FontBox1.Items.Clear();
+                Document.DefaultHtml();
+            }             
             //string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
             //string NewPath = Path.Combine(path, "html", "index.html");
             //string text = System.IO.File.ReadAllText(NewPath);           
