@@ -10,8 +10,17 @@ namespace Fonts_Downloader
         private const string Path = @"C:\FontDownlaoder";
         public void DefaultHtml()
         {
+            string Text;
+            if (Api.IsInternetAvailable())
+            {
+                Text = "<h3>The programm will create in C drive a folder named FontDownlaoder to render the fonts and after closing the program the folder will be deleted</h3>";
+            }
+            else
+            {
+                Text = "<h1 style=\"color:red;\">Check your internet connection</h1>";
+            }
             Directory.CreateDirectory(Path);
-            const string DefaultHtml = "<head>\r\n" +
+            string DefaultHtml = "<head>\r\n" +
                 "<link href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap\" rel=\"stylesheet\">\r\n" +
                 "</head>\r\n" +
                 "<style>\r\n" +
@@ -23,7 +32,7 @@ namespace Fonts_Downloader
                 "</style>\r\n" +
                 "<body>\r\n" +
                 "<h1>Fonts Downloader </h1>\r\n" +
-                "<h3>The programm will create in C drive a folder named FontDownlaoder to render the fonts and after closing the program the folder will be deleted </h3>\n"
+                $"{Text}\n"
                 + "</body>";
             using (StreamWriter writer = new StreamWriter($"{Path}\\index.html", false))
             {

@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
 namespace Fonts_Downloader
@@ -18,6 +19,21 @@ namespace Fonts_Downloader
                     return new ApiResponse { Message = request.ReasonPhrase };
             }
 
+        }
+        public static bool IsInternetAvailable()
+        {
+            try
+            {
+                using (var ping = new Ping())
+                {
+                    var result = ping.Send("https://www.google.com/");
+                    return (result.Status == IPStatus.Success);
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
     public class ApiResponse
