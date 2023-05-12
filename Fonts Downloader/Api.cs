@@ -26,7 +26,7 @@ namespace Fonts_Downloader
             {
                 using (var ping = new Ping())
                 {
-                    var result = ping.Send("https://www.google.com/");
+                    var result = ping.Send("www.google.com");
                     return (result.Status == IPStatus.Success);
                 }
             }
