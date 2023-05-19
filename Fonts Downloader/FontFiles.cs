@@ -17,28 +17,28 @@ namespace Fonts_Downloader
             {
                 { "normal", new Dictionary<string, List<string>>
                     {
-                        { "100", ApiResult.Links_100 },
-                        { "200", ApiResult.Links_200 },
-                        { "300", ApiResult.Links_300 },
-                        { "400", ApiResult.Links_regular },
-                        { "500", ApiResult.Links_500 },
-                        { "600", ApiResult.Links_600 },
-                        { "700", ApiResult.Links_700 },
-                        { "800", ApiResult.Links_800 },
-                        { "900", ApiResult.Links_900 },
+                        { "100", ApiResult.Links100 },
+                        { "200", ApiResult.Links200 },
+                        { "300", ApiResult.Links300 },
+                        { "400", ApiResult.Links400 },
+                        { "500", ApiResult.Links500 },
+                        { "600", ApiResult.Links600 },
+                        { "700", ApiResult.Links700 },
+                        { "800", ApiResult.Links800 },
+                        { "900", ApiResult.Links900 },
                     }
                 },
                 { "italic", new Dictionary<string, List<string>>
                     {
-                        { "100", ApiResult.Links_100italic },
-                        { "200", ApiResult.Links_200italic },
-                        { "300", ApiResult.Links_300italic },
-                        { "400", ApiResult.Links_italic },
-                        { "500", ApiResult.Links_500italic },
-                        { "600", ApiResult.Links_600italic },
-                        { "700", ApiResult.Links_700italic },
-                        { "800", ApiResult.Links_800italic },
-                        { "900", ApiResult.Links_900italic },
+                        { "100", ApiResult.Links100Italic },
+                        { "200", ApiResult.Links200Italic },
+                        { "300", ApiResult.Links300Italic },
+                        { "400", ApiResult.Links400Italic },
+                        { "500", ApiResult.Links500Italic },
+                        { "600", ApiResult.Links600Italic },
+                        { "700", ApiResult.Links700Italic },
+                        { "800", ApiResult.Links800Italic },
+                        { "900", ApiResult.Links900Italic },
                     }
                 },
             };
