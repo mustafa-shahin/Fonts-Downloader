@@ -64,18 +64,13 @@ namespace Fonts_Downloader
           
         }
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (Directory.Exists(@"C:/FontDownlaoder"))
             {
-                if (System.IO.File.Exists(@"C:/FontDownlaoder/index.html"))
+                if (File.Exists(@"C:/FontDownlaoder/index.html"))
                 {
-                    System.IO.File.Delete(@"C:/FontDownlaoder/index.html");
+                    File.Delete(@"C:/FontDownlaoder/index.html");
                 }
                 Directory.Delete(@"C:/FontDownlaoder");
             }
