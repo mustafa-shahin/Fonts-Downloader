@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Fonts_Downloader
 {
-    internal class FontFiles
+    internal class FontFilesDownloader
     {
 
         public void FileLinks(CheckedListBox SizeAndStyle, List<string> FontWeight, Label SelectedFont, string FolderName, FontsCombox ApiResult)

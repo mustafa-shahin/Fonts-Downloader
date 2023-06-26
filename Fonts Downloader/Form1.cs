@@ -86,8 +86,8 @@ namespace Fonts_Downloader
             if (!string.IsNullOrEmpty(FolderName))
             {
                 var FontWeight = new List<string>();
-                var css = new CSS();
-                var File = new FontFiles();
+                var css = new CssFile();
+                var File = new FontFilesDownloader();
                 if (FontBox1.SelectedItem != null)
                 {
                     string FontName = SelectedFont.Text;
