@@ -7,14 +7,21 @@ using System.Windows.Forms;
 
 namespace Fonts_Downloader
 {
-    internal class CSS
+    internal class CssFile
     {
 
         private readonly string[] FontFileStyles = { "Thin", "ExtraLight", "Light", "Regular", "Medium", "SemiBold", "Bold", "ExtraBold", "Black" };
         private List<string> FontWeights = new List<string>();
         private List<string> _Styles = new List<string>();
         public List<string> Styles { get { return _Styles; } }
-        private string Fontface = "@font-face {", Fontfamily = "\nfont-family:", fontStyle = "\nfont-style:", fontweight = "\nfont-weight:", _FontStyle, OldFont;
+
+        private readonly string Fontface = "@font-face {";
+        private readonly string Fontfamily = "\nfont-family:";
+        private string fontStyle = "\nfont-style:";
+        private readonly string fontweight = "\nfont-weight:";
+        private string _FontStyle;
+        private string OldFont;
+
         public string FontFace { get { return Fontface; } }
         public string FontFamily { get { return Fontfamily; } }
         public string Fontstyle { get { return fontStyle; } }
