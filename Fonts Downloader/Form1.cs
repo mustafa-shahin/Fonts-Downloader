@@ -44,7 +44,7 @@ namespace Fonts_Downloader
 
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-                    
+            Key = ApiKeyBox.Text;           
             if (Api.IsInternetAvailable())
             {
                 Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items);
@@ -66,7 +66,11 @@ namespace Fonts_Downloader
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
-
+            Key = ApiKeyBox.Text;
+            if (!string.IsNullOrEmpty(Key))
+            {
+                _ = ApiResult.resAsync(FontBox1, Key);
+            }
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -114,15 +118,6 @@ namespace Fonts_Downloader
         private void webView21_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
             ensure = true;  
-        }
-
-        private void FontBox1_Click(object sender, EventArgs e)
-        {
-            Key = ApiKeyBox.Text;
-            if (!string.IsNullOrEmpty(Key))
-            {
-                _ = ApiResult.resAsync(FontBox1, Key);
-            }
         }
     }
 }

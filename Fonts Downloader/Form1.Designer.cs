@@ -108,7 +108,6 @@ namespace Fonts_Downloader
             this.FontBox1.Size = new System.Drawing.Size(237, 28);
             this.FontBox1.TabIndex = 32;
             this.FontBox1.SelectionChangeCommitted += new System.EventHandler(this.FontBox1_SelectionChangeCommitted);
-            this.FontBox1.Click += new System.EventHandler(this.FontBox1_Click);
             // 
             // SelectedFont
             // 
