@@ -10,33 +10,34 @@ namespace Fonts_Downloader
         private const string Path = @"C:\FontDownlaoder";
         public void DefaultHtml()
         {
-            string Text;
-            if (Api.IsInternetAvailable())
-            {
-                Text = "<h3>The programm will create in C drive a folder named FontDownlaoder to render the fonts and after closing the program the folder will be deleted</h3>";
-            }
-            else
-            {
-                Text = "<h1 style=\"color:red;\">Check your internet connection</h1>";
-            }
+            string text = Api.IsInternetAvailable()
+                ? "<h3>The program will create a folder named FontDownloader on the C drive to render the fonts. After closing the program, the folder will be deleted.</h3>"
+                : "<h1 style=\"color:red;\">Check your internet connection</h1>";
+
             Directory.CreateDirectory(Path);
-            string DefaultHtml = "<head>\r\n" +
-                "<link href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap\" rel=\"stylesheet\">\r\n" +
-                "</head>\r\n" +
-                "<style>\r\n" +
-                "body{\r\n" +
-                "font-family: 'Roboto', sans-serif;\r\n" +
-                "color:white!important;\r\n" +
-                "text-align: center !important;\r\n}\r\n\r\n" +
-                "h1{\r\nfont-weight: 700 !important;\r\n}\r\n" +
-                "</style>\r\n" +
-                "<body>\r\n" +
-                "<h1>Fonts Downloader </h1>\r\n" +
-                $"{Text}\n"
-                + "</body>";
+
+            string defaultHtml = $@"
+                <head>
+                    <link href=""https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap"" rel=""stylesheet"">
+                    <style>
+                        body {{
+                            font-family: 'Roboto', sans-serif;
+                            color: white !important;
+                            text-align: center !important;
+                        }}
+                        h1 {{
+                            font-weight: 700 !important;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <h1>Fonts Downloader </h1>
+                    {text}
+                </body>";
+
             using (StreamWriter writer = new StreamWriter($"{Path}\\index.html", false))
             {
-                writer.WriteLine(DefaultHtml);
+                writer.WriteLine(defaultHtml);
             }
         }
 
