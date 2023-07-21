@@ -44,18 +44,10 @@ namespace Fonts_Downloader
 
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-                    
-            if (Api.IsInternetAvailable())
-            {
-                Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items);
-                Document.CreateHtml(SelectedFont, SizeAndStyle);
-            }
-            else
-            {
-                SizeAndStyle.Items.Clear(); 
-                FontBox1.Items.Clear();
-                Document.DefaultHtml();
-            }             
+            Key = ApiKeyBox.Text;
+            
+            Size.SizeStylesLoad(FontBox1, SelectedFont, SizeAndStyle, Items);
+            Document.CreateHtml(SelectedFont, SizeAndStyle);
             //string path = System.IO.Directory.GetParent(System.IO.Directory.GetParent(Environment.CurrentDirectory).ToString()).ToString();
             //string NewPath = Path.Combine(path, "html", "index.html");
             //string text = System.IO.File.ReadAllText(NewPath);           
@@ -64,13 +56,22 @@ namespace Fonts_Downloader
           
         }
 
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            Key = ApiKeyBox.Text;
+            if (!string.IsNullOrEmpty(Key))
+            {
+                _ = ApiResult.resAsync(FontBox1, Key);
+            }
+        }
+
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (Directory.Exists(@"C:/FontDownlaoder"))
             {
-                if (File.Exists(@"C:/FontDownlaoder/index.html"))
+                if (System.IO.File.Exists(@"C:/FontDownlaoder/index.html"))
                 {
-                    File.Delete(@"C:/FontDownlaoder/index.html");
+                    System.IO.File.Delete(@"C:/FontDownlaoder/index.html");
                 }
                 Directory.Delete(@"C:/FontDownlaoder");
             }
@@ -109,15 +110,6 @@ namespace Fonts_Downloader
         private void webView21_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
             ensure = true;  
-        }
-
-        private void FontBox1_Click(object sender, EventArgs e)
-        {
-            Key = ApiKeyBox.Text;
-            if (!string.IsNullOrEmpty(Key))
-            {
-                _ = ApiResult.resAsync(FontBox1, Key);
-            }
         }
     }
 }

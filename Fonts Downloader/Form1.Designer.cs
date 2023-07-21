@@ -108,7 +108,6 @@ namespace Fonts_Downloader
             this.FontBox1.Size = new System.Drawing.Size(237, 28);
             this.FontBox1.TabIndex = 32;
             this.FontBox1.SelectionChangeCommitted += new System.EventHandler(this.FontBox1_SelectionChangeCommitted);
-            this.FontBox1.Click += new System.EventHandler(this.FontBox1_Click);
             // 
             // SelectedFont
             // 
@@ -206,6 +205,7 @@ namespace Fonts_Downloader
             this.ApiKeyBox.Name = "ApiKeyBox";
             this.ApiKeyBox.Size = new System.Drawing.Size(528, 32);
             this.ApiKeyBox.TabIndex = 32;
+            this.ApiKeyBox.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // WebPanel
             // 
