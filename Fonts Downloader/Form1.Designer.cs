@@ -206,6 +206,7 @@ namespace Fonts_Downloader
             this.ApiKeyBox.Name = "ApiKeyBox";
             this.ApiKeyBox.Size = new System.Drawing.Size(528, 32);
             this.ApiKeyBox.TabIndex = 32;
+            this.ApiKeyBox.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // WebPanel
             // 
