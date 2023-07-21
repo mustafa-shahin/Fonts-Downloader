@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
@@ -31,7 +30,7 @@ namespace Fonts_Downloader
                     return (result.Status == IPStatus.Success);
                 }
             }
-            catch(Exception) 
+            catch
             {
                 return false;
             }
