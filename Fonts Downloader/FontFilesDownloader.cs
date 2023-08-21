@@ -9,9 +9,9 @@ namespace Fonts_Downloader
 {
     internal class FontFilesDownloader
     {
-        private readonly string[] variants = new string[] { "100", "100italic", "200", "200italic", "300", "300italic", "400", "400italic", "500", "500italic", "600", "600italic", "700", "700italic", "800", "800italic", "900", "900italic" };
-        public void FileLinks(CheckedListBox SizeAndStyle, List<string> FontWeight, Label SelectedFont, string FolderName, FontsCombox ApiResult)
+        public void FileLinks(CheckedListBox SizeAndStyle, Label SelectedFont, string FolderName, FontsCombox ApiResult)
         {
+            var variants = new string[] { "100", "100italic", "200", "200italic", "300", "300italic", "400", "400italic", "500", "500italic", "600", "600italic", "700", "700italic", "800", "800italic", "900", "900italic" };
             var StylesNormal = ApiResult.LinksByVariantNormal;
             var StylesItalic = ApiResult.LinksByVariantItalic;
 
@@ -27,31 +27,26 @@ namespace Fonts_Downloader
                 { "800", "ExtraBold" },
                 { "900", "Black" },
             };
-
             foreach (string checkedItem in SizeAndStyle.CheckedItems)
             {
                 string fontStyle = checkedItem.Contains("italic") ? "italic" : "normal";
 
                 foreach (var variant in variants)
                 {
-                    foreach (string fontWeight in FontWeight)
+                    bool isItalic = fontStyle == "italic";
+                    bool isValidVariant = variant.Contains(StylesNormal.Keys.FirstOrDefault(m => m == variant.Replace("italic", ""))) && (isItalic ? variant.Contains("italic") : !variant.Contains("italic"));
+
+                    if (isValidVariant)
                     {
-                        bool isItalic = fontStyle == "italic";
-                        bool isValidVariant = variant.Contains(fontWeight) && (isItalic ? variant.Contains("italic") : !variant.Contains("italic"));
+                        var selectedStyles = isItalic ? StylesItalic : StylesNormal;
 
-                        if (isValidVariant)
+                        if (selectedStyles.ContainsKey(variant))
                         {
-                            Dictionary<string, List<string>> selectedStyles = isItalic ? StylesItalic : StylesNormal;
-
-                            if (selectedStyles.ContainsKey(variant))
-                            {
-                                FileDownload(SelectedFont.Text, FolderName, fontStyle, FontFileStyles[fontWeight], selectedStyles[variant]);
-                            }
+                            FileDownload(SelectedFont.Text, FolderName, fontStyle, FontFileStyles[variant.Replace("italic", "")], selectedStyles[variant]);
                         }
                     }
                 }
             }
-
         }
         private void FileDownload(string selectedFont, string folderName, string fontStyle, string fontFileStyle, List<string> links)
         {

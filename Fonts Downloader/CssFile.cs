@@ -9,8 +9,6 @@ namespace Fonts_Downloader
 {
     internal class CssFile
     {
-
-        private readonly string[] FontFileStyles = { "Thin", "ExtraLight", "Light", "Regular", "Medium", "SemiBold", "Bold", "ExtraBold", "Black" };
         private List<string> FontWeights = new List<string>();
         private List<string> _Styles = new List<string>();
         public List<string> Styles { get { return _Styles; } }

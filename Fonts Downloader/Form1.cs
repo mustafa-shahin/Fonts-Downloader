@@ -91,7 +91,7 @@ namespace Fonts_Downloader
                     FontWeight = css.FontWeight;
                     if (FontWeight.Any())
                     {                      
-                        File.FileLinks(SizeAndStyle, FontWeight, SelectedFont, FolderName, ApiResult);
+                        File.FileLinks(SizeAndStyle, SelectedFont, FolderName, ApiResult);
                         DialogResult dialogResult = MessageBox.Show("The Downlaod has been completed. Do you want to check downloaded files? ", "Download completed", MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.Yes)
                         {
