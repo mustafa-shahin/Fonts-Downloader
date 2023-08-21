@@ -13,10 +13,8 @@ namespace Fonts_Downloader
             "400", "400italic", "500", "500italic", "600", "600italic",
             "700", "700italic", "800", "800italic", "900", "900italic"
         };
-
         public Dictionary<string, List<string>> LinksByVariantNormal { get; } = new Dictionary<string, List<string>>();
         public Dictionary<string, List<string>> LinksByVariantItalic { get; } = new Dictionary<string, List<string>>();
-
         private void AddLinkForVariant(string variant, string link)
         {
             var targetDictionary = variant.Contains("italic") ? LinksByVariantItalic : LinksByVariantNormal;
