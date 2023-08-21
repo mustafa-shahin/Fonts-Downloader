@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 
@@ -10,80 +9,88 @@ namespace Fonts_Downloader
 {
     internal class FontFilesDownloader
     {
-
+        private readonly string[] variants = new string[] { "100", "100italic", "200", "200italic", "300", "300italic", "400", "400italic", "500", "500italic", "600", "600italic", "700", "700italic", "800", "800italic", "900", "900italic" };
         public void FileLinks(CheckedListBox SizeAndStyle, List<string> FontWeight, Label SelectedFont, string FolderName, FontsCombox ApiResult)
         {
-            var Styles = new Dictionary<string, Dictionary<string, List<string>>>
-            {
-                { "normal", new Dictionary<string, List<string>>
-                    {
-                        { "100", ApiResult.Links_100 },
-                        { "200", ApiResult.Links_200 },
-                        { "300", ApiResult.Links_300 },
-                        { "400", ApiResult.Links_regular },
-                        { "500", ApiResult.Links_500 },
-                        { "600", ApiResult.Links_600 },
-                        { "700", ApiResult.Links_700 },
-                        { "800", ApiResult.Links_800 },
-                        { "900", ApiResult.Links_900 },
-                    }
-                },
-                { "italic", new Dictionary<string, List<string>>
-                    {
-                        { "100", ApiResult.Links_100italic },
-                        { "200", ApiResult.Links_200italic },
-                        { "300", ApiResult.Links_300italic },
-                        { "400", ApiResult.Links_italic },
-                        { "500", ApiResult.Links_500italic },
-                        { "600", ApiResult.Links_600italic },
-                        { "700", ApiResult.Links_700italic },
-                        { "800", ApiResult.Links_800italic },
-                        { "900", ApiResult.Links_900italic },
-                    }
-                },
-            };
+            var StylesNormal = ApiResult.LinksByVariantNormal;
+            var StylesItalic = ApiResult.LinksByVariantItalic;
+
             var FontFileStyles = new Dictionary<string, string>
             {
-                    { "100", "Thin" },
-                    { "200", "ExtraLight" },
-                    { "300", "Light" },
-                    { "400", "Regular" },
-                    { "500", "Medium" },
-                    { "600", "SemiBold" },
-                    { "700", "ExtraBold" },
-                    { "800", "ExtraBold" },
-                    { "900", "Black" },
+                { "100", "Thin" },
+                { "200", "ExtraLight" },
+                { "300", "Light" },
+                { "400", "Regular" },
+                { "500", "Medium" },
+                { "600", "SemiBold" },
+                { "700", "Bold" },
+                { "800", "ExtraBold" },
+                { "900", "Black" },
             };
+
             foreach (string checkedItem in SizeAndStyle.CheckedItems)
             {
                 string fontStyle = checkedItem.Contains("italic") ? "italic" : "normal";
-                foreach (string fontWeight in FontWeight)
+
+                foreach (var variant in variants)
                 {
-                    if (Styles[fontStyle].ContainsKey(fontWeight))
+                    foreach (string fontWeight in FontWeight)
                     {
-                        FileDownload(SelectedFont.Text, FolderName, fontStyle, FontFileStyles[fontWeight], Styles[fontStyle][fontWeight]);
+                        if (variant.Contains(fontWeight))
+                        {
+                            if (fontStyle == "italic" && StylesItalic.ContainsKey(variant) && variant.Contains(fontWeight) && variant.Contains("italic"))
+                            {
+                                FileDownload(SelectedFont.Text, FolderName, fontStyle, FontFileStyles[fontWeight], StylesItalic[variant]);
+                            }
+                            else if (fontStyle == "normal" && !variant.Contains("italic") && StylesNormal.ContainsKey(variant))
+                            {
+                                FileDownload(SelectedFont.Text, FolderName, fontStyle, FontFileStyles[fontWeight], StylesNormal[variant]);
+                            }
+                        }
                     }
                 }
             }
+            foreach (string checkedItem in SizeAndStyle.CheckedItems)
+            {
+                string fontStyle = checkedItem.Contains("italic") ? "italic" : "normal";
+
+                foreach (var variant in variants)
+                {
+                    var isItalic = fontStyle == "italic";
+                    var isValidVariant = variant.Contains(FontFileStyles[variant.Replace("italic", "")]) && (isItalic ? variant.Contains("italic") : !variant.Contains("italic"));
+
+                    if (isValidVariant)
+                    {
+                        var selectedStyles = isItalic ? StylesItalic : StylesNormal;
+
+                        if (selectedStyles.ContainsKey(variant))
+                        {
+                           // FileDownload(SelectedFont.Text, FolderName, fontStyle, FontFileStyles[variant.Replace("italic", "")], selectedStyles[variant][variant.Replace("italic", "")]);
+                        }
+                    }
+
+                }
+            }
+
         }
-        private void FileDownload(string SelectedFont, string folderName, string FontStyle, string FontFileStyle, List<string> links)
+
+        private void FileDownload(string selectedFont, string folderName, string fontStyle, string fontFileStyle, List<string> links)
         {
             foreach (var link in links)
             {
-                if (!string.IsNullOrEmpty(link) && link.Replace("/", " ").Contains(SelectedFont.ToLower().Replace(" ", "")))
+                if (!string.IsNullOrEmpty(link) && link.Replace("/", " ").Contains(selectedFont.ToLower().Replace(" ", "")))
                 {
-                    string[] FontFileLinks = link.ToLower().Split('/');
-                    foreach (string fontName in FontFileLinks)
+                    string[] fontFileLinks = link.ToLower().Split('/');
+                    foreach (string fontName in fontFileLinks)
                     {
-                        if (fontName == SelectedFont.ToLower().Replace(" ", ""))
+                        if (fontName == selectedFont.ToLower().Replace(" ", ""))
                         {
-                            var FaileName = $@"{$"{folderName}\\{SelectedFont.Replace(" ", "")}"}" + $"\\{SelectedFont.Replace(" ", "")}-" +
-                                $"{FontStyle.Substring(0, 1).ToUpper() + FontStyle.Substring(1)}-{FontFileStyle}.ttf";
+                            var fileName = $"{folderName}\\{selectedFont.Replace(" ", "")}\\{selectedFont.Replace(" ", "")}-{fontStyle.Substring(0, 1).ToUpper() + fontStyle.Substring(1)}-{fontFileStyle}.ttf";
                             WebClient wc = new WebClient();
                             Uri url = new Uri(link);
-                            if (!File.Exists(FaileName))
+                            if (!File.Exists(fileName))
                             {
-                                wc.DownloadFileTaskAsync(url, FaileName);
+                                wc.DownloadFileTaskAsync(url, fileName);
                             }
                         }
                     }
