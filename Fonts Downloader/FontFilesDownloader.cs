@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Fonts_Downloader
 {
     internal class FontFilesDownloader
     {
-        public void FileLinks(CheckedListBox SizeAndStyle, Label SelectedFont, string FolderName, FontsCombox ApiResult)
+        public async Task FileLinks(CheckedListBox SizeAndStyle, Label SelectedFont, string FolderName, FontsCombox ApiResult)
         {
             var variants = new string[] { "100", "100italic", "200", "200italic", "300", "300italic", "400", "400italic", "500", "500italic", "600", "600italic", "700", "700italic", "800", "800italic", "900", "900italic" };
             var StylesNormal = ApiResult.LinksByVariantNormal;
@@ -42,34 +44,37 @@ namespace Fonts_Downloader
 
                         if (selectedStyles.ContainsKey(variant))
                         {
-                            FileDownload(SelectedFont.Text, FolderName, fontStyle, FontFileStyles[variant.Replace("italic", "")], selectedStyles[variant]);
+                           await FileDownloadAsync(SelectedFont.Text, FolderName, fontStyle, FontFileStyles[variant.Replace("italic", "")], selectedStyles[variant]);
                         }
                     }
                 }
             }
         }
-        private void FileDownload(string selectedFont, string folderName, string fontStyle, string fontFileStyle, List<string> links)
+        private async Task FileDownloadAsync(string selectedFont, string folderName, string fontStyle, string fontFileStyle, List<string> links)
         {
-            foreach (var link in links)
+            using (var wc = new WebClient())
             {
-                if (!string.IsNullOrEmpty(link) && link.Replace("/", " ").Contains(selectedFont.ToLower().Replace(" ", "")))
+                foreach (var link in links)
                 {
-                    string[] fontFileLinks = link.ToLower().Split('/');
-                    foreach (string fontName in fontFileLinks)
+                    if (!string.IsNullOrEmpty(link) && link.Replace("/", " ").Contains(selectedFont.ToLower().Replace(" ", "")))
                     {
-                        if (fontName == selectedFont.ToLower().Replace(" ", ""))
+                        string[] fontFileLinks = link.ToLower().Split('/');
+                        foreach (string fontName in fontFileLinks)
                         {
-                            var fileName = $"{folderName}\\{selectedFont.Replace(" ", "")}\\{selectedFont.Replace(" ", "")}-{fontStyle.Substring(0, 1).ToUpper() + fontStyle.Substring(1)}-{fontFileStyle}.ttf";
-                            WebClient wc = new WebClient();
-                            Uri url = new Uri(link);
-                            if (!File.Exists(fileName))
+                            if (fontName == selectedFont.ToLower().Replace(" ", ""))
                             {
-                                wc.DownloadFileTaskAsync(url, fileName);
+                                var fileName = $"{folderName}\\{selectedFont.Replace(" ", "")}\\{selectedFont.Replace(" ", "")}-{fontStyle.Substring(0, 1).ToUpper() + fontStyle.Substring(1)}-{fontFileStyle}.ttf";
+                                Uri url = new Uri(link);
+                                if (!File.Exists(fileName))
+                                {
+                                    await wc.DownloadFileTaskAsync(url, fileName);
+                                }
                             }
                         }
                     }
                 }
             }
         }
+
     }
 }
