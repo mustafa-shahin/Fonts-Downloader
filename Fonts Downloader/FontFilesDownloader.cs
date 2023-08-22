@@ -13,10 +13,9 @@ namespace Fonts_Downloader
     {
         public async Task FileLinks(CheckedListBox SizeAndStyle, Label SelectedFont, string FolderName, FontsCombox ApiResult)
         {
-            var variants = new string[] { "100", "100italic", "200", "200italic", "300", "300italic", "400", "400italic", "500", "500italic", "600", "600italic", "700", "700italic", "800", "800italic", "900", "900italic" };
             var StylesNormal = ApiResult.LinksByVariantNormal;
             var StylesItalic = ApiResult.LinksByVariantItalic;
-
+            var variants = SizeAndStyle.CheckedItems;
             var FontFileStyles = new Dictionary<string, string>
             {
                 { "100", "Thin" },
@@ -29,23 +28,19 @@ namespace Fonts_Downloader
                 { "800", "ExtraBold" },
                 { "900", "Black" },
             };
-            foreach (string checkedItem in SizeAndStyle.CheckedItems)
+            foreach (var variant in variants)
             {
-                string fontStyle = checkedItem.Contains("italic") ? "italic" : "normal";
+                string fontStyle = variant.ToString().Contains("italic") ? "italic" : "normal";
+                bool isItalic = fontStyle == "italic";
+                bool isValidVariant = variant.ToString().Contains(StylesNormal.Keys.FirstOrDefault(m => m == variant.ToString().Replace("italic", ""))) && (isItalic ? variant.ToString().Contains("italic") : !variant.ToString().Contains("italic"));
 
-                foreach (var variant in variants)
+                if (isValidVariant)
                 {
-                    bool isItalic = fontStyle == "italic";
-                    bool isValidVariant = variant.Contains(StylesNormal.Keys.FirstOrDefault(m => m == variant.Replace("italic", ""))) && (isItalic ? variant.Contains("italic") : !variant.Contains("italic"));
+                    var selectedStyles = isItalic ? StylesItalic : StylesNormal;
 
-                    if (isValidVariant)
+                    if (selectedStyles.ContainsKey(variant.ToString()))
                     {
-                        var selectedStyles = isItalic ? StylesItalic : StylesNormal;
-
-                        if (selectedStyles.ContainsKey(variant))
-                        {
-                           await FileDownloadAsync(SelectedFont.Text, FolderName, fontStyle, FontFileStyles[variant.Replace("italic", "")], selectedStyles[variant]);
-                        }
+                        await FileDownloadAsync(SelectedFont.Text, FolderName, fontStyle, FontFileStyles[variant.ToString().Replace("italic", "")], selectedStyles[variant.ToString()]);
                     }
                 }
             }
@@ -54,22 +49,20 @@ namespace Fonts_Downloader
         {
             using (var wc = new WebClient())
             {
-                foreach (var link in links)
+                string formattedSelectedFont = selectedFont.ToLower().Replace(" ", "");
+
+                foreach (var link in links.Where(link => !string.IsNullOrEmpty(link) && link.Contains(formattedSelectedFont)))
                 {
-                    if (!string.IsNullOrEmpty(link) && link.Replace("/", " ").Contains(selectedFont.ToLower().Replace(" ", "")))
+                    string[] fontFileLinks = link.ToLower().Split('/');
+                    string formattedFontName = formattedSelectedFont;
+                    if (fontFileLinks.Contains(formattedFontName))
                     {
-                        string[] fontFileLinks = link.ToLower().Split('/');
-                        foreach (string fontName in fontFileLinks)
+                        var fileName = $"{folderName}\\{formattedSelectedFont}\\{formattedSelectedFont}-{char.ToUpper(fontStyle[0]) + fontStyle.Substring(1)}-{fontFileStyle}.ttf";
+                        Uri url = new Uri(link);
+
+                        if (!File.Exists(fileName))
                         {
-                            if (fontName == selectedFont.ToLower().Replace(" ", ""))
-                            {
-                                var fileName = $"{folderName}\\{selectedFont.Replace(" ", "")}\\{selectedFont.Replace(" ", "")}-{fontStyle.Substring(0, 1).ToUpper() + fontStyle.Substring(1)}-{fontFileStyle}.ttf";
-                                Uri url = new Uri(link);
-                                if (!File.Exists(fileName))
-                                {
-                                    await wc.DownloadFileTaskAsync(url, fileName);
-                                }
-                            }
+                            await wc.DownloadFileTaskAsync(url, fileName);
                         }
                     }
                 }
