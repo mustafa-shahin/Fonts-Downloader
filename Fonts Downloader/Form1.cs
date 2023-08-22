@@ -33,11 +33,13 @@ namespace Fonts_Downloader
        
         private void SelectFolder_Click(object sender, EventArgs e)
         {
-            var folderBrowserDialog = new FolderBrowserDialog();
-            DialogResult result = folderBrowserDialog.ShowDialog();
-            if (result == DialogResult.OK)
+            using (var folderBrowserDialog = new FolderBrowserDialog())
             {
-                FolderName = folderBrowserDialog.SelectedPath;
+                DialogResult result = folderBrowserDialog.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    FolderName = folderBrowserDialog.SelectedPath;
+                }
             }
             SelectedFolder.Text = FolderName;
         }
