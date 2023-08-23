@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Fonts_Downloader
@@ -33,11 +34,13 @@ namespace Fonts_Downloader
        
         private void SelectFolder_Click(object sender, EventArgs e)
         {
-            var folderBrowserDialog = new FolderBrowserDialog();
-            DialogResult result = folderBrowserDialog.ShowDialog();
-            if (result == DialogResult.OK)
+            using (var folderBrowserDialog = new FolderBrowserDialog())
             {
-                FolderName = folderBrowserDialog.SelectedPath;
+                DialogResult result = folderBrowserDialog.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    FolderName = folderBrowserDialog.SelectedPath;
+                }
             }
             SelectedFolder.Text = FolderName;
         }
@@ -77,7 +80,7 @@ namespace Fonts_Downloader
             }
         }
 
-        private void CopyFont_Click(object sender, EventArgs e)
+        private async void CopyFont_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(FolderName))
             {
@@ -91,7 +94,7 @@ namespace Fonts_Downloader
                     FontWeight = css.FontWeight;
                     if (FontWeight.Any())
                     {                      
-                        File.FileLinks(SizeAndStyle, FontWeight, SelectedFont, FolderName, ApiResult);
+                        await File.FileLinks(SizeAndStyle, SelectedFont, FolderName, ApiResult);
                         DialogResult dialogResult = MessageBox.Show("The Downlaod has been completed. Do you want to check downloaded files? ", "Download completed", MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.Yes)
                         {

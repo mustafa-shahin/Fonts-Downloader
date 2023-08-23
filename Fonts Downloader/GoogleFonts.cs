@@ -39,10 +39,10 @@ namespace Fonts_Downloader
         public string _300italic { get; set; }
 
         [JsonProperty("regular")]
-        public string regular { get; set; }
+        public string _400 { get; set; }
 
         [JsonProperty("italic")]
-        public string italic { get; set; }
+        public string _400italic { get; set; }
 
         [JsonProperty("500italic")]
         public string _500italic { get; set; }
