@@ -1,48 +1,54 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Fonts_Downloader
 {
     internal class SizeStyles
     {
-        private string old = string.Empty;
-        private List<string> Subset = new List<string>();
-        public List<string> SubsetList { get { return Subset; } }
-        public void SizeStylesLoad(ComboBox FontBox, Label SelectedFont, CheckedListBox SizeAndStyle, List<Item> Items)
-        {
-            if (FontBox.SelectedIndex > -1)
-            {
-                SelectedFont.Text = FontBox.SelectedItem.ToString();
-            }
-            if (SelectedFont.Text != old)
-            {
-                SizeAndStyle.Items.Clear();
-            }
-            foreach (var item in Items)
-            {
-                if (FontBox.SelectedItem.ToString() == item.family)
-                {
-                    for (int i = 0; i < item.variants.Count; i++)
-                    {
-                        if (item.variants[i] == "regular")
-                        {
-                            item.variants[i] = "400";
-                        }
-                        if (item.variants[i] == "italic")
-                        {
-                            item.variants[i] = "400italic";
-                        }
-                        SizeAndStyle.Items.Add(item.variants[i]);
+        private string previousFont = string.Empty;
 
-                    }
-                    for (int i = 0; i < item.subsets.Count; i++)
+        public void LoadSizeStyles(ComboBox FontBox, Label SelectedFont, CheckedListBox SizeAndStyle, CheckedListBox SubsetsLists, List<Item> Items)
+        {
+            string selectedFont = FontBox.SelectedItem?.ToString();
+
+            if (!string.IsNullOrEmpty(selectedFont) && selectedFont != previousFont)
+            {
+                SelectedFont.Text = selectedFont;
+                SizeAndStyle.Items.Clear();
+                foreach (var item in Items.Where(item => item.family == selectedFont))
+                {
+                    foreach (var variant in item.variants.Select(MapVariant))
                     {
-                        Subset.Add(item.subsets[i]);
+                        SizeAndStyle.Items.Add(variant);
                     }
                 }
+
+                var subsets = Items
+                    .Where(item => item.family == selectedFont)
+                    .SelectMany(item => item.subsets)
+                    .Select(item => char.ToUpper(item[0]) + item.Substring(1))
+                    .ToList();
+
+                SubsetsLists.Items.Clear();
+                SubsetsLists.Items.AddRange(subsets.ToArray());
+
+                previousFont = selectedFont;
             }
-            old = SelectedFont.Text;
+        }
+
+        private string MapVariant(string variant)
+        {
+            switch (variant)
+            {
+                case "regular":
+                    return "400";
+                case "italic":
+                    return "400italic";
+                default:
+                    return variant;
+            }
         }
     }
 }
-
