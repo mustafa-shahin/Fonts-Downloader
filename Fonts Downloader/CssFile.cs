@@ -21,49 +21,71 @@ namespace Fonts_Downloader
             { "900", "Black" },
         };
 
-        private List<string> _Styles = new List<string>();
-        public List<string> Styles => _Styles;
+        private List<string> Styles { get; } = new List<string>();
+        private List<string> FontWeight { get; } = new List<string>();
+        public List<string> FontWeights => FontWeight;
 
-        private List<string> _FontWeight = new List<string>();
-        public List<string> FontWeight => _FontWeight;
-        public void CreateCSS(CheckedListBox SizeAndStyle, List<string> SubSet, string FolderName, string FontName)
+        public void CreateCSS(CheckedListBox sizeAndStyle, CheckedListBox subsetsLists, string folderName, string fontName)
         {
-            List<string> Css = new List<string>();
+            var cssList = new List<string>();
 
-            for (int i = 0; i < SizeAndStyle.CheckedItems.Count; i++)
+            foreach (var checkedItem in sizeAndStyle.CheckedItems.Cast<string>())
             {
-                string fontStyle = SizeAndStyle.CheckedItems[i].ToString().Contains("italic") ? "italic" : "normal";
-                _Styles.Add(fontStyle);
-                 
-                string fontWeight = SizeAndStyle.CheckedItems[i].ToString().Replace("italic", "");
-                _FontWeight.Add(fontWeight);
-                if (!string.IsNullOrWhiteSpace(fontWeight))
+                if (ParseCheckedItem(checkedItem, out var fontStyle, out var fontWeight))
                 {
-                    string fontFileStyle = FontFileStyles.ContainsKey(fontWeight) ? FontFileStyles[fontWeight] : "Regular";
-
-                    foreach (var sub in SubSet)
+                    Styles.Add(fontStyle);
+                    FontWeight.Add(fontWeight);
+                    string fontFileStyle = FontFileStyles[fontWeight];
+                    if (subsetsLists.CheckedIndices.Count > 0)
                     {
-                        string css = $"/*{sub}*/" +
-                                     $"\n@font-face {{\nfont-family: '{FontName}';\nfont-style: {fontStyle};\nfont-weight: {fontWeight};\nfont-stretch: 100%;" +
-                                     $"\nsrc: url('{FontName.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle.Substring(1)}-{fontFileStyle}.ttf')\n}}";
-                        Css.Add(css);
+                        foreach (var subset in subsetsLists.CheckedItems.Cast<string>())
+                        {
+                            var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, subset.ToLower() , fontFileStyle);
+                            cssList.Add(css);
+                        }
+                    }
+                    else
+                    {
+                        var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, fontFileStyle);
+                        cssList.Add(css);
                     }
                 }
             }
 
-            if (Css.Any())
+            if (cssList.Any())
             {
-                string fontFolder = $"{FolderName}\\{FontName.Replace(" ", "")}";
+                string fontFolder = Path.Combine(folderName, fontName.Replace(" ", ""));
                 Directory.CreateDirectory(fontFolder);
 
-                using (StreamWriter writer = new StreamWriter(Path.Combine(fontFolder, $"{FontName.Replace(" ", "")}.css"), false))
-                {
-                    foreach (var str in Css)
-                    {
-                        writer.WriteLine(str);
-                    }
-                }
+                string cssFilePath = Path.Combine(fontFolder, $"{fontName.Replace(" ", "")}.css");
+
+                File.WriteAllLines(cssFilePath, cssList);
             }
+        }
+
+        private bool ParseCheckedItem(string checkedItem, out string fontStyle, out string fontWeight)
+        {
+            fontStyle = checkedItem.Contains("italic") ? "italic" : "normal";
+            fontWeight = checkedItem.Replace("italic", "").Trim();
+
+            return !string.IsNullOrWhiteSpace(fontWeight) && FontFileStyles.TryGetValue(fontWeight, out _);
+        }
+
+        private string GenerateFontFaceCss(string fontName, string fontStyle, string fontWeight, string fontFileStyle, string subset = null)
+        {
+            var Subset = !string.IsNullOrWhiteSpace(subset) ? $"/*{subset}*/\n" : "";
+            return Subset +
+                   $"@font-face {{\n" +
+                   $"font-family: '{fontName}';\n" +
+                   $"font-style: {fontStyle};\n" +
+                   $"font-weight: {fontWeight};\n" +
+                   $"font-stretch: 100%;\n" +
+                   $"src: url('{CssFileName(fontName, fontStyle, fontFileStyle)}.ttf')\n}}";
+        }
+
+        private string CssFileName(string fontName, string fontStyle, string fontWeight)
+        {
+            return $"{fontName.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle.Substring(1)}-{fontWeight}";
         }
     }
 }

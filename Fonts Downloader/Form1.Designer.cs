@@ -5,7 +5,7 @@ namespace Fonts_Downloader
 {
     partial class Form1
     {
-        
+
 
         /// <summary>
         /// Required designer variable.
@@ -41,6 +41,7 @@ namespace Fonts_Downloader
             this.CopyFont = new System.Windows.Forms.Button();
             this.webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.LeftPanel = new System.Windows.Forms.Panel();
+            this.SubsetsLists = new System.Windows.Forms.CheckedListBox();
             this.TopPanel = new System.Windows.Forms.Panel();
             this.ApiKeyLabel = new System.Windows.Forms.Label();
             this.ApiKeyBox = new System.Windows.Forms.TextBox();
@@ -63,7 +64,7 @@ namespace Fonts_Downloader
             this.SizeAndStyle.Margin = new System.Windows.Forms.Padding(3, 3, 3, 2);
             this.SizeAndStyle.Name = "SizeAndStyle";
             this.SizeAndStyle.Size = new System.Drawing.Size(237, 350);
-            this.SizeAndStyle.TabIndex = 15;
+            this.SizeAndStyle.TabIndex = 35;
             // 
             // SelectFolder
             // 
@@ -129,7 +130,7 @@ namespace Fonts_Downloader
             this.CopyFont.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CopyFont.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CopyFont.ForeColor = System.Drawing.Color.White;
-            this.CopyFont.Location = new System.Drawing.Point(20, 460);
+            this.CopyFont.Location = new System.Drawing.Point(20, 740);
             this.CopyFont.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.CopyFont.Name = "CopyFont";
             this.CopyFont.Size = new System.Drawing.Size(237, 51);
@@ -154,9 +155,10 @@ namespace Fonts_Downloader
             // 
             // LeftPanel
             // 
-            this.LeftPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.LeftPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.LeftPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(62)))), ((int)(((byte)(79)))));
+            this.LeftPanel.Controls.Add(this.SubsetsLists);
             this.LeftPanel.Controls.Add(this.CopyFont);
             this.LeftPanel.Controls.Add(this.SelectedFont);
             this.LeftPanel.Controls.Add(this.SizeAndStyle);
@@ -166,9 +168,23 @@ namespace Fonts_Downloader
             this.LeftPanel.Size = new System.Drawing.Size(274, 808);
             this.LeftPanel.TabIndex = 36;
             // 
+            // SubsetsLists
+            // 
+            this.SubsetsLists.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(98)))), ((int)(((byte)(101)))));
+            this.SubsetsLists.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.SubsetsLists.CheckOnClick = true;
+            this.SubsetsLists.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SubsetsLists.ForeColor = System.Drawing.Color.White;
+            this.SubsetsLists.FormattingEnabled = true;
+            this.SubsetsLists.Location = new System.Drawing.Point(19, 454);
+            this.SubsetsLists.Margin = new System.Windows.Forms.Padding(3, 3, 3, 2);
+            this.SubsetsLists.Name = "SubsetsLists";
+            this.SubsetsLists.Size = new System.Drawing.Size(237, 275);
+            this.SubsetsLists.TabIndex = 50;
+            // 
             // TopPanel
             // 
-            this.TopPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.TopPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TopPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(62)))), ((int)(((byte)(79)))));
             this.TopPanel.Controls.Add(this.ApiKeyLabel);
@@ -209,8 +225,8 @@ namespace Fonts_Downloader
             // 
             // WebPanel
             // 
-            this.WebPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.WebPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.WebPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(62)))), ((int)(((byte)(79)))));
             this.WebPanel.Controls.Add(this.webView21);
@@ -259,5 +275,6 @@ namespace Fonts_Downloader
         private Panel WebPanel;
         private Label ApiKeyLabel;
         private TextBox ApiKeyBox;
+        private CheckedListBox SubsetsLists;
     }
 }
