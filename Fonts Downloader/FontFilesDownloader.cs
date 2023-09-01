@@ -49,15 +49,12 @@ namespace Fonts_Downloader
         {
             using (var wc = new WebClient())
             {
-                string formattedSelectedFont = selectedFont.ToLower().Replace(" ", "");
-
-                foreach (var link in links.Where(link => !string.IsNullOrEmpty(link) && link.Contains(formattedSelectedFont)))
+                foreach (var link in links.Where(link => !string.IsNullOrEmpty(link) && link.Contains(selectedFont.Replace(" ", "").ToLower())))
                 {
                     string[] fontFileLinks = link.ToLower().Split('/');
-                    string formattedFontName = formattedSelectedFont;
-                    if (fontFileLinks.Contains(formattedFontName))
+                    if (fontFileLinks.Contains(selectedFont.Replace(" ", "").ToLower()))
                     {
-                        var fileName = $"{folderName}\\{formattedSelectedFont}\\{formattedSelectedFont}-{char.ToUpper(fontStyle[0]) + fontStyle.Substring(1)}-{fontFileStyle}.ttf";
+                        var fileName = $"{folderName}\\{selectedFont.Replace(" ", "")}\\{selectedFont.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle.Substring(1)}-{fontFileStyle}.ttf";
                         Uri url = new Uri(link);
 
                         if (!File.Exists(fileName))

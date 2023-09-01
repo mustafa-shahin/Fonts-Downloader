@@ -35,20 +35,20 @@ namespace Fonts_Downloader
                 {
                     Styles.Add(fontStyle);
                     FontWeight.Add(fontWeight);
+                    string fontFileStyle = FontFileStyles[fontWeight];
                     if (subsetsLists.CheckedIndices.Count > 0)
                     {
                         foreach (var subset in subsetsLists.CheckedItems.Cast<string>())
                         {
-                            var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, subset.ToLower());
+                            var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, subset.ToLower() , fontFileStyle);
                             cssList.Add(css);
                         }
                     }
                     else
                     {
-                        var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight);
+                        var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, fontFileStyle);
                         cssList.Add(css);
                     }
-
                 }
             }
 
@@ -71,7 +71,7 @@ namespace Fonts_Downloader
             return !string.IsNullOrWhiteSpace(fontWeight) && FontFileStyles.TryGetValue(fontWeight, out _);
         }
 
-        private string GenerateFontFaceCss(string fontName, string fontStyle, string fontWeight, string subset = null)
+        private string GenerateFontFaceCss(string fontName, string fontStyle, string fontWeight, string fontFileStyle, string subset = null)
         {
             var Subset = !string.IsNullOrWhiteSpace(subset) ? $"/*{subset}*/\n" : "";
             return Subset +
@@ -80,7 +80,7 @@ namespace Fonts_Downloader
                    $"font-style: {fontStyle};\n" +
                    $"font-weight: {fontWeight};\n" +
                    $"font-stretch: 100%;\n" +
-                   $"src: url('{CssFileName(fontName, fontStyle, FontWeight.Last())}.ttf')\n}}";
+                   $"src: url('{CssFileName(fontName, fontStyle, fontFileStyle)}.ttf')\n}}";
         }
 
         private string CssFileName(string fontName, string fontStyle, string fontWeight)
