@@ -88,7 +88,7 @@ namespace Fonts_Downloader
                 if (FontBox1.SelectedItem != null)
                 {
                     string FontName = SelectedFont.Text;
-                    css.CreateCSS(SizeAndStyle, SubsetsLists, FolderName, FontName);
+                    css.CreateCSS(SizeAndStyle, SubsetsLists, FolderName, FontName, Minify);
                     FontWeight = css.FontWeights;
                     if (FontWeight.Any())
                     {

@@ -46,6 +46,7 @@ namespace Fonts_Downloader
             this.ApiKeyLabel = new System.Windows.Forms.Label();
             this.ApiKeyBox = new System.Windows.Forms.TextBox();
             this.WebPanel = new System.Windows.Forms.Panel();
+            this.Minify = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.webView21)).BeginInit();
             this.LeftPanel.SuspendLayout();
             this.TopPanel.SuspendLayout();
@@ -130,7 +131,7 @@ namespace Fonts_Downloader
             this.CopyFont.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CopyFont.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CopyFont.ForeColor = System.Drawing.Color.White;
-            this.CopyFont.Location = new System.Drawing.Point(20, 740);
+            this.CopyFont.Location = new System.Drawing.Point(19, 792);
             this.CopyFont.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.CopyFont.Name = "CopyFont";
             this.CopyFont.Size = new System.Drawing.Size(237, 51);
@@ -148,7 +149,7 @@ namespace Fonts_Downloader
             this.webView21.ForeColor = System.Drawing.Color.White;
             this.webView21.Location = new System.Drawing.Point(0, 0);
             this.webView21.Name = "webView21";
-            this.webView21.Size = new System.Drawing.Size(950, 702);
+            this.webView21.Size = new System.Drawing.Size(950, 739);
             this.webView21.TabIndex = 35;
             this.webView21.ZoomFactor = 1D;
             this.webView21.CoreWebView2InitializationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs>(this.webView21_CoreWebView2InitializationCompleted);
@@ -158,6 +159,7 @@ namespace Fonts_Downloader
             this.LeftPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.LeftPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(62)))), ((int)(((byte)(79)))));
+            this.LeftPanel.Controls.Add(this.Minify);
             this.LeftPanel.Controls.Add(this.SubsetsLists);
             this.LeftPanel.Controls.Add(this.CopyFont);
             this.LeftPanel.Controls.Add(this.SelectedFont);
@@ -165,7 +167,7 @@ namespace Fonts_Downloader
             this.LeftPanel.Controls.Add(this.FontBox1);
             this.LeftPanel.Location = new System.Drawing.Point(12, 12);
             this.LeftPanel.Name = "LeftPanel";
-            this.LeftPanel.Size = new System.Drawing.Size(274, 808);
+            this.LeftPanel.Size = new System.Drawing.Size(274, 845);
             this.LeftPanel.TabIndex = 36;
             // 
             // SubsetsLists
@@ -176,7 +178,7 @@ namespace Fonts_Downloader
             this.SubsetsLists.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SubsetsLists.ForeColor = System.Drawing.Color.White;
             this.SubsetsLists.FormattingEnabled = true;
-            this.SubsetsLists.Location = new System.Drawing.Point(19, 454);
+            this.SubsetsLists.Location = new System.Drawing.Point(20, 446);
             this.SubsetsLists.Margin = new System.Windows.Forms.Padding(3, 3, 3, 2);
             this.SubsetsLists.Name = "SubsetsLists";
             this.SubsetsLists.Size = new System.Drawing.Size(237, 275);
@@ -233,15 +235,26 @@ namespace Fonts_Downloader
             this.WebPanel.ForeColor = System.Drawing.Color.White;
             this.WebPanel.Location = new System.Drawing.Point(292, 118);
             this.WebPanel.Name = "WebPanel";
-            this.WebPanel.Size = new System.Drawing.Size(950, 702);
+            this.WebPanel.Size = new System.Drawing.Size(950, 739);
             this.WebPanel.TabIndex = 38;
+            // 
+            // Minify
+            // 
+            this.Minify.AutoSize = true;
+            this.Minify.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.Minify.Location = new System.Drawing.Point(19, 727);
+            this.Minify.Name = "Minify";
+            this.Minify.Size = new System.Drawing.Size(136, 29);
+            this.Minify.TabIndex = 51;
+            this.Minify.Text = "Minified css";
+            this.Minify.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(18)))));
-            this.ClientSize = new System.Drawing.Size(1254, 832);
+            this.ClientSize = new System.Drawing.Size(1254, 869);
             this.Controls.Add(this.WebPanel);
             this.Controls.Add(this.TopPanel);
             this.Controls.Add(this.LeftPanel);
@@ -276,5 +289,6 @@ namespace Fonts_Downloader
         private Label ApiKeyLabel;
         private TextBox ApiKeyBox;
         private CheckedListBox SubsetsLists;
+        private CheckBox Minify;
     }
 }

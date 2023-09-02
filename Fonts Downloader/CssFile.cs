@@ -1,8 +1,11 @@
-﻿using System;
+﻿using NUglify;
+using NUglify.Css;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.Ajax.Utilities;
 
 namespace Fonts_Downloader
 {
@@ -25,7 +28,7 @@ namespace Fonts_Downloader
         private List<string> FontWeight { get; } = new List<string>();
         public List<string> FontWeights => FontWeight;
 
-        public void CreateCSS(CheckedListBox sizeAndStyle, CheckedListBox subsetsLists, string folderName, string fontName)
+        public void CreateCSS(CheckedListBox sizeAndStyle, CheckedListBox subsetsLists, string folderName, string fontName, CheckBox Minify)
         {
             var cssList = new List<string>();
 
@@ -40,7 +43,7 @@ namespace Fonts_Downloader
                     {
                         foreach (var subset in subsetsLists.CheckedItems.Cast<string>())
                         {
-                            var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, subset.ToLower() , fontFileStyle);
+                            var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, fontFileStyle, subset.ToLower());
                             cssList.Add(css);
                         }
                     }
@@ -56,10 +59,17 @@ namespace Fonts_Downloader
             {
                 string fontFolder = Path.Combine(folderName, fontName.Replace(" ", ""));
                 Directory.CreateDirectory(fontFolder);
-
-                string cssFilePath = Path.Combine(fontFolder, $"{fontName.Replace(" ", "")}.css");
-
-                File.WriteAllLines(cssFilePath, cssList);
+                string cssFilePath = Minify.Checked
+             ? Path.Combine(fontFolder, $"{fontName.Replace(" ", "")}.min.css")
+             : Path.Combine(fontFolder, $"{fontName.Replace(" ", "")}.css");
+                if (Minify.Checked)
+                {
+                    var minifier = new Minifier();
+                    string minifiedCss = minifier.MinifyStyleSheet(string.Join("\n", cssList));
+                    File.WriteAllText(cssFilePath, minifiedCss);
+                }
+                else
+                    File.WriteAllLines(cssFilePath, cssList);
             }
         }
 
@@ -80,10 +90,9 @@ namespace Fonts_Downloader
                    $"font-style: {fontStyle};\n" +
                    $"font-weight: {fontWeight};\n" +
                    $"font-stretch: 100%;\n" +
-                   $"src: url('{CssFileName(fontName, fontStyle, fontFileStyle)}.ttf')\n}}";
+                   $"src: url('{FontFileName(fontName, fontStyle, fontFileStyle)}.ttf')\n}}";
         }
-
-        private string CssFileName(string fontName, string fontStyle, string fontWeight)
+        private string FontFileName(string fontName, string fontStyle, string fontWeight)
         {
             return $"{fontName.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle.Substring(1)}-{fontWeight}";
         }
