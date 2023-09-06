@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace Fonts_Downloader
 {
@@ -41,11 +40,11 @@ namespace Fonts_Downloader
             }
         }
 
-        public void CreateHtml(Label SelectedFont, CheckedListBox SizeAndStyle)
+        public void CreateHtml(string SelectedFont, List<string> Variants)
         {
             List<string> WgtItalic = new List<string>();
             List<string> WgtNormal = new List<string>();
-            foreach (var variant in SizeAndStyle.Items)
+            foreach (var variant in Variants)
             {
                 if (!variant.ToString().Contains("italic"))
                 {
@@ -60,9 +59,9 @@ namespace Fonts_Downloader
             string PTagItalic, PTagNormal, ParagrapphItalic, ParagrapphNormal, Lorem = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua";
             string Italics = string.Join(";", WgtItalic);
             string Normals = string.Join(";", WgtNormal);
-            string GoogleFontLinkItalics = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont.Text}:ital,wght@{Italics}&display=swap\" rel=\"stylesheet\">";
-            string GoogleFontLinkItalicsNormals = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont.Text}:wght@{Normals}&display=swap\" rel=\"stylesheet\">";
-            string FontFamliyStyle = $"font-family: '{SelectedFont.Text}', sans-serif;";
+            string GoogleFontLinkItalics = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont}:ital,wght@{Italics}&display=swap\" rel=\"stylesheet\">";
+            string GoogleFontLinkItalicsNormals = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont}:wght@{Normals}&display=swap\" rel=\"stylesheet\">";
+            string FontFamliyStyle = $"font-family: '{SelectedFont}', sans-serif;";
             string BodyStyle = "body{\n" + FontFamliyStyle + "\n" + "color: white;" + "\n" + "}";
             List<string> PTagCSS = new List<string>();
             List<string> PTags = new List<string>();
@@ -74,7 +73,7 @@ namespace Fonts_Downloader
                 foreach (string wgt in WgtItalic)
                 {
                     //P tag italic  styling
-                    PTagItalic = "\np." + "size" + $"{wgt.Replace("1,", "")}italic" + "{\n" + "font-family:" + $"'{SelectedFont.Text}';\n" + "font-style: italic;\n" + "font-weight:" + $"{wgt.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
+                    PTagItalic = "\np." + "size" + $"{wgt.Replace("1,", "")}italic" + "{\n" + "font-family:" + $"'{SelectedFont}';\n" + "font-style: italic;\n" + "font-weight:" + $"{wgt.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
                     PTagCSS.Add(PTagItalic);
 
                     //P tag italic tag html
@@ -82,11 +81,11 @@ namespace Fonts_Downloader
                     PTags.Add(ParagrapphItalic);
 
                     //H1 tag italic styling
-                    H1Italic = "\nh1." + "size" + $"{wgt.Replace("1,", "")}italic" + "{\n" + "font-family:" + $"'{SelectedFont.Text}';\n" + "font-style: italic;\n" + "font-weight:" + $"{wgt.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
+                    H1Italic = "\nh1." + "size" + $"{wgt.Replace("1,", "")}italic" + "{\n" + "font-family:" + $"'{SelectedFont}';\n" + "font-style: italic;\n" + "font-weight:" + $"{wgt.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
                     H1TagsCSS.Add(H1Italic);
 
                     //H1 tag italic html
-                    H1TagItalic = $"<h1 class = 'size{wgt.Replace("1,", "")}italic'>" + $"{SelectedFont.Text}" + " " + $"{wgt.Replace("1,", "")} Italic" + "</h1>";
+                    H1TagItalic = $"<h1 class = 'size{wgt.Replace("1,", "")}italic'>" + $"{SelectedFont}" + " " + $"{wgt.Replace("1,", "")} Italic" + "</h1>";
                     H1Tags.Add(H1TagItalic);
 
                 }
@@ -96,7 +95,7 @@ namespace Fonts_Downloader
                 foreach (string wgt in WgtNormal)
                 {
                     //P tag normal styling
-                    PTagNormal = "\np." + "size" + $"{wgt}normal" + "{\n" + "font-family:" + $"'{SelectedFont.Text}';\n" + "font-style: normal;\n" + "font-weight:" + $"{wgt};" + "\r\nfont-stretch: 100%;" + "\n}";
+                    PTagNormal = "\np." + "size" + $"{wgt}normal" + "{\n" + "font-family:" + $"'{SelectedFont}';\n" + "font-style: normal;\n" + "font-weight:" + $"{wgt};" + "\r\nfont-stretch: 100%;" + "\n}";
                     PTagCSS.Add(PTagNormal);
 
                     //P tag normal html
@@ -104,11 +103,11 @@ namespace Fonts_Downloader
                     PTags.Add(ParagrapphNormal);
 
                     //H1 tag normal styling
-                    H1Normal = "\nh1." + "size" + $"{wgt}normal" + "{\n" + "font-family:" + $"'{SelectedFont.Text}';\n" + "font-style: normal;\n" + "font-weight:" + $"{wgt.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
+                    H1Normal = "\nh1." + "size" + $"{wgt}normal" + "{\n" + "font-family:" + $"'{SelectedFont}';\n" + "font-style: normal;\n" + "font-weight:" + $"{wgt.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
                     H1TagsCSS.Add(H1Normal);
 
                     //H1 tag normal html
-                    H1TagNormal = $"<h1 class = 'size{wgt}normal'>" + $"{SelectedFont.Text}" + " " + $"{wgt.Replace("1,", "")} Normal" + "</h1>";
+                    H1TagNormal = $"<h1 class = 'size{wgt}normal'>" + $"{SelectedFont}" + " " + $"{wgt.Replace("1,", "")} Normal" + "</h1>";
                     H1Tags.Add(H1TagNormal);
                 }
             }

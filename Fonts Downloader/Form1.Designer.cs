@@ -41,12 +41,12 @@ namespace Fonts_Downloader
             this.CopyFont = new System.Windows.Forms.Button();
             this.webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.LeftPanel = new System.Windows.Forms.Panel();
+            this.Minify = new System.Windows.Forms.CheckBox();
             this.SubsetsLists = new System.Windows.Forms.CheckedListBox();
             this.TopPanel = new System.Windows.Forms.Panel();
             this.ApiKeyLabel = new System.Windows.Forms.Label();
             this.ApiKeyBox = new System.Windows.Forms.TextBox();
             this.WebPanel = new System.Windows.Forms.Panel();
-            this.Minify = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.webView21)).BeginInit();
             this.LeftPanel.SuspendLayout();
             this.TopPanel.SuspendLayout();
@@ -152,11 +152,11 @@ namespace Fonts_Downloader
             this.webView21.Size = new System.Drawing.Size(950, 739);
             this.webView21.TabIndex = 35;
             this.webView21.ZoomFactor = 1D;
-            this.webView21.CoreWebView2InitializationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs>(this.webView21_CoreWebView2InitializationCompleted);
+            this.webView21.CoreWebView2InitializationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs>(this.WebView21_CoreWebView2InitializationCompleted);
             // 
             // LeftPanel
             // 
-            this.LeftPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.LeftPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.LeftPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(62)))), ((int)(((byte)(79)))));
             this.LeftPanel.Controls.Add(this.Minify);
@@ -169,6 +169,17 @@ namespace Fonts_Downloader
             this.LeftPanel.Name = "LeftPanel";
             this.LeftPanel.Size = new System.Drawing.Size(274, 845);
             this.LeftPanel.TabIndex = 36;
+            // 
+            // Minify
+            // 
+            this.Minify.AutoSize = true;
+            this.Minify.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.Minify.Location = new System.Drawing.Point(19, 727);
+            this.Minify.Name = "Minify";
+            this.Minify.Size = new System.Drawing.Size(136, 29);
+            this.Minify.TabIndex = 51;
+            this.Minify.Text = "Minified css";
+            this.Minify.UseVisualStyleBackColor = true;
             // 
             // SubsetsLists
             // 
@@ -186,7 +197,7 @@ namespace Fonts_Downloader
             // 
             // TopPanel
             // 
-            this.TopPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.TopPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TopPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(62)))), ((int)(((byte)(79)))));
             this.TopPanel.Controls.Add(this.ApiKeyLabel);
@@ -223,12 +234,12 @@ namespace Fonts_Downloader
             this.ApiKeyBox.Name = "ApiKeyBox";
             this.ApiKeyBox.Size = new System.Drawing.Size(528, 32);
             this.ApiKeyBox.TabIndex = 32;
-            this.ApiKeyBox.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            this.ApiKeyBox.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
             // 
             // WebPanel
             // 
-            this.WebPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.WebPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.WebPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(62)))), ((int)(((byte)(79)))));
             this.WebPanel.Controls.Add(this.webView21);
@@ -237,17 +248,6 @@ namespace Fonts_Downloader
             this.WebPanel.Name = "WebPanel";
             this.WebPanel.Size = new System.Drawing.Size(950, 739);
             this.WebPanel.TabIndex = 38;
-            // 
-            // Minify
-            // 
-            this.Minify.AutoSize = true;
-            this.Minify.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.Minify.Location = new System.Drawing.Point(19, 727);
-            this.Minify.Name = "Minify";
-            this.Minify.Size = new System.Drawing.Size(136, 29);
-            this.Minify.TabIndex = 51;
-            this.Minify.Text = "Minified css";
-            this.Minify.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
