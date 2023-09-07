@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Fonts_Downloader
 {
-    public class FontsCombox
+    public class FontsComboBoxx
     {
         private readonly List<Item> fontsList = new List<Item>();
         public async Task<List<Item>> ResAsync(string Key)

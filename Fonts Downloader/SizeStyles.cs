@@ -6,18 +6,21 @@ namespace Fonts_Downloader
     internal class SizeStyles
     {
         private readonly List<string> variants = new List<string>();
+
         public List<string> Variants => variants;
-        public List<string> LoadSizeStyles(List<Item> Font, string seletedFont)
+
+        public List<string> LoadSizeStyles(List<Item> fonts, string selectedFont)
         {
-            foreach (var item in Font.Where(item => item.family == seletedFont))
+            var selectedFontItems = fonts.Where(item => item.family == selectedFont);
+
+            foreach (var item in selectedFontItems)
             {
-                foreach (var variant in item.variants.Select(MapVariant))
-                {
-                    variants.Add(variant);
-                }
+                variants.AddRange(item.variants.Select(MapVariant));
             }
+
             return variants;
         }
+
         private string MapVariant(string variant)
         {
             switch (variant)

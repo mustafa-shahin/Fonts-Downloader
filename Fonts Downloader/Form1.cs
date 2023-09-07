@@ -81,7 +81,7 @@ namespace Fonts_Downloader
             Key = ApiKeyBox.Text;
             if (!string.IsNullOrEmpty(Key))
             {
-                var Fonts = new FontsCombox();
+                var Fonts = new FontsComboBoxx();
                 Items = await Fonts.ResAsync(Key);
                 foreach (var item in Items)
                 {
