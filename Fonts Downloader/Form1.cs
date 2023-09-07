@@ -82,7 +82,7 @@ namespace Fonts_Downloader
             if (!string.IsNullOrEmpty(Key))
             {
                 var Fonts = new FontsCombox();
-                Items = await Fonts.resAsync(Key);
+                Items = await Fonts.ResAsync(Key);
                 foreach (var item in Items)
                 {
                     FontBox1.Items.Add(item.family);
