@@ -14,7 +14,7 @@ namespace Fonts_Downloader
             if (result.Success)
             {
                 Root FontResponse = JsonConvert.DeserializeObject<Root>(result.Response);
-                foreach (var list in FontResponse.items)
+                foreach (var list in FontResponse.Items)
                 {
                     fontsList.Add(list);
                 }

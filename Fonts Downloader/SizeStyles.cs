@@ -11,11 +11,11 @@ namespace Fonts_Downloader
 
         public List<string> LoadSizeStyles(List<Item> fonts, string selectedFont)
         {
-            var selectedFontItems = fonts.Where(item => item.family == selectedFont);
+            var selectedFontItems = fonts.Where(item => item.Family == selectedFont);
 
             foreach (var item in selectedFontItems)
             {
-                variants.AddRange(item.variants.Select(MapVariant));
+                variants.AddRange(item.Variants.Select(MapVariant));
             }
 
             return variants;

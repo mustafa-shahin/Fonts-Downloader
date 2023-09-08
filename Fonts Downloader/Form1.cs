@@ -48,8 +48,8 @@ namespace Fonts_Downloader
             SelectedFonts = FontBox1.SelectedItem?.ToString();
             SelectedFont.Text = SelectedFonts;
             Subsets = Items
-              .Where(item => item.family == SelectedFonts)
-              .SelectMany(item => item.subsets)
+              .Where(item => item.Family == SelectedFonts)
+              .SelectMany(item => item.Subsets)
               .Select(item => char.ToUpper(item[0]) + item.Substring(1))
                .ToList();
 
@@ -85,7 +85,7 @@ namespace Fonts_Downloader
                 Items = await Fonts.ResAsync(Key);
                 foreach (var item in Items)
                 {
-                    FontBox1.Items.Add(item.family);
+                    FontBox1.Items.Add(item.Family);
                 }
             }
         }

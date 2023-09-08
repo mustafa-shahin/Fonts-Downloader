@@ -13,7 +13,7 @@ namespace Fonts_Downloader
         {
             var fontStyle = string.Empty;
             var propertyValue = string.Empty;
-            var selectedItems = Items.Where(item => item.family == SelectedFont).ToList();
+            var selectedItems = Items.Where(item => item.Family == SelectedFont).ToList();
             var FontFileStyles = new Dictionary<string, string>
             {
                         { "100", "Thin" },{ "200", "ExtraLight" },
@@ -34,7 +34,7 @@ namespace Fonts_Downloader
                 //                    : "";
                 if (!string.IsNullOrEmpty(item))
                 {
-                    propertyValue = selectedItems.Select(x => x.files.GetType().GetProperty($"_{item}")?.GetValue(x.files) as string)
+                    propertyValue = selectedItems.Select(x => x.Files.GetType().GetProperty($"_{item}")?.GetValue(x.Files) as string)
                                 .FirstOrDefault();
                 }
                 if (!string.IsNullOrEmpty(propertyValue))
