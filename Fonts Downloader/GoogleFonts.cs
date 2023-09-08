@@ -62,19 +62,14 @@ namespace Fonts_Downloader
 
     public class Item
     {
-        public string family { get; set; }
-        public List<string> variants { get; set; }
-        public List<string> subsets { get; set; }
-        public string version { get; set; }
-        public string lastModified { get; set; }
-        public Files files { get; set; }
-        public string category { get; set; }
-        public string kind { get; set; }
+        public string Family { get; set; }
+        public List<string> Variants { get; set; }
+        public List<string> Subsets { get; set; }
+        public Files Files { get; set; }
     }
 
     public class Root
     {
-        public string kind { get; set; }
-        public List<Item> items { get; set; }
+        public List<Item> Items { get; set; }
     }
 }
