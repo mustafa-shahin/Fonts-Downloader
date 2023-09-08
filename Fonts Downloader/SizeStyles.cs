@@ -1,41 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace Fonts_Downloader
 {
     internal class SizeStyles
     {
-        private string previousFont = string.Empty;
+        private readonly List<string> variants = new List<string>();
 
-        public void LoadSizeStyles(ComboBox FontBox, Label SelectedFont, CheckedListBox SizeAndStyle, CheckedListBox SubsetsLists, List<Item> Items)
+        public List<string> Variants => variants;
+
+        public List<string> LoadSizeStyles(List<Item> fonts, string selectedFont)
         {
-            string selectedFont = FontBox.SelectedItem?.ToString();
+            var selectedFontItems = fonts.Where(item => item.Family == selectedFont);
 
-            if (!string.IsNullOrEmpty(selectedFont) && selectedFont != previousFont)
+            foreach (var item in selectedFontItems)
             {
-                SelectedFont.Text = selectedFont;
-                SizeAndStyle.Items.Clear();
-                foreach (var item in Items.Where(item => item.family == selectedFont))
-                {
-                    foreach (var variant in item.variants.Select(MapVariant))
-                    {
-                        SizeAndStyle.Items.Add(variant);
-                    }
-                }
-
-                var subsets = Items
-                    .Where(item => item.family == selectedFont)
-                    .SelectMany(item => item.subsets)
-                    .Select(item => char.ToUpper(item[0]) + item.Substring(1))
-                    .ToList();
-
-                SubsetsLists.Items.Clear();
-                SubsetsLists.Items.AddRange(subsets.ToArray());
-
-                previousFont = selectedFont;
+                variants.AddRange(item.Variants.Select(MapVariant));
             }
+
+            return variants;
         }
 
         private string MapVariant(string variant)
