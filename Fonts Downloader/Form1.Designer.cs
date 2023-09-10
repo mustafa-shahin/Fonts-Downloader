@@ -194,6 +194,7 @@ namespace Fonts_Downloader
             this.SubsetsLists.Name = "SubsetsLists";
             this.SubsetsLists.Size = new System.Drawing.Size(237, 275);
             this.SubsetsLists.TabIndex = 50;
+            this.SubsetsLists.SelectedIndexChanged += new System.EventHandler(this.SubsetsLists_SelectedIndexChanged);
             // 
             // TopPanel
             // 

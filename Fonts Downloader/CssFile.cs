@@ -1,4 +1,5 @@
 ﻿using Microsoft.Ajax.Utilities;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,18 +10,24 @@ namespace Fonts_Downloader
     {
         private readonly Dictionary<string, string> FontFileStyles = new Dictionary<string, string>
         {
-            { "100", "Thin" },{ "200", "ExtraLight" },
-            { "300", "Light" },{ "400", "Regular" },
-            { "500", "Medium" },{ "600", "SemiBold" },
-            { "700", "Bold" },{ "800", "ExtraBold" },
+            { "100", "Thin" }, { "200", "ExtraLight" },
+            { "300", "Light" }, { "400", "Regular" },
+            { "500", "Medium" }, { "600", "SemiBold" },
+            { "700", "Bold" }, { "800", "ExtraBold" },
             { "900", "Black" },
         };
 
-        private readonly List<string> Styles = new List<string>();
-        private readonly List<string> FontWeight = new List<string>();
-
-        public void CreateCSS(List<string> variants, string folderName, string fontName, bool minify, List<string> subsets = null)
+        public void CreateCSS(IEnumerable<string> variants, string folderName, string fontName, bool minify=false, IEnumerable<string> subsets = null)
         {
+            if (variants == null || !variants.Any() || string.IsNullOrEmpty(fontName) || string.IsNullOrEmpty(folderName))
+            {
+                string missingParameters = string.Join(", ",
+                    (variants == null || !variants.Any()) ? "Items" : "",
+                    string.IsNullOrEmpty(fontName) ? "SelectedFont" : "",
+                    string.IsNullOrEmpty(folderName) ? "FolderName" : "");
+                throw new ArgumentException($"One or more required parameters are missing or invalid: {missingParameters}");
+            }
+
             var cssList = GenerateCssList(variants, fontName, subsets);
 
             if (cssList.Any())
@@ -41,23 +48,29 @@ namespace Fonts_Downloader
             }
         }
 
-        private List<string> GenerateCssList(List<string> variants, string fontName, List<string> subsets)
+        private List<string> GenerateCssList(IEnumerable<string> variants, string fontName, IEnumerable<string> subsets = null)
         {
             var cssList = new List<string>();
 
             foreach (var variant in variants)
             {
-                if (ParseCheckedItem(variant, out var fontStyle, out var fontWeight))
+                if (ParseCheckedItem(variant, out var fontStyle, out var fontWeight) &&
+                    FontFileStyles.TryGetValue(fontWeight, out var fontFileStyle))
                 {
-                    Styles.Add(fontStyle);
-                    FontWeight.Add(fontWeight);
-                    string fontFileStyle = FontFileStyles[fontWeight];
-
-                    foreach (var subset in subsets ?? Enumerable.Empty<string>())
+                    if (subsets != null && (subsets.Any() || subsets != null))
                     {
-                        var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, fontFileStyle, subset.ToLower());
+                        foreach (var subset in subsets)
+                        {
+                            var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, fontFileStyle, subset.ToLower());
+                            cssList.Add(css);
+                        }
+                    }
+                    else
+                    {
+                        var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, fontFileStyle);
                         cssList.Add(css);
                     }
+
                 }
             }
             return cssList;
@@ -68,20 +81,36 @@ namespace Fonts_Downloader
             fontStyle = checkedItem.Contains("italic") ? "italic" : "normal";
             fontWeight = checkedItem.Replace("italic", "").Trim();
 
-            return !string.IsNullOrWhiteSpace(fontWeight) && FontFileStyles.TryGetValue(fontWeight, out _);
+            return !string.IsNullOrWhiteSpace(fontWeight);
         }
 
-        private string GenerateFontFaceCss(string fontName, string fontStyle, string fontWeight, string fontFileStyle, string subset = null)
+        private string GenerateFontFaceCss(string fontName, string fontStyle, string fontWeight, string fontFileStyle=null, string subset = null)
         {
-            var subsetComment = !string.IsNullOrWhiteSpace(subset) ? $"/*{subset}*/\n" : "";
-            return $"{subsetComment}" +
-                   $"@font-face {{\n" +
-                   $"font-family: '{fontName}';\n" +
-                   $"font-style: {fontStyle};\n" +
-                   $"font-weight: {fontWeight};\n" +
-                   $"font-stretch: 100%;\n" +
-                   $"src: url('{FontFileName(fontName, fontStyle, fontFileStyle)}.ttf')\n}}";
-        }
+            if (string.IsNullOrEmpty(fontName) || string.IsNullOrEmpty(fontStyle) || string.IsNullOrEmpty(fontWeight))
+            {
+                string missingParameters = string.Join(", ",
+                    (string.IsNullOrEmpty(fontName)) ? "Font's name" : "",
+                    string.IsNullOrEmpty(fontStyle) ? "Font's style" : "",
+                    string.IsNullOrEmpty(fontWeight) ? "Font's weight" : "");
+                throw new ArgumentException($"One or more required parameters are missing or invalid: {missingParameters}");
+            }
+            var subsetComment = !string.IsNullOrEmpty(subset) ? $"/*{subset}*/\n" : "";
+            return string.IsNullOrEmpty(subsetComment)
+       ? $"@font-face {{\n" +
+         $"font-family: '{fontName}';\n" +
+         $"font-style: {fontStyle};\n" +
+         $"font-weight: {fontWeight};\n" +
+         $"font-stretch: 100%;\n" +
+         $"src: url('{FontFileName(fontName, fontStyle, fontFileStyle)}.ttf')\n}}"
+       : $"{subsetComment}" +
+         $"@font-face {{\n" +
+         $"font-family: '{fontName}';\n" +
+         $"font-style: {fontStyle};\n" +
+         $"font-weight: {fontWeight};\n" +
+         $"font-stretch: 100%;\n" +
+         $"src: url('{FontFileName(fontName, fontStyle, fontFileStyle)}.ttf')\n}}";
+        
+    }
 
         private string FontFileName(string fontName, string fontStyle, string fontWeight)
         {

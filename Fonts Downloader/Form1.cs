@@ -117,10 +117,11 @@ namespace Fonts_Downloader
                 var minify = Minify.Checked;
                 if (Variants != null && Variants.Any())
                 {
+                    var subsets = SubsetsLists.CheckedItems.Cast<string>().ToList();
                     if (SubsetsLists.CheckedItems.Count > 0)
-                        css.CreateCSS(Variants, FolderName, SelectedFonts, minify, Subsets);
+                        css.CreateCSS(Variants, FolderName, SelectedFonts, false, subsets);
                     else
-                        css.CreateCSS(Variants, FolderName, SelectedFonts, minify);
+                        css.CreateCSS(Variants, FolderName, SelectedFonts, minify); 
                     Task fileLinksTask = File.FileLinks(Items, SelectedFonts, FolderName, Variants);
                     await fileLinksTask;
                     if (fileLinksTask.Status == TaskStatus.RanToCompletion)
@@ -141,6 +142,12 @@ namespace Fonts_Downloader
             }
             else
                 MessageBox.Show("Please select a folder");
+        }
+
+        private void SubsetsLists_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Minify.Enabled = SubsetsLists.CheckedItems.Count == 0;
+
         }
     }
 }
