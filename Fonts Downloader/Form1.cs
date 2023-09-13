@@ -21,6 +21,7 @@ namespace Fonts_Downloader
         private bool ensure = false;
         private string Key = " ";
         private List<string> Subsets;
+        private FontsComboBox Fonts;
         public Form1()
         {
             InitializeComponent();
@@ -42,6 +43,56 @@ namespace Fonts_Downloader
             }
             SelectedFolder.Text = FolderName;
         }
+
+        private async void FontBox1_Click(object sender, EventArgs e)
+        {
+            if ((TTF.Checked || WOFF2.Checked) && !string.IsNullOrEmpty(ApiKeyBox.Text))
+            {
+                Fonts = new FontsComboBox();
+                Items = await Fonts.GetWebFontsAsync(Key, WOFF2.Checked, TTF.Checked);
+                foreach (var item in Items)
+                {
+                    FontBox1.Items.Add(item.Family);
+                }
+            }
+            else
+            {
+                if ((!TTF.Checked || !WOFF2.Checked) && !string.IsNullOrEmpty(ApiKeyBox.Text))
+                    MessageBox.Show("Please select whether you want TTF or WOFF2 files by checking one of the boxes above");
+                else if ((TTF.Checked || WOFF2.Checked) && string.IsNullOrEmpty(ApiKeyBox.Text))
+                    MessageBox.Show("Please enter your Api key");
+                else
+                    MessageBox.Show("Please select whether you want TTF or WOFF2 files by checking one of the boxes above and enter your Api key");
+            }
+        }
+
+        private void WOFF2_CheckedChanged(object sender, EventArgs e)
+        {
+            TTF.Checked = !WOFF2.Checked;
+            TTF.Enabled = true;
+            Fonts = null;
+            Items = null;
+            Subsets = null;
+            FontBox1.Text = string.Empty;
+            FontBox1.Items.Clear();
+            SizeAndStyle.Items.Clear();
+            SubsetsLists.Items.Clear();
+        }
+
+        private void TTF_CheckedChanged(object sender, EventArgs e)
+        {
+            WOFF2.Checked = !TTF.Checked;
+            TTF.Enabled = true;
+            Fonts = null;
+            Items = null;
+            Subsets = null;
+            FontBox1.Text = string.Empty;
+            FontBox1.Items.Clear();
+            SizeAndStyle.Items.Clear();
+            SubsetsLists.Items.Clear(); 
+        }
+
+
 
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
@@ -76,18 +127,9 @@ namespace Fonts_Downloader
             }
         }
 
-        private async void TextBox2_TextChanged(object sender, EventArgs e)
+        private void TextBox2_TextChanged(object sender, EventArgs e)
         {
             Key = ApiKeyBox.Text;
-            if (!string.IsNullOrEmpty(Key))
-            {
-                var Fonts = new FontsComboBoxx();
-                Items = await Fonts.ResAsync(Key);
-                foreach (var item in Items)
-                {
-                    FontBox1.Items.Add(item.Family);
-                }
-            }
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -119,10 +161,10 @@ namespace Fonts_Downloader
                 {
                     var subsets = SubsetsLists.CheckedItems.Cast<string>().ToList();
                     if (SubsetsLists.CheckedItems.Count > 0)
-                        css.CreateCSS(Variants, FolderName, SelectedFonts, false, subsets);
+                        css.CreateCSS(Variants, FolderName, SelectedFonts, WOFF2.Checked, TTF.Checked, false, subsets);
                     else
-                        css.CreateCSS(Variants, FolderName, SelectedFonts, minify); 
-                    Task fileLinksTask = File.FileLinks(Items, SelectedFonts, FolderName, Variants);
+                        css.CreateCSS(Variants, FolderName, SelectedFonts, WOFF2.Checked, TTF.Checked, minify);
+                    Task fileLinksTask = File.FileLinks(Items, SelectedFonts, FolderName, Variants, WOFF2.Checked);
                     await fileLinksTask;
                     if (fileLinksTask.Status == TaskStatus.RanToCompletion)
                     {
@@ -149,5 +191,6 @@ namespace Fonts_Downloader
             Minify.Enabled = SubsetsLists.CheckedItems.Count == 0;
 
         }
+
     }
 }

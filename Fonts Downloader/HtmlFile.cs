@@ -10,8 +10,9 @@ namespace Fonts_Downloader
         public void DefaultHtml()
         {
             string text = Api.IsInternetAvailable()
-                ? "<h3>The program will create a folder named FontDownloader on the C drive to render the fonts. After closing the program, the folder will be deleted.</h3>"
-                : "<h1 style=\"color:red;\">Check your internet connection</h1>";
+                ? "<h3>The program will create a folder named FontDownloader on the C drive to render the fonts. After closing the program, the folder will be deleted.</h3>"+
+                "<h3 style=\"color:#9b2b22;\"> Please select whether you want TTF or WOFF2 files by checking one of the boxes above</h3>"
+                : "<h1 style=\"color:#9b2b22;\">Check your internet connection</h1>";
 
             Directory.CreateDirectory(Path);
 

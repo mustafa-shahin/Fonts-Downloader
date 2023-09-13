@@ -106,7 +106,7 @@
   <ItemGroup>
     <Compile Include="Api.cs" />
     <Compile Include="FontFilesDownloader.cs" />
-    <Compile Include="FontsComboBoxx.cs" />
+    <Compile Include="FontsComboBox.cs" />
     <Compile Include="GoogleFonts.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
