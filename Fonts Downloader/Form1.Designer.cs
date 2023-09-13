@@ -131,7 +131,7 @@ namespace Fonts_Downloader
             this.CopyFont.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CopyFont.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CopyFont.ForeColor = System.Drawing.Color.White;
-            this.CopyFont.Location = new System.Drawing.Point(19, 792);
+            this.CopyFont.Location = new System.Drawing.Point(19, 770);
             this.CopyFont.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.CopyFont.Name = "CopyFont";
             this.CopyFont.Size = new System.Drawing.Size(237, 51);
