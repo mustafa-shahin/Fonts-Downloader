@@ -14,7 +14,6 @@ namespace Fonts_Downloader
     {
         private string previousFont = string.Empty;
         private List<Item> Items;
-
         private string FolderName;
         private readonly HtmlFile Document = new HtmlFile();
         private string SelectedFonts;
@@ -68,56 +67,43 @@ namespace Fonts_Downloader
 
         private void WOFF2_CheckedChanged(object sender, EventArgs e)
         {
-            TTF.Checked = !WOFF2.Checked;
-            TTF.Enabled = true;
-            Fonts = null;
-            Items = null;
-            Subsets = null;
-            FontBox1.Text = string.Empty;
-            FontBox1.Items.Clear();
-            SizeAndStyle.Items.Clear();
-            SubsetsLists.Items.Clear();
+            if(TTF.Checked)
+                TTF.Checked = !WOFF2.Checked;
         }
 
         private void TTF_CheckedChanged(object sender, EventArgs e)
         {
-            WOFF2.Checked = !TTF.Checked;
-            TTF.Enabled = true;
-            Fonts = null;
-            Items = null;
-            Subsets = null;
-            FontBox1.Text = string.Empty;
-            FontBox1.Items.Clear();
-            SizeAndStyle.Items.Clear();
-            SubsetsLists.Items.Clear(); 
+            if(WOFF2.Checked)
+                WOFF2.Checked = !TTF.Checked;
         }
 
 
 
-        private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
+        private  void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             SelectedFonts = FontBox1.SelectedItem?.ToString();
-            SelectedFont.Text = SelectedFonts;
-            Subsets = Items
-              .Where(item => item.Family == SelectedFonts)
-              .SelectMany(item => item.Subsets)
-              .Select(item => char.ToUpper(item[0]) + item.Substring(1))
-               .ToList();
+            if (!string.IsNullOrEmpty(SelectedFonts))
+            {
+                SelectedFont.Text = SelectedFonts;
+                Subsets = Items
+                  .Where(item => item.Family == SelectedFonts)
+                  .SelectMany(item => item.Subsets)
+                  .Select(item => char.ToUpper(item[0]) + item.Substring(1))
+                   .ToList();
 
+            }
             if (SelectedFonts != previousFont)
             {
                 SubsetsLists.Items.Clear();
                 SizeAndStyle.Items.Clear();
                 previousFont = SelectedFonts;
             }
-
-            var sizeStyles = new SizeStyles();
-            var Variants = sizeStyles.LoadSizeStyles(Items, SelectedFonts);
-
             foreach (var subset in Subsets)
             {
                 SubsetsLists.Items.Add(subset);
             }
+            var sizeStyles = new SizeStyles();
+            var Variants = sizeStyles.LoadSizeStyles(Items, SelectedFonts);
             SizeAndStyle.Items.AddRange(Variants.ToArray());
             Document.CreateHtml(SelectedFonts, Variants);
 
@@ -161,9 +147,9 @@ namespace Fonts_Downloader
                 {
                     var subsets = SubsetsLists.CheckedItems.Cast<string>().ToList();
                     if (SubsetsLists.CheckedItems.Count > 0)
-                        css.CreateCSS(Variants, FolderName, SelectedFonts, WOFF2.Checked, TTF.Checked, false, subsets);
+                        css.CreateCSS(Variants, FolderName, SelectedFonts, WOFF2.Checked, false, subsets);
                     else
-                        css.CreateCSS(Variants, FolderName, SelectedFonts, WOFF2.Checked, TTF.Checked, minify);
+                        css.CreateCSS(Variants, FolderName, SelectedFonts, WOFF2.Checked, minify);
                     Task fileLinksTask = File.FileLinks(Items, SelectedFonts, FolderName, Variants, WOFF2.Checked);
                     await fileLinksTask;
                     if (fileLinksTask.Status == TaskStatus.RanToCompletion)
