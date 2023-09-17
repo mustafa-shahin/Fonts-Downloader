@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,61 +17,63 @@ namespace Fonts_Downloader
             httpClient = new HttpClient();
         }
 
-        public async Task FileLinks(List<Item> Items, string SelectedFont, string FolderName, List<string> Variants)
+        public async Task FileLinks(List<Item> items, string selectedFont, string folderName, List<string> variants, bool woff2)
         {
-            if (Items == null || !Items.Any() || string.IsNullOrEmpty(SelectedFont) ||
-                   string.IsNullOrEmpty(FolderName) || Variants == null || !Variants.Any())
-            {
-                string missingParameters = string.Join(", ",
-                    (Items == null || !Items.Any()) ? "Items" : "",
-                    string.IsNullOrEmpty(SelectedFont) ? "SelectedFont" : "",
-                    string.IsNullOrEmpty(FolderName) ? "FolderName" : "",
-                    (Variants == null || !Variants.Any()) ? "Variants" : "");
+            ValidateParameters(items, selectedFont, folderName, variants);
 
-                throw new ArgumentException($"One or more required parameters are missing or invalid: {missingParameters}");
-            }
-            var fontStyle = string.Empty;
-            var propertyValue = string.Empty;
-            var selectedItems = Items.Where(item => item.Family == SelectedFont).ToList();
-            var FontFileStyles = new Dictionary<string, string>
+            var fontFileStyles = new Dictionary<string, string>
             {
-                        { "100", "Thin" },{ "200", "ExtraLight" },
-                        { "300", "Light" },{ "400", "Regular" },
-                        { "500", "Medium" },{ "600", "SemiBold" },
-                        { "700", "Bold" },{ "800", "ExtraBold" },
-                        { "900", "Black" },
+                { "100", "Thin" }, { "200", "ExtraLight" },
+                { "300", "Light" }, { "400", "Regular" },
+                { "500", "Medium" }, { "600", "SemiBold" },
+                { "700", "Bold" }, { "800", "ExtraBold" },
+                { "900", "Black" },
             };
 
-            foreach (var item in Variants)
+            foreach (var item in variants)
             {
-                fontStyle = item.Contains("italic") ? "italic" : "normal";
-                //var propertyName = $"_{item}";
-                //var propertyName = selectedItems.Any(x => x.variants.Any(variant => variant == "regular" || variant == "italic"))
-                //                    ? $"_{item}"
-                //                    : selectedItems.Any(x => x.variants.Any(variant => variant == fontStyle))
-                //                    ? $"_{fontStyle}"
-                //                    : "";
-                //var propertyName = $"_{item}";
-                if (!string.IsNullOrEmpty(item))
+                if (!string.IsNullOrEmpty(item) && fontFileStyles.TryGetValue(item.Replace("italic", ""), out var fontFileStyle))
                 {
-                    propertyValue = selectedItems.Select(x => x.Files.GetType().GetProperty($"_{item}")?.GetValue(x.Files) as string)
-                                .FirstOrDefault();
+                    var fontStyle = item.Contains("italic") ? "italic" : "normal";
+                    var propertyValue = items
+                        .Where(x => x.Family == selectedFont)
+                        .Select(x => x.Files.GetType().GetProperty($"_{item}")?.GetValue(x.Files) as string)
+                        .FirstOrDefault();
+
+                    if (!string.IsNullOrEmpty(propertyValue))
+                    {
+                        await DownloadFontFileAsync(selectedFont, folderName, propertyValue, woff2, fontFileStyle, fontStyle);
+                    }
                 }
-                if (!string.IsNullOrEmpty(propertyValue))
-                    await DownloadFontFileAsync(SelectedFont, FolderName, propertyValue, FontFileStyles[item.Replace("italic", "")], fontStyle);
             }
         }
 
-        private async Task DownloadFontFileAsync(string selectedFont, string folderName,  string link, string fontFileStyle=null, string fontStyle=null)
+        private void ValidateParameters(List<Item> items, string selectedFont, string folderName, List<string> variants)
         {
+            if (items == null || !items.Any() || string.IsNullOrEmpty(selectedFont) || string.IsNullOrEmpty(folderName) || variants == null || !variants.Any())
+            {
+                string missingParameters = string.Join(", ",
+                    (items == null || !items.Any()) ? "Items" : "",
+                    string.IsNullOrEmpty(selectedFont) ? "SelectedFont" : "",
+                    string.IsNullOrEmpty(folderName) ? "FolderName" : "",
+                    (variants == null || !variants.Any()) ? "Variants" : "");
+
+                throw new ArgumentException($"One or more required parameters are missing or invalid: {missingParameters}");
+            }
+        }
+
+        public async Task DownloadFontFileAsync(string selectedFont, string folderName, string link, bool woff2, string fontFileStyle = null, string fontStyle = null)
+        {
+            var format = woff2 ? "woff2" : "ttf";
             if (string.IsNullOrEmpty(link))
             {
-                throw new ArgumentException($" A Parameters is missing or invalid: {link}");
+                throw new ArgumentException($"A parameter is missing or invalid: {link}");
             }
+
             string[] fontFileLinks = link.ToLower().Split('/');
             if (fontFileLinks.Contains(selectedFont.Replace(" ", "").ToLower()))
             {
-                string fileName = $"{folderName}\\{selectedFont.Replace(" ", "")}\\{selectedFont.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle.Substring(1)}-{fontFileStyle}.ttf";
+                string fileName = Path.Combine(folderName, selectedFont.Replace(" ", ""), $"{selectedFont.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle.Substring(1)}-{fontFileStyle}.{format}");
                 Uri url = new Uri(link);
                 if (!File.Exists(fileName))
                 {

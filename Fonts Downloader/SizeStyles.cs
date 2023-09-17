@@ -5,13 +5,10 @@ namespace Fonts_Downloader
 {
     internal class SizeStyles
     {
-        private readonly List<string> variants = new List<string>();
-
-        public List<string> Variants => variants;
-
         public List<string> LoadSizeStyles(List<Item> fonts, string selectedFont)
         {
-            var selectedFontItems = fonts.Where(item => item.Family == selectedFont);
+             var variants = new List<string>();
+        var selectedFontItems = fonts.Where(item => item.Family == selectedFont);
 
             foreach (var item in selectedFontItems)
             {
