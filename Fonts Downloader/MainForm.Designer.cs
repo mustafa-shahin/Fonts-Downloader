@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace Fonts_Downloader
 {
-    partial class Form1
+    partial class MainForm
     {
 
 
@@ -32,7 +32,7 @@ namespace Fonts_Downloader
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.SizeAndStyle = new System.Windows.Forms.CheckedListBox();
             this.SelectFolder = new System.Windows.Forms.Button();
             this.SelectedFolder = new System.Windows.Forms.TextBox();
@@ -112,7 +112,7 @@ namespace Fonts_Downloader
             this.FontBox1.Size = new System.Drawing.Size(237, 28);
             this.FontBox1.TabIndex = 32;
             this.FontBox1.SelectionChangeCommitted += new System.EventHandler(this.FontBox1_SelectionChangeCommitted);
-            this.FontBox1.Click += new System.EventHandler(this.FontBox1_Click);
+            this.FontBox1.Text = "Selected Font";
             // 
             // SelectedFont
             // 

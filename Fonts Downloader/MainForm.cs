@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Fonts_Downloader
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private string previousFont = string.Empty;
         private List<Item> Items;
@@ -21,7 +21,7 @@ namespace Fonts_Downloader
         private string Key = " ";
         private List<string> Subsets;
         private FontsComboBox Fonts;
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             webView21.EnsureCoreWebView2Async();
@@ -43,42 +43,23 @@ namespace Fonts_Downloader
             SelectedFolder.Text = FolderName;
         }
 
-        private async void FontBox1_Click(object sender, EventArgs e)
-        {
-            if ((TTF.Checked || WOFF2.Checked) && !string.IsNullOrEmpty(ApiKeyBox.Text))
-            {
-                Fonts = new FontsComboBox();
-                Items = await Fonts.GetWebFontsAsync(Key, WOFF2.Checked, TTF.Checked);
-                foreach (var item in Items)
-                {
-                    FontBox1.Items.Add(item.Family);
-                }
-            }
-            else
-            {
-                if ((!TTF.Checked || !WOFF2.Checked) && !string.IsNullOrEmpty(ApiKeyBox.Text))
-                    MessageBox.Show("Please select whether you want TTF or WOFF2 files by checking one of the boxes above");
-                else if ((TTF.Checked || WOFF2.Checked) && string.IsNullOrEmpty(ApiKeyBox.Text))
-                    MessageBox.Show("Please enter your Api key");
-                else
-                    MessageBox.Show("Please select whether you want TTF or WOFF2 files by checking one of the boxes above and enter your Api key");
-            }
-        }
-
-        private void WOFF2_CheckedChanged(object sender, EventArgs e)
+        private async void WOFF2_CheckedChanged(object sender, EventArgs e)
         {
             if(TTF.Checked)
                 TTF.Checked = !WOFF2.Checked;
+
+            if (WOFF2.Checked)
+                await ApiCall();
         }
 
-        private void TTF_CheckedChanged(object sender, EventArgs e)
+        private async void TTF_CheckedChanged(object sender, EventArgs e)
         {
             if(WOFF2.Checked)
                 WOFF2.Checked = !TTF.Checked;
+
+            if (TTF.Checked)
+                await ApiCall();
         }
-
-
-
         private  void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             SelectedFonts = FontBox1.SelectedItem?.ToString();
@@ -90,9 +71,8 @@ namespace Fonts_Downloader
                   .SelectMany(item => item.Subsets)
                   .Select(item => char.ToUpper(item[0]) + item.Substring(1))
                    .ToList();
-
             }
-            if (SelectedFonts != previousFont)
+            if (SelectedFonts != previousFont || string.IsNullOrEmpty(FontBox1.Text))
             {
                 SubsetsLists.Items.Clear();
                 SizeAndStyle.Items.Clear();
@@ -177,6 +157,26 @@ namespace Fonts_Downloader
             Minify.Enabled = SubsetsLists.CheckedItems.Count == 0;
 
         }
-
+        private async Task ApiCall()
+        {
+            if ((TTF.Checked || WOFF2.Checked) && !string.IsNullOrEmpty(ApiKeyBox.Text))
+            {
+                Fonts = new FontsComboBox();
+                Items = await Fonts.GetWebFontsAsync(Key, WOFF2.Checked, TTF.Checked);
+                foreach (var item in Items)
+                {
+                    FontBox1.Items.Add(item.Family);
+                }
+            }
+            else
+            {
+                if ((!TTF.Checked || !WOFF2.Checked) && !string.IsNullOrEmpty(ApiKeyBox.Text))
+                    MessageBox.Show("Please select whether you want TTF or WOFF2 files by checking one of the boxes above");
+                else if ((TTF.Checked || WOFF2.Checked) && string.IsNullOrEmpty(ApiKeyBox.Text))
+                    MessageBox.Show("Please enter your Api key");
+                else
+                    MessageBox.Show("Please select whether you want TTF or WOFF2 files by checking one of the boxes above and enter your Api key");
+            }
+        }
     }
 }

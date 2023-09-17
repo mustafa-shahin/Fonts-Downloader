@@ -8,10 +8,9 @@ namespace Fonts_Downloader
 {
     public class FontsComboBox
     {
-        private List<Item> fontsList = new List<Item>();
-
         public async Task<List<Item>> GetWebFontsAsync(string apiKey, bool Woff2, bool TTF)
         {
+            var fontsList = new List<Item>();
             string link = string.Empty;
 
             try
