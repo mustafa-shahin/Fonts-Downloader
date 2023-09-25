@@ -48,7 +48,7 @@ namespace Fonts_Downloader
             }
         }
 
-        private void ValidateParameters(List<Item> items, string selectedFont, string folderName, List<string> variants)
+        private static void ValidateParameters(List<Item> items, string selectedFont, string folderName, List<string> variants)
         {
             if (items == null || !items.Any() || string.IsNullOrEmpty(selectedFont) || string.IsNullOrEmpty(folderName) || variants == null || !variants.Any())
             {
@@ -62,19 +62,14 @@ namespace Fonts_Downloader
             }
         }
 
-        public async Task DownloadFontFileAsync(string selectedFont, string folderName, string link, bool woff2, string fontFileStyle = null, string fontStyle = null)
+        public async Task DownloadFontFileAsync(string selectedFont, string folderName, string link, bool woff2, string fontFileStyle , string fontStyle)
         {
             var format = woff2 ? "woff2" : "ttf";
-            if (string.IsNullOrEmpty(link))
-            {
-                throw new ArgumentException($"A parameter is missing or invalid: {link}");
-            }
-
             string[] fontFileLinks = link.ToLower().Split('/');
             if (fontFileLinks.Contains(selectedFont.Replace(" ", "").ToLower()))
             {
-                string fileName = Path.Combine(folderName, selectedFont.Replace(" ", ""), $"{selectedFont.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle.Substring(1)}-{fontFileStyle}.{format}");
-                Uri url = new Uri(link);
+                string fileName = Path.Combine(folderName, selectedFont.Replace(" ", ""), $"{selectedFont.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle[1..]}-{fontFileStyle}.{format}");
+                Uri url = new(link);
                 if (!File.Exists(fileName))
                 {
                     try
@@ -82,11 +77,9 @@ namespace Fonts_Downloader
                         var response = await httpClient.GetAsync(url);
                         response.EnsureSuccessStatusCode();
 
-                        using (var stream = await response.Content.ReadAsStreamAsync())
-                        using (var fileStream = File.Create(fileName))
-                        {
-                            await stream.CopyToAsync(fileStream);
-                        }
+                        using var stream = await response.Content.ReadAsStreamAsync();
+                        using var fileStream = File.Create(fileName);
+                        await stream.CopyToAsync(fileStream);
                     }
                     catch (HttpRequestException ex)
                     {

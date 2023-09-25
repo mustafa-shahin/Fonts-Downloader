@@ -127,7 +127,7 @@ namespace Fonts_Downloader
             return css;
         }
 
-        private bool ValidateFontParameters(string fontName, string fontStyle, string fontWeight)
+        private static bool ValidateFontParameters(string fontName, string fontStyle, string fontWeight)
         {
             if (string.IsNullOrEmpty(fontName) || string.IsNullOrEmpty(fontStyle) || string.IsNullOrEmpty(fontWeight))
             {
@@ -140,9 +140,9 @@ namespace Fonts_Downloader
             return true;
         }
 
-        private string FontFileName(string fontName, string fontStyle, string fontWeight)
+        private static string FontFileName(string fontName, string fontStyle, string fontWeight)
         {
-            return $"{fontName.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle.Substring(1)}-{fontWeight}";
+            return $"{fontName.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle[1..]}-{fontWeight}";
         }
     }
 }

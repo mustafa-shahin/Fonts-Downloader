@@ -33,278 +33,287 @@ namespace Fonts_Downloader
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.SizeAndStyle = new System.Windows.Forms.CheckedListBox();
-            this.SelectFolder = new System.Windows.Forms.Button();
-            this.SelectedFolder = new System.Windows.Forms.TextBox();
-            this.FontBox1 = new System.Windows.Forms.ComboBox();
-            this.SelectedFont = new System.Windows.Forms.Label();
-            this.CopyFont = new System.Windows.Forms.Button();
-            this.webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
-            this.LeftPanel = new System.Windows.Forms.Panel();
-            this.Minify = new System.Windows.Forms.CheckBox();
-            this.SubsetsLists = new System.Windows.Forms.CheckedListBox();
-            this.WOFF2 = new System.Windows.Forms.CheckBox();
-            this.TopPanel = new System.Windows.Forms.Panel();
-            this.TTF = new System.Windows.Forms.CheckBox();
-            this.ApiKeyLabel = new System.Windows.Forms.Label();
-            this.ApiKeyBox = new System.Windows.Forms.TextBox();
-            this.WebPanel = new System.Windows.Forms.Panel();
-            ((System.ComponentModel.ISupportInitialize)(this.webView21)).BeginInit();
-            this.LeftPanel.SuspendLayout();
-            this.TopPanel.SuspendLayout();
-            this.WebPanel.SuspendLayout();
-            this.SuspendLayout();
+            SizeAndStyle = new CheckedListBox();
+            SelectFolder = new Button();
+            SelectedFolder = new TextBox();
+            FontBox1 = new ComboBox();
+            SelectedFont = new Label();
+            CopyFont = new Button();
+            webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
+            LeftPanel = new Panel();
+            Minify = new CheckBox();
+            SubsetsLists = new CheckedListBox();
+            WOFF2 = new CheckBox();
+            TopPanel = new Panel();
+            TTF = new CheckBox();
+            ApiKeyLabel = new Label();
+            ApiKeyBox = new TextBox();
+            WebPanel = new Panel();
+            ((System.ComponentModel.ISupportInitialize)webView21).BeginInit();
+            LeftPanel.SuspendLayout();
+            TopPanel.SuspendLayout();
+            WebPanel.SuspendLayout();
+            SuspendLayout();
             // 
             // SizeAndStyle
             // 
-            this.SizeAndStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(98)))), ((int)(((byte)(101)))));
-            this.SizeAndStyle.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.SizeAndStyle.CheckOnClick = true;
-            this.SizeAndStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SizeAndStyle.ForeColor = System.Drawing.Color.White;
-            this.SizeAndStyle.FormattingEnabled = true;
-            this.SizeAndStyle.Location = new System.Drawing.Point(20, 82);
-            this.SizeAndStyle.Margin = new System.Windows.Forms.Padding(3, 3, 3, 2);
-            this.SizeAndStyle.Name = "SizeAndStyle";
-            this.SizeAndStyle.Size = new System.Drawing.Size(237, 350);
-            this.SizeAndStyle.TabIndex = 35;
+            SizeAndStyle.BackColor = Color.FromArgb(21, 98, 101);
+            SizeAndStyle.BorderStyle = BorderStyle.None;
+            SizeAndStyle.CheckOnClick = true;
+            SizeAndStyle.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            SizeAndStyle.ForeColor = Color.White;
+            SizeAndStyle.FormattingEnabled = true;
+            SizeAndStyle.Location = new Point(20, 110);
+            SizeAndStyle.Margin = new Padding(3, 5, 3, 2);
+            SizeAndStyle.Name = "SizeAndStyle";
+            SizeAndStyle.Size = new Size(237, 325);
+            SizeAndStyle.TabIndex = 35; 
             // 
             // SelectFolder
             // 
-            this.SelectFolder.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.SelectFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(114)))), ((int)(((byte)(66)))));
-            this.SelectFolder.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(114)))), ((int)(((byte)(66)))));
-            this.SelectFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SelectFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SelectFolder.ForeColor = System.Drawing.Color.White;
-            this.SelectFolder.Location = new System.Drawing.Point(80, 16);
-            this.SelectFolder.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.SelectFolder.Name = "SelectFolder";
-            this.SelectFolder.Size = new System.Drawing.Size(121, 32);
-            this.SelectFolder.TabIndex = 30;
-            this.SelectFolder.Text = "Select Folder";
-            this.SelectFolder.UseVisualStyleBackColor = false;
-            this.SelectFolder.Click += new System.EventHandler(this.SelectFolder_Click);
+            SelectFolder.Anchor = AnchorStyles.None;
+            SelectFolder.BackColor = Color.FromArgb(35, 114, 66);
+            SelectFolder.FlatAppearance.BorderColor = Color.FromArgb(35, 114, 66);
+            SelectFolder.FlatStyle = FlatStyle.Flat;
+            SelectFolder.Font = new Font("Microsoft Sans Serif", 8F, FontStyle.Regular, GraphicsUnit.Point);
+            SelectFolder.ForeColor = Color.White;
+            SelectFolder.Location = new Point(23, 24);
+            SelectFolder.Margin = new Padding(3, 2, 3, 2);
+            SelectFolder.Name = "SelectFolder";
+            SelectFolder.Size = new Size(121, 35);
+            SelectFolder.TabIndex = 30;
+            SelectFolder.Text = "Select Folder";
+            SelectFolder.UseVisualStyleBackColor = false;
+            SelectFolder.Click += SelectFolder_Click;
             // 
             // SelectedFolder
             // 
-            this.SelectedFolder.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.SelectedFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(211)))), ((int)(((byte)(200)))));
-            this.SelectedFolder.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.SelectedFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SelectedFolder.Location = new System.Drawing.Point(230, 15);
-            this.SelectedFolder.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.SelectedFolder.Multiline = true;
-            this.SelectedFolder.Name = "SelectedFolder";
-            this.SelectedFolder.Size = new System.Drawing.Size(528, 32);
-            this.SelectedFolder.TabIndex = 31;
+            SelectedFolder.Anchor = AnchorStyles.None;
+            SelectedFolder.BackColor = Color.FromArgb(203, 211, 200);
+            SelectedFolder.BorderStyle = BorderStyle.None;
+            SelectedFolder.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            SelectedFolder.Location = new Point(173, 24);
+            SelectedFolder.Margin = new Padding(3, 2, 3, 2);
+            SelectedFolder.Multiline = true;
+            SelectedFolder.Name = "SelectedFolder";
+            SelectedFolder.Size = new Size(528, 35);
+            SelectedFolder.TabIndex = 31;
             // 
             // FontBox1
             // 
-            this.FontBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(98)))), ((int)(((byte)(101)))));
-            this.FontBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.FontBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FontBox1.ForeColor = System.Drawing.Color.White;
-            this.FontBox1.FormattingEnabled = true;
-            this.FontBox1.Location = new System.Drawing.Point(20, 19);
-            this.FontBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.FontBox1.Name = "FontBox1";
-            this.FontBox1.Size = new System.Drawing.Size(237, 28);
-            this.FontBox1.TabIndex = 32;
-            this.FontBox1.SelectionChangeCommitted += new System.EventHandler(this.FontBox1_SelectionChangeCommitted);
-            this.FontBox1.Text = "Selected Font";
+            FontBox1.BackColor = Color.FromArgb(21, 98, 101);
+            FontBox1.FlatStyle = FlatStyle.Flat;
+            FontBox1.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            FontBox1.ForeColor = Color.White;
+            FontBox1.FormattingEnabled = true;
+            FontBox1.Location = new Point(20, 30);
+            FontBox1.Margin = new Padding(3, 2, 3, 2);
+            FontBox1.Name = "FontBox1";
+            FontBox1.Size = new Size(237, 28);
+            FontBox1.TabIndex = 32;
+            FontBox1.Text = "Selected Font";
+            FontBox1.SelectionChangeCommitted += FontBox1_SelectionChangeCommitted;
             // 
             // SelectedFont
             // 
-            this.SelectedFont.AutoSize = true;
-            this.SelectedFont.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SelectedFont.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SelectedFont.ForeColor = System.Drawing.Color.White;
-            this.SelectedFont.Location = new System.Drawing.Point(16, 60);
-            this.SelectedFont.Name = "SelectedFont";
-            this.SelectedFont.Size = new System.Drawing.Size(42, 20);
-            this.SelectedFont.TabIndex = 33;
-            this.SelectedFont.Text = "Font";
+            SelectedFont.AutoSize = true;
+            SelectedFont.FlatStyle = FlatStyle.Flat;
+            SelectedFont.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            SelectedFont.ForeColor = Color.White;
+            SelectedFont.Location = new Point(20, 85);
+            SelectedFont.Name = "SelectedFont";
+            SelectedFont.Size = new Size(42, 20);
+            SelectedFont.TabIndex = 33;
+            SelectedFont.Text = "Font";
             // 
             // CopyFont
             // 
-            this.CopyFont.AutoSize = true;
-            this.CopyFont.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(114)))), ((int)(((byte)(66)))));
-            this.CopyFont.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(114)))), ((int)(((byte)(66)))));
-            this.CopyFont.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CopyFont.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CopyFont.ForeColor = System.Drawing.Color.White;
-            this.CopyFont.Location = new System.Drawing.Point(19, 802);
-            this.CopyFont.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.CopyFont.Name = "CopyFont";
-            this.CopyFont.Size = new System.Drawing.Size(237, 51);
-            this.CopyFont.TabIndex = 34;
-            this.CopyFont.Text = "Download Font";
-            this.CopyFont.UseVisualStyleBackColor = false;
-            this.CopyFont.Click += new System.EventHandler(this.CopyFont_Click);
+            CopyFont.Anchor = AnchorStyles.None;
+            CopyFont.AutoSize = true;
+            CopyFont.BackColor = Color.FromArgb(35, 114, 66);
+            CopyFont.FlatAppearance.BorderColor = Color.FromArgb(35, 114, 66);
+            CopyFont.FlatStyle = FlatStyle.Flat;
+            CopyFont.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            CopyFont.ForeColor = Color.White;
+            CopyFont.Location = new Point(20, 866);
+            CopyFont.Margin = new Padding(3, 2, 3, 2);
+            CopyFont.Name = "CopyFont";
+            CopyFont.Size = new Size(237, 48);
+            CopyFont.TabIndex = 34;
+            CopyFont.Text = "Download Font";
+            CopyFont.UseVisualStyleBackColor = false;
+            CopyFont.Click += CopyFont_Click;
             // 
             // webView21
             // 
-            this.webView21.AllowExternalDrop = true;
-            this.webView21.CreationProperties = null;
-            this.webView21.DefaultBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(62)))), ((int)(((byte)(79)))));
-            this.webView21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webView21.ForeColor = System.Drawing.Color.White;
-            this.webView21.Location = new System.Drawing.Point(0, 0);
-            this.webView21.Name = "webView21";
-            this.webView21.Size = new System.Drawing.Size(950, 767);
-            this.webView21.TabIndex = 35;
-            this.webView21.ZoomFactor = 1D;
-            this.webView21.CoreWebView2InitializationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs>(this.WebView21_CoreWebView2InitializationCompleted);
+            webView21.AllowExternalDrop = true;
+            webView21.CreationProperties = null;
+            webView21.DefaultBackgroundColor = Color.FromArgb(45, 62, 79);
+            webView21.Dock = DockStyle.Fill;
+            webView21.ForeColor = Color.White;
+            webView21.Location = new Point(0, 0);
+            webView21.Margin = new Padding(3, 5, 3, 5);
+            webView21.Name = "webView21";
+            webView21.Size = new Size(950, 766);
+            webView21.TabIndex = 35;
+            webView21.ZoomFactor = 1D;
+            webView21.CoreWebView2InitializationCompleted += WebView21_CoreWebView2InitializationCompleted;
             // 
             // LeftPanel
             // 
-            this.LeftPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.LeftPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(62)))), ((int)(((byte)(79)))));
-            this.LeftPanel.Controls.Add(this.Minify);
-            this.LeftPanel.Controls.Add(this.SubsetsLists);
-            this.LeftPanel.Controls.Add(this.CopyFont);
-            this.LeftPanel.Controls.Add(this.SelectedFont);
-            this.LeftPanel.Controls.Add(this.SizeAndStyle);
-            this.LeftPanel.Controls.Add(this.FontBox1);
-            this.LeftPanel.Location = new System.Drawing.Point(12, 12);
-            this.LeftPanel.Name = "LeftPanel";
-            this.LeftPanel.Size = new System.Drawing.Size(274, 873);
-            this.LeftPanel.TabIndex = 36;
+            LeftPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            LeftPanel.BackColor = Color.FromArgb(45, 62, 79);
+            LeftPanel.Controls.Add(Minify);
+            LeftPanel.Controls.Add(CopyFont);
+            LeftPanel.Controls.Add(SubsetsLists);
+            LeftPanel.Controls.Add(SelectedFont);
+            LeftPanel.Controls.Add(SizeAndStyle);
+            LeftPanel.Controls.Add(FontBox1);
+            LeftPanel.Location = new Point(12, 19);
+            LeftPanel.Margin = new Padding(3, 5, 3, 5);
+            LeftPanel.Name = "LeftPanel";
+            LeftPanel.Size = new Size(274, 932);
+            LeftPanel.TabIndex = 36;
             // 
             // Minify
             // 
-            this.Minify.AutoSize = true;
-            this.Minify.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.Minify.Location = new System.Drawing.Point(19, 727);
-            this.Minify.Name = "Minify";
-            this.Minify.Size = new System.Drawing.Size(136, 29);
-            this.Minify.TabIndex = 51;
-            this.Minify.Text = "Minified css";
-            this.Minify.UseVisualStyleBackColor = true;
+            Minify.Anchor = AnchorStyles.None;
+            Minify.AutoSize = true;
+            Minify.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            Minify.Location = new Point(20, 805);
+            Minify.Margin = new Padding(3, 5, 3, 5);
+            Minify.Name = "Minify";
+            Minify.Size = new Size(136, 29);
+            Minify.TabIndex = 51;
+            Minify.Text = "Minified css";
+            Minify.UseVisualStyleBackColor = true;
             // 
             // SubsetsLists
             // 
-            this.SubsetsLists.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(98)))), ((int)(((byte)(101)))));
-            this.SubsetsLists.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.SubsetsLists.CheckOnClick = true;
-            this.SubsetsLists.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SubsetsLists.ForeColor = System.Drawing.Color.White;
-            this.SubsetsLists.FormattingEnabled = true;
-            this.SubsetsLists.Location = new System.Drawing.Point(20, 446);
-            this.SubsetsLists.Margin = new System.Windows.Forms.Padding(3, 3, 3, 2);
-            this.SubsetsLists.Name = "SubsetsLists";
-            this.SubsetsLists.Size = new System.Drawing.Size(237, 275);
-            this.SubsetsLists.TabIndex = 50;
-            this.SubsetsLists.SelectedIndexChanged += new System.EventHandler(this.SubsetsLists_SelectedIndexChanged);
+            SubsetsLists.BackColor = Color.FromArgb(21, 98, 101);
+            SubsetsLists.BorderStyle = BorderStyle.None;
+            SubsetsLists.CheckOnClick = true;
+            SubsetsLists.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            SubsetsLists.ForeColor = Color.White;
+            SubsetsLists.FormattingEnabled = true;
+            SubsetsLists.Location = new Point(20, 461);
+            SubsetsLists.Margin = new Padding(3, 5, 3, 2);
+            SubsetsLists.Name = "SubsetsLists";
+            SubsetsLists.Size = new Size(237, 325);
+            SubsetsLists.TabIndex = 50;
+            SubsetsLists.SelectedIndexChanged += SubsetsLists_SelectedIndexChanged;
             // 
             // WOFF2
             // 
-            this.WOFF2.AutoSize = true;
-            this.WOFF2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.WOFF2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(43)))), ((int)(((byte)(34)))));
-            this.WOFF2.Location = new System.Drawing.Point(842, 19);
-            this.WOFF2.Name = "WOFF2";
-            this.WOFF2.Size = new System.Drawing.Size(105, 29);
-            this.WOFF2.TabIndex = 52;
-            this.WOFF2.Text = "WOFF2";
-            this.WOFF2.UseVisualStyleBackColor = true;
-            this.WOFF2.CheckedChanged += new System.EventHandler(this.WOFF2_CheckedChanged);
+            WOFF2.Anchor = AnchorStyles.None;
+            WOFF2.AutoSize = true;
+            WOFF2.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            WOFF2.ForeColor = Color.FromArgb(155, 43, 34);
+            WOFF2.Location = new Point(785, 30);
+            WOFF2.Margin = new Padding(3, 5, 3, 5);
+            WOFF2.Name = "WOFF2";
+            WOFF2.Size = new Size(105, 29);
+            WOFF2.TabIndex = 52;
+            WOFF2.Text = "WOFF2";
+            WOFF2.UseVisualStyleBackColor = true;
+            WOFF2.CheckedChanged += WOFF2_CheckedChanged;
             // 
             // TopPanel
             // 
-            this.TopPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TopPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(62)))), ((int)(((byte)(79)))));
-            this.TopPanel.Controls.Add(this.TTF);
-            this.TopPanel.Controls.Add(this.ApiKeyLabel);
-            this.TopPanel.Controls.Add(this.WOFF2);
-            this.TopPanel.Controls.Add(this.ApiKeyBox);
-            this.TopPanel.Controls.Add(this.SelectFolder);
-            this.TopPanel.Controls.Add(this.SelectedFolder);
-            this.TopPanel.Location = new System.Drawing.Point(292, 12);
-            this.TopPanel.Name = "TopPanel";
-            this.TopPanel.Size = new System.Drawing.Size(950, 100);
-            this.TopPanel.TabIndex = 37;
+            TopPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            TopPanel.BackColor = Color.FromArgb(45, 62, 79);
+            TopPanel.Controls.Add(TTF);
+            TopPanel.Controls.Add(ApiKeyLabel);
+            TopPanel.Controls.Add(WOFF2);
+            TopPanel.Controls.Add(ApiKeyBox);
+            TopPanel.Controls.Add(SelectFolder);
+            TopPanel.Controls.Add(SelectedFolder);
+            TopPanel.Location = new Point(292, 19);
+            TopPanel.Margin = new Padding(3, 5, 3, 5);
+            TopPanel.Name = "TopPanel";
+            TopPanel.Size = new Size(950, 156);
+            TopPanel.TabIndex = 37;
             // 
             // TTF
             // 
-            this.TTF.AutoSize = true;
-            this.TTF.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.TTF.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(43)))), ((int)(((byte)(34)))));
-            this.TTF.Location = new System.Drawing.Point(842, 54);
-            this.TTF.Name = "TTF";
-            this.TTF.Size = new System.Drawing.Size(72, 29);
-            this.TTF.TabIndex = 53;
-            this.TTF.Text = "TTF";
-            this.TTF.UseVisualStyleBackColor = true;
-            this.TTF.CheckedChanged += new System.EventHandler(this.TTF_CheckedChanged);
+            TTF.Anchor = AnchorStyles.None;
+            TTF.AutoSize = true;
+            TTF.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            TTF.ForeColor = Color.FromArgb(155, 43, 34);
+            TTF.Location = new Point(785, 95);
+            TTF.Margin = new Padding(3, 5, 3, 5);
+            TTF.Name = "TTF";
+            TTF.Size = new Size(72, 29);
+            TTF.TabIndex = 53;
+            TTF.Text = "TTF";
+            TTF.UseVisualStyleBackColor = true;
+            TTF.CheckedChanged += TTF_CheckedChanged;
             // 
             // ApiKeyLabel
             // 
-            this.ApiKeyLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.ApiKeyLabel.AutoSize = true;
-            this.ApiKeyLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ApiKeyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ApiKeyLabel.ForeColor = System.Drawing.Color.White;
-            this.ApiKeyLabel.Location = new System.Drawing.Point(120, 57);
-            this.ApiKeyLabel.Name = "ApiKeyLabel";
-            this.ApiKeyLabel.Size = new System.Drawing.Size(81, 25);
-            this.ApiKeyLabel.TabIndex = 35;
-            this.ApiKeyLabel.Text = "Api Key";
+            ApiKeyLabel.Anchor = AnchorStyles.None;
+            ApiKeyLabel.AutoSize = true;
+            ApiKeyLabel.FlatStyle = FlatStyle.Flat;
+            ApiKeyLabel.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            ApiKeyLabel.ForeColor = Color.White;
+            ApiKeyLabel.Location = new Point(63, 89);
+            ApiKeyLabel.Name = "ApiKeyLabel";
+            ApiKeyLabel.Size = new Size(81, 25);
+            ApiKeyLabel.TabIndex = 35;
+            ApiKeyLabel.Text = "Api Key";
             // 
             // ApiKeyBox
             // 
-            this.ApiKeyBox.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.ApiKeyBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(211)))), ((int)(((byte)(200)))));
-            this.ApiKeyBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.ApiKeyBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ApiKeyBox.Location = new System.Drawing.Point(230, 56);
-            this.ApiKeyBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.ApiKeyBox.Multiline = true;
-            this.ApiKeyBox.Name = "ApiKeyBox";
-            this.ApiKeyBox.Size = new System.Drawing.Size(528, 32);
-            this.ApiKeyBox.TabIndex = 32;
-            this.ApiKeyBox.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
+            ApiKeyBox.Anchor = AnchorStyles.None;
+            ApiKeyBox.BackColor = Color.FromArgb(203, 211, 200);
+            ApiKeyBox.BorderStyle = BorderStyle.None;
+            ApiKeyBox.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            ApiKeyBox.Location = new Point(173, 89);
+            ApiKeyBox.Margin = new Padding(3, 2, 3, 2);
+            ApiKeyBox.Multiline = true;
+            ApiKeyBox.Name = "ApiKeyBox";
+            ApiKeyBox.Size = new Size(528, 35);
+            ApiKeyBox.TabIndex = 32;
+            ApiKeyBox.TextChanged += TextBox2_TextChanged;
             // 
             // WebPanel
             // 
-            this.WebPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.WebPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(62)))), ((int)(((byte)(79)))));
-            this.WebPanel.Controls.Add(this.webView21);
-            this.WebPanel.ForeColor = System.Drawing.Color.White;
-            this.WebPanel.Location = new System.Drawing.Point(292, 118);
-            this.WebPanel.Name = "WebPanel";
-            this.WebPanel.Size = new System.Drawing.Size(950, 767);
-            this.WebPanel.TabIndex = 38;
+            WebPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            WebPanel.BackColor = Color.FromArgb(45, 62, 79);
+            WebPanel.Controls.Add(webView21);
+            WebPanel.ForeColor = Color.White;
+            WebPanel.Location = new Point(292, 185);
+            WebPanel.Margin = new Padding(3, 5, 3, 5);
+            WebPanel.Name = "WebPanel";
+            WebPanel.Size = new Size(950, 766);
+            WebPanel.TabIndex = 38;
             // 
-            // Form1
+            // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(18)))));
-            this.ClientSize = new System.Drawing.Size(1254, 897);
-            this.Controls.Add(this.WebPanel);
-            this.Controls.Add(this.TopPanel);
-            this.Controls.Add(this.LeftPanel);
-            this.ForeColor = System.Drawing.Color.White;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Name = "Form1";
-            this.Text = "Fonts Downloader";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
-            ((System.ComponentModel.ISupportInitialize)(this.webView21)).EndInit();
-            this.LeftPanel.ResumeLayout(false);
-            this.LeftPanel.PerformLayout();
-            this.TopPanel.ResumeLayout(false);
-            this.TopPanel.PerformLayout();
-            this.WebPanel.ResumeLayout(false);
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(120F, 120F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoScroll = true;
+            AutoSize = true;
+            BackColor = Color.FromArgb(18, 18, 18);
+            ClientSize = new Size(1254, 965);
+            Controls.Add(WebPanel);
+            Controls.Add(TopPanel);
+            Controls.Add(LeftPanel);
+            ForeColor = Color.White;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(3, 2, 3, 2);
+            Name = "MainForm";
+            Text = "Fonts Downloader";
+            WindowState = FormWindowState.Minimized;
+            FormClosed += Form1_FormClosed;
+            ((System.ComponentModel.ISupportInitialize)webView21).EndInit();
+            LeftPanel.ResumeLayout(false);
+            LeftPanel.PerformLayout();
+            TopPanel.ResumeLayout(false);
+            TopPanel.PerformLayout();
+            WebPanel.ResumeLayout(false);
+            ResumeLayout(false);
         }
 
         #endregion
