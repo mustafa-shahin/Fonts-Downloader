@@ -43,8 +43,8 @@ namespace Fonts_Downloader
 
         public void CreateHtml(string SelectedFont, List<string> Variants)
         {
-            List<string> WgtItalic = new List<string>();
-            List<string> WgtNormal = new List<string>();
+            List<string> WgtItalic = new();
+            List<string> WgtNormal = new();
             foreach (var variant in Variants)
             {
                 if (!variant.ToString().Contains("italic"))
@@ -64,10 +64,10 @@ namespace Fonts_Downloader
             string GoogleFontLinkItalicsNormals = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont}:wght@{Normals}&display=swap\" rel=\"stylesheet\">";
             string FontFamliyStyle = $"font-family: '{SelectedFont}', sans-serif;";
             string BodyStyle = "body{\n" + FontFamliyStyle + "\n" + "color: white;" + "\n" + "}";
-            List<string> PTagCSS = new List<string>();
-            List<string> PTags = new List<string>();
-            List<string> H1Tags = new List<string>();
-            List<string> H1TagsCSS = new List<string>();
+            List<string> PTagCSS = new();
+            List<string> PTags = new();
+            List<string> H1Tags = new();
+            List<string> H1TagsCSS =new();
             string H1Italic, H1Normal, H1TagItalic, H1TagNormal;
             if (WgtItalic.Any())
             {
@@ -91,7 +91,7 @@ namespace Fonts_Downloader
 
                 }
             }
-            if (WgtNormal.Any())
+            if (WgtNormal.Any() && WgtNormal != null)
             {
                 foreach (string wgt in WgtNormal)
                 {

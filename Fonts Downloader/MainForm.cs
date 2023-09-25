@@ -17,7 +17,8 @@ namespace Fonts_Downloader
         private string previousFont = string.Empty;
         private List<Item> Items;
         private string FolderName;
-        private readonly HtmlFile Document = new HtmlFile();
+        private readonly HtmlFile Document = new();
+        private readonly FontsComboBox Fonts = new();
         private string SelectedFonts;
         private bool ensure = false;
         private string Key = " ";
@@ -46,18 +47,26 @@ namespace Fonts_Downloader
             SelectedFolder.Text = FolderName;
         }
 
-        private  void WOFF2_CheckedChanged(object sender, EventArgs e)
+        private async void WOFF2_CheckedChanged(object sender, EventArgs e)
         {
-            if(TTF.Checked)
+            if (WOFF2.Checked)
+            {
                 TTF.Checked = !WOFF2.Checked;
+                Items = await Fonts.GetWebFontsAsync(Key, true, TTF.Checked);
+            }
+
         }
 
-        private  void TTF_CheckedChanged(object sender, EventArgs e)
+        private async void TTF_CheckedChanged(object sender, EventArgs e)
         {
-            if(WOFF2.Checked)
+            if (TTF.Checked)
+            {
                 WOFF2.Checked = !TTF.Checked;
+                Items = await Fonts.GetWebFontsAsync(Key, false, TTF.Checked);
+            }
+
         }
-        private  void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
+        private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             SelectedFonts = FontBox1.SelectedItem?.ToString();
             if (!string.IsNullOrEmpty(SelectedFonts))
@@ -73,6 +82,7 @@ namespace Fonts_Downloader
             {
                 SubsetsLists.Items.Clear();
                 SizeAndStyle.Items.Clear();
+                Minify.Enabled = true;
                 previousFont = SelectedFonts;
             }
             foreach (var subset in Subsets)
@@ -97,28 +107,28 @@ namespace Fonts_Downloader
                 try
                 {
                     Key = ApiKeyBox.Text;
-                    var Fonts = new FontsComboBox();
                     Items = await Fonts.GetWebFontsAsync(Key, true, TTF.Checked);
+
+                    if (Items.Any() && Items != null)
+                    {
+                        foreach (var item in Items)
+                        {
+                            FontBox1.Items.Add(item.Family);
+                        }
+                    }
                     var response = new ApiResponse();
                     if (response.Success)
                     {
                         WOFF2.Enabled = true;
                         TTF.Enabled = true;
                     }
-                    if (Items.Any())
-                    {
-                        foreach (var item in Items)
-                        {
-                            FontBox1.Items.Add(item.Family);
-                        }
-                    }                  
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("your api key is not correct "+ex.Message);
+                    MessageBox.Show("your api key is not correct " + ex.Message);
                 }
             }
-           
+
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -160,7 +170,16 @@ namespace Fonts_Downloader
                         DialogResult dialogResult = MessageBox.Show("The Downlaod has been completed. Do you want to check downloaded files? ", "Download completed", MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.Yes)
                         {
-                            Process.Start($"{FolderName}\\{SelectedFonts.Replace(" ", "")}");
+                            try
+                            {
+                                var folderToOpen = Path.Combine(FolderName, SelectedFonts.Replace(" ", ""));
+                                Process.Start("explorer.exe", folderToOpen); ;
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"Error opening folder: {ex.Message}");
+                            }
+
                         }
                     }
                     else if (fileLinksTask.IsFaulted)
@@ -178,7 +197,6 @@ namespace Fonts_Downloader
         private void SubsetsLists_SelectedIndexChanged(object sender, EventArgs e)
         {
             Minify.Enabled = SubsetsLists.CheckedItems.Count == 0;
-
         }
     }
 }
