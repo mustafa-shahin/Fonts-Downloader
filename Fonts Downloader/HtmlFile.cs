@@ -7,10 +7,10 @@ namespace Fonts_Downloader
     internal class HtmlFile
     {
         private const string Path = @"C:\FontDownlaoder";
-        public void DefaultHtml()
+        public static void DefaultHtml()
         {
             string text = Api.IsInternetAvailable()
-                ? "<h3>The program will create a folder named FontDownloader on the C drive to render the fonts. After closing the program, the folder will be deleted.</h3>"+
+                ? "<h3>The program will create a folder named FontDownloader on the C drive to render the fonts. After closing the program, the folder will be deleted.</h3>" +
                 "<h3 style=\"color:#9b2b22;\"> Please select whether you want TTF or WOFF2 files by checking one of the boxes above</h3>"
                 : "<h1 style=\"color:#9b2b22;\">Check your internet connection</h1>";
 
@@ -35,13 +35,11 @@ namespace Fonts_Downloader
                     {text}
                 </body>";
 
-            using (StreamWriter writer = new StreamWriter($"{Path}\\index.html", false))
-            {
-                writer.WriteLine(defaultHtml);
-            }
+            using StreamWriter writer = new StreamWriter($"{Path}\\index.html", false);
+            writer.WriteLine(defaultHtml);
         }
 
-        public void CreateHtml(string SelectedFont, List<string> Variants)
+        public static void CreateHtml(string SelectedFont, List<string> Variants)
         {
             List<string> WgtItalic = new();
             List<string> WgtNormal = new();
@@ -67,7 +65,7 @@ namespace Fonts_Downloader
             List<string> PTagCSS = new();
             List<string> PTags = new();
             List<string> H1Tags = new();
-            List<string> H1TagsCSS =new();
+            List<string> H1TagsCSS = new();
             string H1Italic, H1Normal, H1TagItalic, H1TagNormal;
             if (WgtItalic.Any())
             {
@@ -113,7 +111,7 @@ namespace Fonts_Downloader
                 }
             }
 
-            using (StreamWriter writer = new StreamWriter($"{Path}\\index.html", false))
+            using (StreamWriter writer = new($"{Path}\\index.html", false))
             {
                 writer.WriteLine("<head>");
                 if (!string.IsNullOrEmpty(Italics))

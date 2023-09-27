@@ -5,10 +5,10 @@ namespace Fonts_Downloader
 {
     internal class SizeStyles
     {
-        public List<string> LoadSizeStyles(List<Item> fonts, string selectedFont)
+        public  List<string> LoadSizeStyles(List<Item> fonts, string selectedFont)
         {
              var variants = new List<string>();
-        var selectedFontItems = fonts.Where(item => item.Family == selectedFont);
+             var selectedFontItems = fonts.Where(item => item.Family == selectedFont);
 
             foreach (var item in selectedFontItems)
             {
@@ -20,15 +20,12 @@ namespace Fonts_Downloader
 
         private string MapVariant(string variant)
         {
-            switch (variant)
+            return variant switch
             {
-                case "regular":
-                    return "400";
-                case "italic":
-                    return "400italic";
-                default:
-                    return variant;
-            }
+                "regular" => "400",
+                "italic" => "400italic",
+                _ => variant,
+            };
         }
     }
 }

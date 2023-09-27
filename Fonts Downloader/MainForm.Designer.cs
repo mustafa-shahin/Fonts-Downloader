@@ -67,7 +67,7 @@ namespace Fonts_Downloader
             SizeAndStyle.Margin = new Padding(3, 5, 3, 2);
             SizeAndStyle.Name = "SizeAndStyle";
             SizeAndStyle.Size = new Size(237, 325);
-            SizeAndStyle.TabIndex = 35; 
+            SizeAndStyle.TabIndex = 35;
             // 
             // SelectFolder
             // 
@@ -187,6 +187,7 @@ namespace Fonts_Downloader
             Minify.TabIndex = 51;
             Minify.Text = "Minified css";
             Minify.UseVisualStyleBackColor = true;
+            Minify.CheckedChanged += Minify_CheckedChanged;
             // 
             // SubsetsLists
             // 
@@ -201,7 +202,6 @@ namespace Fonts_Downloader
             SubsetsLists.Name = "SubsetsLists";
             SubsetsLists.Size = new Size(237, 325);
             SubsetsLists.TabIndex = 50;
-            SubsetsLists.SelectedIndexChanged += SubsetsLists_SelectedIndexChanged;
             // 
             // WOFF2
             // 

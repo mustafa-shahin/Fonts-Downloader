@@ -17,21 +17,21 @@ namespace Fonts_Downloader
         private string previousFont = string.Empty;
         private List<Item> Items;
         private string FolderName;
-        private readonly HtmlFile Document = new();
-        private readonly FontsComboBox Fonts = new();
         private string SelectedFonts;
         private bool ensure = false;
         private string Key = " ";
-        private List<string> Subsets;
+        private SizeStyles sizeStyles = new();
+
         public MainForm()
         {
             InitializeComponent();
             webView21.EnsureCoreWebView2Async();
-            Document.DefaultHtml();
+            HtmlFile.DefaultHtml();
             webView21.BackColor = Color.FromArgb(45, 62, 79);
             webView21.Source = new Uri("file:///C:/FontDownlaoder/index.html");
             TTF.Enabled = false;
             WOFF2.Enabled = false;
+
         }
 
         private void SelectFolder_Click(object sender, EventArgs e)
@@ -52,7 +52,7 @@ namespace Fonts_Downloader
             if (WOFF2.Checked)
             {
                 TTF.Checked = !WOFF2.Checked;
-                Items = await Fonts.GetWebFontsAsync(Key, true, TTF.Checked);
+                Items = await FontsComboBox.GetWebFontsAsync(Key, WOFF2.Checked, TTF.Checked);
             }
 
         }
@@ -62,44 +62,37 @@ namespace Fonts_Downloader
             if (TTF.Checked)
             {
                 WOFF2.Checked = !TTF.Checked;
-                Items = await Fonts.GetWebFontsAsync(Key, false, TTF.Checked);
+                Items = await FontsComboBox.GetWebFontsAsync(Key, WOFF2.Checked, TTF.Checked);
             }
 
         }
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             SelectedFonts = FontBox1.SelectedItem?.ToString();
-            if (!string.IsNullOrEmpty(SelectedFonts))
+            if (!string.IsNullOrEmpty(SelectedFonts) && !(SelectedFonts == previousFont && SubsetsLists.Items.Count > 0))
             {
+                if (!string.IsNullOrEmpty(previousFont) && previousFont != SelectedFonts)
+                {
+                    SubsetsLists.Items.Clear();
+                    SizeAndStyle.Items.Clear();
+                    Minify.Enabled = true;
+                }
                 SelectedFont.Text = SelectedFonts;
-                Subsets = Items
+                SubsetsLists.Items.AddRange(Items
                   .Where(item => item.Family == SelectedFonts)
                   .SelectMany(item => item.Subsets)
-                  .Select(item => char.ToUpper(item[0]) + item.Substring(1))
-                   .ToList();
+                  .Select(item => char.ToUpper(item[0]) + item[1..]).ToArray());
+
+                var Variants = sizeStyles.LoadSizeStyles(Items, SelectedFonts);
+                SizeAndStyle.Items.AddRange(Variants.ToArray());
+                HtmlFile.CreateHtml(SelectedFonts, Variants);
             }
-            if (SelectedFonts != previousFont || string.IsNullOrEmpty(FontBox1.Text))
-            {
-                SubsetsLists.Items.Clear();
-                SizeAndStyle.Items.Clear();
-                Minify.Enabled = true;
-                previousFont = SelectedFonts;
-            }
-            foreach (var subset in Subsets)
-            {
-                SubsetsLists.Items.Add(subset);
-            }
-            var sizeStyles = new SizeStyles();
-            var Variants = sizeStyles.LoadSizeStyles(Items, SelectedFonts);
-            SizeAndStyle.Items.AddRange(Variants.ToArray());
-            Document.CreateHtml(SelectedFonts, Variants);
+            previousFont = SelectedFonts;
 
             if (ensure)
-            {
                 webView21.CoreWebView2.Navigate("file:///C:/FontDownlaoder/index.html");
-            }
-        }
 
+        }
         private async void TextBox2_TextChanged(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(ApiKeyBox.Text))
@@ -107,7 +100,7 @@ namespace Fonts_Downloader
                 try
                 {
                     Key = ApiKeyBox.Text;
-                    Items = await Fonts.GetWebFontsAsync(Key, true, TTF.Checked);
+                    Items = await FontsComboBox.GetWebFontsAsync(Key, true, TTF.Checked);
 
                     if (Items.Any() && Items != null)
                     {
@@ -194,9 +187,12 @@ namespace Fonts_Downloader
                 MessageBox.Show("Please select a folder");
         }
 
-        private void SubsetsLists_SelectedIndexChanged(object sender, EventArgs e)
+        private void Minify_CheckedChanged(object sender, EventArgs e)
         {
-            Minify.Enabled = SubsetsLists.CheckedItems.Count == 0;
+            if (Minify.Checked)
+                SubsetsLists.Enabled = false;
+            else
+                SubsetsLists.Enabled = true;
         }
     }
 }
