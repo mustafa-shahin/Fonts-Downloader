@@ -8,7 +8,7 @@ namespace Fonts_Downloader
 {
     internal class CssFile
     {
-        private readonly Dictionary<string, string> FontFileStyles = new Dictionary<string, string>
+        private readonly Dictionary<string, string> FontFileStyles = new()
         {
             { "100", "Thin" }, { "200", "ExtraLight" },
             { "300", "Light" }, { "400", "Regular" },
@@ -17,7 +17,7 @@ namespace Fonts_Downloader
             { "900", "Black" },
         };
 
-        public void CreateCSS(IEnumerable<string> variants, string folderName, string fontName, bool woff, bool minify = false, IEnumerable<string> subsets = null)
+        public  void CreateCSS(IEnumerable<string> variants, string folderName, string fontName, bool woff, bool minify = false, IEnumerable<string> subsets = null)
         {
 
             var cssList = GenerateCssList(variants, fontName, woff, subsets);
@@ -90,7 +90,7 @@ namespace Fonts_Downloader
             return cssList;
         }
 
-        private bool ParseCheckedItem(string checkedItem, out string fontStyle, out string fontWeight)
+        private static bool ParseCheckedItem(string checkedItem, out string fontStyle, out string fontWeight)
         {
             fontStyle = checkedItem.Contains("italic") ? "italic" : "normal";
             fontWeight = checkedItem.Replace("italic", "").Trim();
@@ -98,7 +98,7 @@ namespace Fonts_Downloader
             return !string.IsNullOrWhiteSpace(fontWeight);
         }
 
-        private string GenerateFontFaceCss(string fontName, string fontStyle, string fontWeight, bool woff, string fontFileStyle = null, string subset = null)
+        private static string GenerateFontFaceCss(string fontName, string fontStyle, string fontWeight, bool woff, string fontFileStyle, string subset = null)
         {
             if (!ValidateFontParameters(fontName, fontStyle, fontWeight)) return string.Empty;
 

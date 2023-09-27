@@ -3,12 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.LinkLabel;
 
 namespace Fonts_Downloader
 {
     public class FontsComboBox
     {
-        public async Task<List<Item>> GetWebFontsAsync(string apiKey, bool Woff2, bool TTF)
+        public static async Task<List<Item>> GetWebFontsAsync(string apiKey, bool Woff2, bool TTF)
         {
             var fontsList = new List<Item>();
             string link = string.Empty;
