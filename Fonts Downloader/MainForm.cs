@@ -20,7 +20,7 @@ namespace Fonts_Downloader
         private string SelectedFonts;
         private bool ensure = false;
         private string Key = " ";
-        private SizeStyles sizeStyles = new();
+        private readonly SizeStyles sizeStyles = new();
 
         public MainForm()
         {
@@ -31,6 +31,8 @@ namespace Fonts_Downloader
             webView21.Source = new Uri("file:///C:/FontDownlaoder/index.html");
             TTF.Enabled = false;
             WOFF2.Enabled = false;
+            FontBox1.Enabled = false;
+            Minify.Enabled = false;
 
         }
 
@@ -114,6 +116,8 @@ namespace Fonts_Downloader
                     {
                         WOFF2.Enabled = true;
                         TTF.Enabled = true;
+                        FontBox1.Enabled = true;
+                        Minify.Enabled = true; 
                     }
                 }
                 catch (Exception ex)
@@ -193,6 +197,14 @@ namespace Fonts_Downloader
                 SubsetsLists.Enabled = false;
             else
                 SubsetsLists.Enabled = true;
+        }
+
+        private void SubsetsLists_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (SubsetsLists.CheckedItems.Count > 0)
+                Minify.Enabled = false;
+            else
+                Minify.Enabled = true;
         }
     }
 }

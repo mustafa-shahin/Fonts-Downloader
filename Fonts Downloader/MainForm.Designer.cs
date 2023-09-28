@@ -89,7 +89,7 @@ namespace Fonts_Downloader
             // SelectedFolder
             // 
             SelectedFolder.Anchor = AnchorStyles.None;
-            SelectedFolder.BackColor = Color.FromArgb(203, 211, 200);
+            SelectedFolder.BackColor = Color.White;
             SelectedFolder.BorderStyle = BorderStyle.None;
             SelectedFolder.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
             SelectedFolder.Location = new Point(173, 24);
@@ -202,6 +202,7 @@ namespace Fonts_Downloader
             SubsetsLists.Name = "SubsetsLists";
             SubsetsLists.Size = new Size(237, 325);
             SubsetsLists.TabIndex = 50;
+            SubsetsLists.ItemCheck += SubsetsLists_ItemCheck;
             // 
             // WOFF2
             // 
@@ -265,7 +266,7 @@ namespace Fonts_Downloader
             // ApiKeyBox
             // 
             ApiKeyBox.Anchor = AnchorStyles.None;
-            ApiKeyBox.BackColor = Color.FromArgb(203, 211, 200);
+            ApiKeyBox.BackColor = Color.White;
             ApiKeyBox.BorderStyle = BorderStyle.None;
             ApiKeyBox.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
             ApiKeyBox.Location = new Point(173, 89);
