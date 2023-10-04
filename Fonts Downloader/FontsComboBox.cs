@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.LinkLabel;
@@ -9,28 +10,32 @@ namespace Fonts_Downloader
 {
     public class FontsComboBox
     {
-        public static async Task<List<Item>> GetWebFontsAsync(string apiKey, bool Woff2, bool TTF)
-        {
-            var fontsList = new List<Item>();
-            string link = string.Empty;
-
+        private static List<Item> FontsList = new();
+        public static async Task<List<Item>> GetWebFontsAsync(string apiKey, bool Woff2)
+        {      
             try
             {
-                if (Woff2)
-                {
-                    link = $"https://www.googleapis.com/webfonts/v1/webfonts?capability=WOFF2&sort=alpha&key={apiKey}";
-                }
-
-                else if (TTF)
-                {
-                    link = $"https://www.googleapis.com/webfonts/v1/webfonts?sort=alpha&key={apiKey}";
-                }
+                var WOFF = Woff2 ? "capability=WOFF2" : "";
+                var link = $"https://www.googleapis.com/webfonts/v1/webfonts?{WOFF}&sort=alpha&key={apiKey}";
                 var result = await Api.Get(link);
-
+                //if (result.Success)
+                //{
+                //    var fontResponse = JsonConvert.DeserializeObject<Root>(result.Response);
+                //    FontsList = fontResponse.Items;
+                //}
                 if (result.Success)
                 {
                     var fontResponse = JsonConvert.DeserializeObject<Root>(result.Response);
-                    fontsList = fontResponse.Items;
+                    if (!FontsList.Any() && fontResponse.Items.Any() && fontResponse != null)
+                        FontsList = fontResponse.Items;
+                    else
+                    {
+                        FontsList = FontsList.Zip(fontResponse.Items, (existingItem, newItem) =>
+                        {
+                            existingItem.Files = newItem.Files;
+                            return existingItem;
+                        }).ToList();
+                    }
                 }
             }
             catch (Exception ex)
@@ -38,7 +43,7 @@ namespace Fonts_Downloader
                 MessageBox.Show("An error occurred: " + ex.Message);
             }
 
-            return fontsList;
+            return FontsList;
         }
     }
 }
