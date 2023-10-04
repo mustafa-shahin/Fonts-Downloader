@@ -20,9 +20,9 @@ namespace Fonts_Downloader
         public  void CreateCSS(IEnumerable<string> variants, string folderName, string fontName, bool woff, bool minify = false, IEnumerable<string> subsets = null)
         {
 
-            var cssList = GenerateCssList(variants, fontName, woff, subsets);
+            var CssList = GenerateCssList(variants, fontName, woff, subsets);
 
-            if (cssList.Any())
+            if (CssList.Any())
             {
                 string fontFolder = Path.Combine(folderName, fontName.Replace(" ", ""));
                 if (!Directory.Exists(fontFolder))
@@ -31,7 +31,7 @@ namespace Fonts_Downloader
                 }
 
                 string cssFilePath = Path.Combine(fontFolder, $"{fontName.Replace(" ", "")}{(minify ? ".min" : "")}.css");
-                string cssContent = string.Join("\n", cssList);
+                string cssContent = string.Join("\n", CssList);
 
                 if (minify)
                 {
@@ -64,7 +64,7 @@ namespace Fonts_Downloader
 
         private List<string> GenerateCssList(IEnumerable<string> variants, string fontName, bool woff, IEnumerable<string> subsets = null)
         {
-            var cssList = new List<string>();
+            var CssList = new List<string>();
 
             foreach (var variant in variants)
             {
@@ -76,18 +76,18 @@ namespace Fonts_Downloader
                         foreach (var subset in subsets)
                         {
                             var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, woff, fontFileStyle, subset.ToLower());
-                            cssList.Add(css);
+                            CssList.Add(css);
                         }
                     }
                     else
                     {
                         var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, woff, fontFileStyle);
-                        cssList.Add(css);
+                        CssList.Add(css);
                     }
 
                 }
             }
-            return cssList;
+            return CssList;
         }
 
         private static bool ParseCheckedItem(string checkedItem, out string fontStyle, out string fontWeight)

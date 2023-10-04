@@ -17,11 +17,11 @@ namespace Fonts_Downloader
             httpClient = new HttpClient();
         }
 
-        public async Task FileLinks(List<Item> items, string selectedFont, string folderName, List<string> variants, bool woff2)
+        public async Task Download(List<Item> Items, string SelectedFont, string FolderName, List<string> Variants, bool Woff2)
         {
-            ValidateParameters(items, selectedFont, folderName, variants);
+            ValidateParameters(Items, SelectedFont, FolderName, Variants);
 
-            var fontFileStyles = new Dictionary<string, string>
+            var FontFileStyles = new Dictionary<string, string>
             {
                 { "100", "Thin" }, { "200", "ExtraLight" },
                 { "300", "Light" }, { "400", "Regular" },
@@ -30,47 +30,47 @@ namespace Fonts_Downloader
                 { "900", "Black" },
             };
 
-            foreach (var item in variants)
+            foreach (var item in Variants)
             {
-                if (!string.IsNullOrEmpty(item) && fontFileStyles.TryGetValue(item.Replace("italic", ""), out var fontFileStyle))
+                if (!string.IsNullOrEmpty(item) && FontFileStyles.TryGetValue(item.Replace("italic", ""), out var FontFileStyle))
                 {
-                    var fontStyle = item.Contains("italic") ? "italic" : "normal";
-                    var propertyValue = items
-                        .Where(x => x.Family == selectedFont)
+                    var FontStyle = item.Contains("italic") ? "italic" : "normal";
+                    var PropertyValue = Items
+                        .Where(x => x.Family == SelectedFont)
                         .Select(x => x.Files.GetType().GetProperty($"_{item}")?.GetValue(x.Files) as string)
                         .FirstOrDefault();
 
-                    if (!string.IsNullOrEmpty(propertyValue))
+                    if (!string.IsNullOrEmpty(PropertyValue))
                     {
-                        await DownloadFontFileAsync(selectedFont, folderName, propertyValue, woff2, fontFileStyle, fontStyle);
+                        await DownloadFontFileAsync(SelectedFont, FolderName, PropertyValue, Woff2, FontFileStyle, FontStyle);
                     }
                 }
             }
         }
 
-        private static void ValidateParameters(List<Item> items, string selectedFont, string folderName, List<string> variants)
+        private static void ValidateParameters(List<Item> Items, string selectedFont, string FolderName, List<string> Variants)
         {
-            if (items == null || !items.Any() || string.IsNullOrEmpty(selectedFont) || string.IsNullOrEmpty(folderName) || variants == null || !variants.Any())
+            if (Items == null || !Items.Any() || string.IsNullOrEmpty(selectedFont) || string.IsNullOrEmpty(FolderName) || Variants == null || !Variants.Any())
             {
                 string missingParameters = string.Join(", ",
-                    (items == null || !items.Any()) ? "Items" : "",
+                    (Items == null || !Items.Any()) ? "Items" : "",
                     string.IsNullOrEmpty(selectedFont) ? "SelectedFont" : "",
-                    string.IsNullOrEmpty(folderName) ? "FolderName" : "",
-                    (variants == null || !variants.Any()) ? "Variants" : "");
+                    string.IsNullOrEmpty(FolderName) ? "FolderName" : "",
+                    (Variants == null || !Variants.Any()) ? "Variants" : "");
 
                 throw new ArgumentException($"One or more required parameters are missing or invalid: {missingParameters}");
             }
         }
 
-        public async Task DownloadFontFileAsync(string selectedFont, string folderName, string link, bool woff2, string fontFileStyle , string fontStyle)
+        public async Task DownloadFontFileAsync(string SelectedFont, string FolderName, string Link, bool Woff2, string FontFileStyle , string FontStyle)
         {
-            var format = woff2 ? "woff2" : "ttf";
-            string[] fontFileLinks = link.ToLower().Split('/');
-            if (fontFileLinks.Contains(selectedFont.Replace(" ", "").ToLower()))
+            var format = Woff2 ? "Woff2" : "ttf";
+            string[] fontFileLinks = Link.ToLower().Split('/');
+            if (fontFileLinks.Contains(SelectedFont.Replace(" ", "").ToLower()))
             {
-                string fileName = Path.Combine(folderName, selectedFont.Replace(" ", ""), $"{selectedFont.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle[1..]}-{fontFileStyle}.{format}");
-                Uri url = new(link);
-                if (!File.Exists(fileName))
+                string FileName = Path.Combine(FolderName, SelectedFont.Replace(" ", ""), $"{SelectedFont.Replace(" ", "")}-{char.ToUpper(FontStyle[0]) + FontStyle[1..]}-{FontFileStyle}.{format}");
+                Uri url = new(Link);
+                if (!File.Exists(FileName))
                 {
                     try
                     {
@@ -78,7 +78,7 @@ namespace Fonts_Downloader
                         response.EnsureSuccessStatusCode();
 
                         using var stream = await response.Content.ReadAsStreamAsync();
-                        using var fileStream = File.Create(fileName);
+                        using var fileStream = File.Create(FileName);
                         await stream.CopyToAsync(fileStream);
                     }
                     catch (HttpRequestException ex)

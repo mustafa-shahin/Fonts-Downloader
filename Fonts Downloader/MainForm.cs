@@ -14,13 +14,13 @@ namespace Fonts_Downloader
 {
     public partial class MainForm : Form
     {
-        private string previousFont = string.Empty;
+        private string PreviousFont = string.Empty;
         private List<Item> Items;
         private string FolderName;
         private string SelectedFonts;
         private bool ensure = false;
-        private string Key = " ";
-        private readonly SizeStyles sizeStyles = new();
+        private string Key = "";
+        private readonly SizeStyles SizeStyles = new();
 
         public MainForm()
         {
@@ -54,7 +54,7 @@ namespace Fonts_Downloader
             if (WOFF2.Checked)
             {
                 TTF.Checked = !WOFF2.Checked;
-                Items = await FontsComboBox.GetWebFontsAsync(Key, WOFF2.Checked, TTF.Checked);
+                Items = await FontsComboBox.GetWebFontsAsync(Key, WOFF2.Checked);
             }
 
         }
@@ -64,16 +64,16 @@ namespace Fonts_Downloader
             if (TTF.Checked)
             {
                 WOFF2.Checked = !TTF.Checked;
-                Items = await FontsComboBox.GetWebFontsAsync(Key, WOFF2.Checked, TTF.Checked);
+                Items = await FontsComboBox.GetWebFontsAsync(Key, WOFF2.Checked);
             }
 
         }
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             SelectedFonts = FontBox1.SelectedItem?.ToString();
-            if (!string.IsNullOrEmpty(SelectedFonts) && !(SelectedFonts == previousFont && SubsetsLists.Items.Count > 0))
+            if (!string.IsNullOrEmpty(SelectedFonts) && !(SelectedFonts == PreviousFont && SubsetsLists.Items.Count > 0))
             {
-                if (!string.IsNullOrEmpty(previousFont) && previousFont != SelectedFonts)
+                if (!string.IsNullOrEmpty(PreviousFont) && PreviousFont != SelectedFonts)
                 {
                     SubsetsLists.Items.Clear();
                     SizeAndStyle.Items.Clear();
@@ -85,11 +85,11 @@ namespace Fonts_Downloader
                   .SelectMany(item => item.Subsets)
                   .Select(item => char.ToUpper(item[0]) + item[1..]).ToArray());
 
-                var Variants = sizeStyles.LoadSizeStyles(Items, SelectedFonts);
+                var Variants = SizeStyles.LoadSizeStyles(Items, SelectedFonts);
                 SizeAndStyle.Items.AddRange(Variants.ToArray());
                 HtmlFile.CreateHtml(SelectedFonts, Variants);
             }
-            previousFont = SelectedFonts;
+            PreviousFont = SelectedFonts;
 
             if (ensure)
                 webView21.CoreWebView2.Navigate("file:///C:/FontDownlaoder/index.html");
@@ -102,7 +102,7 @@ namespace Fonts_Downloader
                 try
                 {
                     Key = ApiKeyBox.Text;
-                    Items = await FontsComboBox.GetWebFontsAsync(Key, true, TTF.Checked);
+                    Items = await FontsComboBox.GetWebFontsAsync(Key, true);
 
                     if (Items.Any() && Items != null)
                     {
@@ -127,16 +127,15 @@ namespace Fonts_Downloader
             }
 
         }
-
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (Directory.Exists(@"C:/FontDownlaoder"))
+            if (Directory.Exists(@"C:/FontDownloader"))
             {
-                if (System.IO.File.Exists(@"C:/FontDownlaoder/index.html"))
+                if (System.IO.File.Exists(@"C:/FontDownloader/index.html"))
                 {
-                    System.IO.File.Delete(@"C:/FontDownlaoder/index.html");
+                    System.IO.File.Delete(@"C:/FontDownloader/index.html");
                 }
-                Directory.Delete(@"C:/FontDownlaoder");
+                Directory.Delete(@"C:/FontDownloader");
             }
         }
 
@@ -155,22 +154,22 @@ namespace Fonts_Downloader
                 var minify = Minify.Checked;
                 if (Variants != null && Variants.Any())
                 {
-                    var subsets = SubsetsLists.CheckedItems.Cast<string>().ToList();
+                    var Subsets = SubsetsLists.CheckedItems.Cast<string>().ToList();
                     if (SubsetsLists.CheckedItems.Count > 0)
-                        css.CreateCSS(Variants, FolderName, SelectedFonts, WOFF2.Checked, false, subsets);
+                        css.CreateCSS(Variants, FolderName, SelectedFonts, WOFF2.Checked, false, Subsets);
                     else
                         css.CreateCSS(Variants, FolderName, SelectedFonts, WOFF2.Checked, minify);
-                    Task fileLinksTask = File.FileLinks(Items, SelectedFonts, FolderName, Variants, WOFF2.Checked);
-                    await fileLinksTask;
-                    if (fileLinksTask.Status == TaskStatus.RanToCompletion)
+                    Task FileToDownload = File.Download(Items, SelectedFonts, FolderName, Variants, WOFF2.Checked);
+                    await FileToDownload;
+                    if (FileToDownload.Status == TaskStatus.RanToCompletion)
                     {
-                        DialogResult dialogResult = MessageBox.Show("The Downlaod has been completed. Do you want to check downloaded files? ", "Download completed", MessageBoxButtons.YesNo);
+                        DialogResult dialogResult = MessageBox.Show("The Download has been completed. Do you want to check downloaded files? ", "Download completed", MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.Yes)
                         {
                             try
                             {
-                                var folderToOpen = Path.Combine(FolderName, SelectedFonts.Replace(" ", ""));
-                                Process.Start("explorer.exe", folderToOpen); ;
+                                var FolderToOpen = Path.Combine(FolderName, SelectedFonts.Replace(" ", ""));
+                                Process.Start("explorer.exe", FolderToOpen); ;
                             }
                             catch (Exception ex)
                             {
@@ -179,7 +178,7 @@ namespace Fonts_Downloader
 
                         }
                     }
-                    else if (fileLinksTask.IsFaulted)
+                    else if (FileToDownload.IsFaulted)
                     {
                         MessageBox.Show("Download failed ");
                     }

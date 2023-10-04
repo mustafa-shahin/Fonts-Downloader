@@ -8,8 +8,8 @@ namespace Fonts_Downloader
     {
         public static async Task<ApiResponse> Get(string url)
         {
-            using var client = new HttpClient();
-            var request = await client.GetAsync(url);
+            using var Client = new HttpClient();
+            var request = await Client.GetAsync(url);
             if (request.IsSuccessStatusCode)
             {
                 return new ApiResponse { Response = await request.Content.ReadAsStringAsync() };
@@ -22,8 +22,8 @@ namespace Fonts_Downloader
         {
             try
             {
-                using var ping = new Ping();
-                var result = ping.Send("www.google.com");
+                using var Ping = new Ping();
+                var result = Ping.Send("www.google.com");
                 return (result.Status == IPStatus.Success);
             }
             catch
