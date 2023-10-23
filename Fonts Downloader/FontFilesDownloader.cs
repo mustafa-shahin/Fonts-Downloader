@@ -24,7 +24,7 @@ namespace Fonts_Downloader
             var FontFileStyles = new Dictionary<string, string>
             {
                 { "100", "Thin" }, { "200", "ExtraLight" },
-                { "300", "Light" },
+                { "300", "Light" },  { "400", "Regular" },
                 { "500", "Medium" }, { "600", "SemiBold" },
                 { "700", "Bold" }, { "800", "ExtraBold" },
                 { "900", "Black" },
@@ -35,7 +35,7 @@ namespace Fonts_Downloader
                 if (!string.IsNullOrEmpty(item))
                 {                   
                     var FontStyle = item.Contains("italic") ? "italic" : "normal";
-                    var FontFileStyle = FontFileStyles.GetValueOrDefault(item.Replace("italic", "")) ?? item.ToString();
+                    var FontFileStyle = FontFileStyles.GetValueOrDefault(item.Replace("italic", "")) ?? item;
                     var PropertyValue = Items
                         .Where(x => x.Family == SelectedFont)
                         .Select(x => x.Files.GetType().GetProperty($"_{item}")?.GetValue(x.Files) as string)
