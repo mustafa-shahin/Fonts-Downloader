@@ -28,7 +28,7 @@ namespace Fonts_Downloader
             webView21.EnsureCoreWebView2Async();
             HtmlFile.DefaultHtml();
             webView21.BackColor = Color.FromArgb(45, 62, 79);
-            webView21.Source = new Uri("file:///C:/FontDownlaoder/index.html");
+            webView21.Source = new Uri("file:///C:/FontDownloader/index.html");
             TTF.Enabled = false;
             WOFF2.Enabled = false;
             FontBox1.Enabled = false;
@@ -92,7 +92,7 @@ namespace Fonts_Downloader
             PreviousFont = SelectedFonts;
 
             if (ensure)
-                webView21.CoreWebView2.Navigate("file:///C:/FontDownlaoder/index.html");
+                webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
 
         }
         private async void TextBox2_TextChanged(object sender, EventArgs e)
