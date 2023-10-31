@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Fonts_Downloader
@@ -14,7 +15,9 @@ namespace Fonts_Downloader
             {
                 Variants.AddRange(item.Variants.Select(MapVariant));
             }
-
+            Variants = Variants.OrderBy(variant => variant.EndsWith("italic", StringComparison.OrdinalIgnoreCase))
+                                 .ThenBy(variant => variant)
+                                 .ToList();
             return Variants;
         }
 
