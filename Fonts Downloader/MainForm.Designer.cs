@@ -41,6 +41,7 @@ namespace Fonts_Downloader
             CopyFont = new Button();
             webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
             LeftPanel = new Panel();
+            SubsetsLabel = new Label();
             Minify = new CheckBox();
             SubsetsLists = new CheckedListBox();
             WOFF2 = new CheckBox();
@@ -118,11 +119,11 @@ namespace Fonts_Downloader
             // 
             SelectedFont.AutoSize = true;
             SelectedFont.FlatStyle = FlatStyle.Flat;
-            SelectedFont.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            SelectedFont.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
             SelectedFont.ForeColor = Color.White;
-            SelectedFont.Location = new Point(20, 85);
+            SelectedFont.Location = new Point(20, 80);
             SelectedFont.Name = "SelectedFont";
-            SelectedFont.Size = new Size(42, 20);
+            SelectedFont.Size = new Size(51, 25);
             SelectedFont.TabIndex = 33;
             SelectedFont.Text = "Font";
             // 
@@ -163,6 +164,7 @@ namespace Fonts_Downloader
             // 
             LeftPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             LeftPanel.BackColor = Color.FromArgb(45, 62, 79);
+            LeftPanel.Controls.Add(SubsetsLabel);
             LeftPanel.Controls.Add(Minify);
             LeftPanel.Controls.Add(CopyFont);
             LeftPanel.Controls.Add(SubsetsLists);
@@ -175,12 +177,24 @@ namespace Fonts_Downloader
             LeftPanel.Size = new Size(274, 932);
             LeftPanel.TabIndex = 36;
             // 
+            // SubsetsLabel
+            // 
+            SubsetsLabel.AutoSize = true;
+            SubsetsLabel.FlatStyle = FlatStyle.Flat;
+            SubsetsLabel.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            SubsetsLabel.ForeColor = Color.White;
+            SubsetsLabel.Location = new Point(20, 458);
+            SubsetsLabel.Name = "SubsetsLabel";
+            SubsetsLabel.Size = new Size(84, 25);
+            SubsetsLabel.TabIndex = 52;
+            SubsetsLabel.Text = "Subsets";
+            // 
             // Minify
             // 
             Minify.Anchor = AnchorStyles.None;
             Minify.AutoSize = true;
             Minify.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            Minify.Location = new Point(20, 805);
+            Minify.Location = new Point(20, 820);
             Minify.Margin = new Padding(3, 5, 3, 5);
             Minify.Name = "Minify";
             Minify.Size = new Size(136, 29);
@@ -197,7 +211,7 @@ namespace Fonts_Downloader
             SubsetsLists.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
             SubsetsLists.ForeColor = Color.White;
             SubsetsLists.FormattingEnabled = true;
-            SubsetsLists.Location = new Point(20, 461);
+            SubsetsLists.Location = new Point(20, 488);
             SubsetsLists.Margin = new Padding(3, 5, 3, 2);
             SubsetsLists.Name = "SubsetsLists";
             SubsetsLists.Size = new Size(237, 325);
@@ -290,7 +304,7 @@ namespace Fonts_Downloader
             WebPanel.TabIndex = 38;
             // 
             // MainForm
-            //
+            // 
             AutoScaleDimensions = new SizeF(120F, 120F);
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoScroll = true;
@@ -307,7 +321,6 @@ namespace Fonts_Downloader
             Name = "MainForm";
             Text = "Fonts Downloader";
             WindowState = FormWindowState.Minimized;
-            //FormClosed += Form1_FormClosed;
             ((System.ComponentModel.ISupportInitialize)webView21).EndInit();
             LeftPanel.ResumeLayout(false);
             LeftPanel.PerformLayout();
@@ -334,5 +347,6 @@ namespace Fonts_Downloader
         private CheckBox Minify;
         private CheckBox WOFF2;
         private CheckBox TTF;
+        private Label SubsetsLabel;
     }
 }
