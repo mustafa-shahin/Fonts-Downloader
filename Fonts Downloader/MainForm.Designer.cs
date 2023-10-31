@@ -290,7 +290,7 @@ namespace Fonts_Downloader
             WebPanel.TabIndex = 38;
             // 
             // MainForm
-            // 
+            //
             AutoScaleDimensions = new SizeF(120F, 120F);
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoScroll = true;
@@ -307,7 +307,7 @@ namespace Fonts_Downloader
             Name = "MainForm";
             Text = "Fonts Downloader";
             WindowState = FormWindowState.Minimized;
-            FormClosed += Form1_FormClosed;
+            //FormClosed += Form1_FormClosed;
             ((System.ComponentModel.ISupportInitialize)webView21).EndInit();
             LeftPanel.ResumeLayout(false);
             LeftPanel.PerformLayout();

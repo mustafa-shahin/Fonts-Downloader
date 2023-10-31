@@ -1,5 +1,6 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -18,24 +19,29 @@ namespace Fonts_Downloader
         private List<Item> Items;
         private string FolderName;
         private string SelectedFonts;
-        private bool ensure = false;
         private string Key = "";
         private readonly SizeStyles SizeStyles = new();
+#if !DEBUG
+        private readonly string WebViewEnvironmentFolder = @"C:/FontDownloader/";
+#endif
 
         public MainForm()
         {
             InitializeComponent();
-            webView21.EnsureCoreWebView2Async();
-            HtmlFile.DefaultHtml();
+            WindowState = FormWindowState.Normal;
+#if !DEBUG
+            _ = InitAsync(Path.Combine(WebViewEnvironmentFolder, "WebView Environment"));
+#endif
+            //webView21.EnsureCoreWebView2Async();         
             webView21.BackColor = Color.FromArgb(45, 62, 79);
             webView21.Source = new Uri("file:///C:/FontDownloader/index.html");
+            HtmlFile.DefaultHtml();
             TTF.Enabled = false;
             WOFF2.Enabled = false;
             FontBox1.Enabled = false;
             Minify.Enabled = false;
 
         }
-
         private void SelectFolder_Click(object sender, EventArgs e)
         {
             using (var folderBrowserDialog = new FolderBrowserDialog())
@@ -90,9 +96,7 @@ namespace Fonts_Downloader
                 HtmlFile.CreateHtml(SelectedFonts, Variants);
             }
             PreviousFont = SelectedFonts;
-
-            if (ensure)
-                webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
+            webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
 
         }
         private async void TextBox2_TextChanged(object sender, EventArgs e)
@@ -117,7 +121,7 @@ namespace Fonts_Downloader
                         WOFF2.Enabled = true;
                         TTF.Enabled = true;
                         FontBox1.Enabled = true;
-                        Minify.Enabled = true; 
+                        Minify.Enabled = true;
                     }
                 }
                 catch (Exception ex)
@@ -127,22 +131,22 @@ namespace Fonts_Downloader
             }
 
         }
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (Directory.Exists(@"C:/FontDownloader"))
-            {
-                if (System.IO.File.Exists(@"C:/FontDownloader/index.html"))
-                {
-                    System.IO.File.Delete(@"C:/FontDownloader/index.html");
-                }
-                Directory.Delete(@"C:/FontDownloader");
-            }
-        }
+        //private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        //{
+        //    if (Directory.Exists(@"C:/FontDownloader"))
+        //    {
+        //        if (System.IO.File.Exists(@"C:/FontDownloader/index.html"))
+        //        {
+        //            System.IO.File.Delete(@"C:/FontDownloader/index.html");
+        //        }
+        //        Directory.Delete(@"C:/FontDownloader");
+        //    }
+        //}
 
-        private void WebView21_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
-        {
-            ensure = true;
-        }
+        //private void WebView21_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+        //{
+        //    ensure = true;
+        //}
 
         private async void CopyFont_Click(object sender, EventArgs e)
         {
@@ -204,6 +208,24 @@ namespace Fonts_Downloader
                 Minify.Enabled = false;
             else
                 Minify.Enabled = true;
+        }
+#if !DEBUG
+        private async Task InitAsync(string path)
+        {
+            var WebViewEnvironmentPath = Path.Combine(WebViewEnvironmentFolder, "WebView Environment");
+            if(!Directory.Exists(WebViewEnvironmentPath))
+            {
+                var env = await CoreWebView2Environment.CreateAsync(userDataFolder: path);
+                await webView21.EnsureCoreWebView2Async(env);
+            }           
+        }
+#endif
+        private void WebView21_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+        {
+            if (webView21 != null && webView21.CoreWebView2 != null)
+            {
+                webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
+            }
         }
     }
 }
