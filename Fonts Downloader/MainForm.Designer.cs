@@ -43,16 +43,21 @@ namespace Fonts_Downloader
             LeftPanel = new Panel();
             SubsetsLabel = new Label();
             Minify = new CheckBox();
+            TTF = new CheckBox();
             SubsetsLists = new CheckedListBox();
             WOFF2 = new CheckBox();
             TopPanel = new Panel();
-            TTF = new CheckBox();
+            GitPanel = new Panel();
+            GitPic = new PictureBox();
+            GitHubLink = new LinkLabel();
             ApiKeyLabel = new Label();
             ApiKeyBox = new TextBox();
             WebPanel = new Panel();
             ((System.ComponentModel.ISupportInitialize)webView21).BeginInit();
             LeftPanel.SuspendLayout();
             TopPanel.SuspendLayout();
+            GitPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)GitPic).BeginInit();
             WebPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -78,7 +83,7 @@ namespace Fonts_Downloader
             SelectFolder.FlatStyle = FlatStyle.Flat;
             SelectFolder.Font = new Font("Microsoft Sans Serif", 8F, FontStyle.Regular, GraphicsUnit.Point);
             SelectFolder.ForeColor = Color.White;
-            SelectFolder.Location = new Point(23, 24);
+            SelectFolder.Location = new Point(46, 30);
             SelectFolder.Margin = new Padding(3, 2, 3, 2);
             SelectFolder.Name = "SelectFolder";
             SelectFolder.Size = new Size(121, 35);
@@ -93,7 +98,7 @@ namespace Fonts_Downloader
             SelectedFolder.BackColor = Color.White;
             SelectedFolder.BorderStyle = BorderStyle.None;
             SelectedFolder.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            SelectedFolder.Location = new Point(173, 24);
+            SelectedFolder.Location = new Point(173, 30);
             SelectedFolder.Margin = new Padding(3, 2, 3, 2);
             SelectedFolder.Multiline = true;
             SelectedFolder.Name = "SelectedFolder";
@@ -136,7 +141,7 @@ namespace Fonts_Downloader
             CopyFont.FlatStyle = FlatStyle.Flat;
             CopyFont.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
             CopyFont.ForeColor = Color.White;
-            CopyFont.Location = new Point(20, 866);
+            CopyFont.Location = new Point(20, 891);
             CopyFont.Margin = new Padding(3, 2, 3, 2);
             CopyFont.Name = "CopyFont";
             CopyFont.Size = new Size(237, 48);
@@ -155,7 +160,7 @@ namespace Fonts_Downloader
             webView21.Location = new Point(0, 0);
             webView21.Margin = new Padding(3, 5, 3, 5);
             webView21.Name = "webView21";
-            webView21.Size = new Size(950, 766);
+            webView21.Size = new Size(950, 803);
             webView21.TabIndex = 35;
             webView21.ZoomFactor = 1D;
             webView21.CoreWebView2InitializationCompleted += WebView21_CoreWebView2InitializationCompleted;
@@ -166,15 +171,17 @@ namespace Fonts_Downloader
             LeftPanel.BackColor = Color.FromArgb(45, 62, 79);
             LeftPanel.Controls.Add(SubsetsLabel);
             LeftPanel.Controls.Add(Minify);
+            LeftPanel.Controls.Add(TTF);
             LeftPanel.Controls.Add(CopyFont);
             LeftPanel.Controls.Add(SubsetsLists);
+            LeftPanel.Controls.Add(WOFF2);
             LeftPanel.Controls.Add(SelectedFont);
             LeftPanel.Controls.Add(SizeAndStyle);
             LeftPanel.Controls.Add(FontBox1);
             LeftPanel.Location = new Point(12, 19);
             LeftPanel.Margin = new Padding(3, 5, 3, 5);
             LeftPanel.Name = "LeftPanel";
-            LeftPanel.Size = new Size(274, 932);
+            LeftPanel.Size = new Size(274, 969);
             LeftPanel.TabIndex = 36;
             // 
             // SubsetsLabel
@@ -194,7 +201,7 @@ namespace Fonts_Downloader
             Minify.Anchor = AnchorStyles.None;
             Minify.AutoSize = true;
             Minify.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            Minify.Location = new Point(20, 820);
+            Minify.Location = new Point(20, 816);
             Minify.Margin = new Padding(3, 5, 3, 5);
             Minify.Name = "Minify";
             Minify.Size = new Size(136, 29);
@@ -202,6 +209,21 @@ namespace Fonts_Downloader
             Minify.Text = "Minified css";
             Minify.UseVisualStyleBackColor = true;
             Minify.CheckedChanged += Minify_CheckedChanged;
+            // 
+            // TTF
+            // 
+            TTF.Anchor = AnchorStyles.None;
+            TTF.AutoSize = true;
+            TTF.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            TTF.ForeColor = Color.FromArgb(155, 43, 34);
+            TTF.Location = new Point(131, 855);
+            TTF.Margin = new Padding(3, 5, 3, 5);
+            TTF.Name = "TTF";
+            TTF.Size = new Size(72, 29);
+            TTF.TabIndex = 53;
+            TTF.Text = "TTF";
+            TTF.UseVisualStyleBackColor = true;
+            TTF.CheckedChanged += TTF_CheckedChanged;
             // 
             // SubsetsLists
             // 
@@ -216,7 +238,7 @@ namespace Fonts_Downloader
             SubsetsLists.Name = "SubsetsLists";
             SubsetsLists.Size = new Size(237, 325);
             SubsetsLists.TabIndex = 50;
-            SubsetsLists.ItemCheck += SubsetsLists_ItemCheck;
+            SubsetsLists.SelectedIndexChanged += SubsetsLists_SelectedIndexChanged;
             // 
             // WOFF2
             // 
@@ -224,7 +246,7 @@ namespace Fonts_Downloader
             WOFF2.AutoSize = true;
             WOFF2.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
             WOFF2.ForeColor = Color.FromArgb(155, 43, 34);
-            WOFF2.Location = new Point(785, 30);
+            WOFF2.Location = new Point(20, 855);
             WOFF2.Margin = new Padding(3, 5, 3, 5);
             WOFF2.Name = "WOFF2";
             WOFF2.Size = new Size(105, 29);
@@ -237,9 +259,8 @@ namespace Fonts_Downloader
             // 
             TopPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             TopPanel.BackColor = Color.FromArgb(45, 62, 79);
-            TopPanel.Controls.Add(TTF);
+            TopPanel.Controls.Add(GitPanel);
             TopPanel.Controls.Add(ApiKeyLabel);
-            TopPanel.Controls.Add(WOFF2);
             TopPanel.Controls.Add(ApiKeyBox);
             TopPanel.Controls.Add(SelectFolder);
             TopPanel.Controls.Add(SelectedFolder);
@@ -249,20 +270,42 @@ namespace Fonts_Downloader
             TopPanel.Size = new Size(950, 156);
             TopPanel.TabIndex = 37;
             // 
-            // TTF
+            // GitPanel
             // 
-            TTF.Anchor = AnchorStyles.None;
-            TTF.AutoSize = true;
-            TTF.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            TTF.ForeColor = Color.FromArgb(155, 43, 34);
-            TTF.Location = new Point(785, 95);
-            TTF.Margin = new Padding(3, 5, 3, 5);
-            TTF.Name = "TTF";
-            TTF.Size = new Size(72, 29);
-            TTF.TabIndex = 53;
-            TTF.Text = "TTF";
-            TTF.UseVisualStyleBackColor = true;
-            TTF.CheckedChanged += TTF_CheckedChanged;
+            GitPanel.Controls.Add(GitPic);
+            GitPanel.Controls.Add(GitHubLink);
+            GitPanel.Location = new Point(786, 30);
+            GitPanel.Name = "GitPanel";
+            GitPanel.Size = new Size(161, 102);
+            GitPanel.TabIndex = 56;
+            // 
+            // GitPic
+            // 
+            GitPic.Image = (Image)resources.GetObject("GitPic.Image");
+            GitPic.Location = new Point(55, 0);
+            GitPic.Name = "GitPic";
+            GitPic.Size = new Size(64, 64);
+            GitPic.SizeMode = PictureBoxSizeMode.AutoSize;
+            GitPic.TabIndex = 54;
+            GitPic.TabStop = false;
+            GitPic.Click += GitPic_Click;
+            // 
+            // GitHubLink
+            // 
+            GitHubLink.ActiveLinkColor = Color.White;
+            GitHubLink.AutoSize = true;
+            GitHubLink.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            GitHubLink.ForeColor = Color.White;
+            GitHubLink.LinkBehavior = LinkBehavior.NeverUnderline;
+            GitHubLink.LinkColor = Color.White;
+            GitHubLink.Location = new Point(59, 67);
+            GitHubLink.Name = "GitHubLink";
+            GitHubLink.Size = new Size(60, 25);
+            GitHubLink.TabIndex = 55;
+            GitHubLink.TabStop = true;
+            GitHubLink.Text = "Code";
+            GitHubLink.VisitedLinkColor = Color.White;
+            GitHubLink.Click += GitHubLink_Click;
             // 
             // ApiKeyLabel
             // 
@@ -271,7 +314,7 @@ namespace Fonts_Downloader
             ApiKeyLabel.FlatStyle = FlatStyle.Flat;
             ApiKeyLabel.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
             ApiKeyLabel.ForeColor = Color.White;
-            ApiKeyLabel.Location = new Point(63, 89);
+            ApiKeyLabel.Location = new Point(70, 85);
             ApiKeyLabel.Name = "ApiKeyLabel";
             ApiKeyLabel.Size = new Size(81, 25);
             ApiKeyLabel.TabIndex = 35;
@@ -283,7 +326,7 @@ namespace Fonts_Downloader
             ApiKeyBox.BackColor = Color.White;
             ApiKeyBox.BorderStyle = BorderStyle.None;
             ApiKeyBox.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            ApiKeyBox.Location = new Point(173, 89);
+            ApiKeyBox.Location = new Point(173, 85);
             ApiKeyBox.Margin = new Padding(3, 2, 3, 2);
             ApiKeyBox.Multiline = true;
             ApiKeyBox.Name = "ApiKeyBox";
@@ -300,7 +343,7 @@ namespace Fonts_Downloader
             WebPanel.Location = new Point(292, 185);
             WebPanel.Margin = new Padding(3, 5, 3, 5);
             WebPanel.Name = "WebPanel";
-            WebPanel.Size = new Size(950, 766);
+            WebPanel.Size = new Size(950, 803);
             WebPanel.TabIndex = 38;
             // 
             // MainForm
@@ -310,7 +353,7 @@ namespace Fonts_Downloader
             AutoScroll = true;
             AutoSize = true;
             BackColor = Color.FromArgb(18, 18, 18);
-            ClientSize = new Size(1254, 965);
+            ClientSize = new Size(1254, 1002);
             Controls.Add(WebPanel);
             Controls.Add(TopPanel);
             Controls.Add(LeftPanel);
@@ -326,6 +369,9 @@ namespace Fonts_Downloader
             LeftPanel.PerformLayout();
             TopPanel.ResumeLayout(false);
             TopPanel.PerformLayout();
+            GitPanel.ResumeLayout(false);
+            GitPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)GitPic).EndInit();
             WebPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -348,5 +394,8 @@ namespace Fonts_Downloader
         private CheckBox WOFF2;
         private CheckBox TTF;
         private Label SubsetsLabel;
+        private PictureBox GitPic;
+        private LinkLabel GitHubLink;
+        private Panel GitPanel;
     }
 }

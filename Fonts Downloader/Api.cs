@@ -6,16 +6,23 @@ namespace Fonts_Downloader
 {
     public class Api
     {
+        private static bool succeeded = false;
+        public static bool Succeeded { get { return succeeded; } }
         public static async Task<ApiResponse> Get(string url)
         {
             using var Client = new HttpClient();
             var request = await Client.GetAsync(url);
             if (request.IsSuccessStatusCode)
             {
+                succeeded = true;
                 return new ApiResponse { Response = await request.Content.ReadAsStringAsync() };
             }
             else
-                return new ApiResponse { Message = request.ReasonPhrase };
+            {
+                succeeded = false;
+                return new ApiResponse { Message = request.RequestMessage.ToString() };
+            }
+                
 
         }
         public static bool IsInternetAvailable()
