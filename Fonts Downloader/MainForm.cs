@@ -1,15 +1,12 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.LinkLabel;
 
 namespace Fonts_Downloader
 {
@@ -21,17 +18,13 @@ namespace Fonts_Downloader
         private string SelectedFonts;
         private string Key = "";
         private readonly SizeStyles SizeStyles = new();
-#if !DEBUG
         private readonly string WebViewEnvironmentFolder = @"C:/FontDownloader/";
-#endif
 
         public MainForm()
         {
             InitializeComponent();
             WindowState = FormWindowState.Normal;
-#if !DEBUG
             _ = InitAsync(Path.Combine(WebViewEnvironmentFolder, "WebView Environment"));
-#endif
             //webView21.EnsureCoreWebView2Async();         
             webView21.BackColor = Color.FromArgb(45, 62, 79);
             webView21.Source = new Uri("file:///C:/FontDownloader/index.html");
@@ -101,27 +94,39 @@ namespace Fonts_Downloader
         }
         private async void TextBox2_TextChanged(object sender, EventArgs e)
         {
+           
             if (!string.IsNullOrEmpty(ApiKeyBox.Text))
             {
+                Key = ApiKeyBox.Text;
+                Items = await FontsComboBox.GetWebFontsAsync(Key, true);
                 try
-                {
-                    Key = ApiKeyBox.Text;
-                    Items = await FontsComboBox.GetWebFontsAsync(Key, true);
-
-                    if (Items.Any() && Items != null)
+                {                   
+                    if (Api.Succeeded)
                     {
-                        foreach (var item in Items)
+                        if (Items != null &&  Items.Any()) 
                         {
-                            FontBox1.Items.Add(item.Family);
+                            foreach (var item in Items)
+                            {
+                                FontBox1.Items.Add(item.Family);
+                            }
                         }
-                    }
-                    var response = new ApiResponse();
-                    if (response.Success)
-                    {
                         WOFF2.Enabled = true;
                         TTF.Enabled = true;
                         FontBox1.Enabled = true;
                         Minify.Enabled = true;
+                        ApiKeyBox.Enabled = false;
+                    }
+                    else
+                    {
+                        HtmlFile.ShowError();
+                        webView21.Reload();
+                        WOFF2.Enabled = false;
+                        TTF.Enabled = false;
+                        FontBox1.Enabled = false;
+                        Minify.Enabled = false;
+                        FontBox1.Items.Clear();
+                        SizeAndStyle.Items.Clear();
+                        SubsetsLists.Items.Clear();
                     }
                 }
                 catch (Exception ex)
@@ -201,31 +206,50 @@ namespace Fonts_Downloader
             else
                 SubsetsLists.Enabled = true;
         }
-
-        private void SubsetsLists_ItemCheck(object sender, ItemCheckEventArgs e)
-        {
-            if (SubsetsLists.CheckedItems.Count > 0)
-                Minify.Enabled = false;
-            else
-                Minify.Enabled = true;
-        }
-#if !DEBUG
         private async Task InitAsync(string path)
         {
-            var WebViewEnvironmentPath = Path.Combine(WebViewEnvironmentFolder, "WebView Environment");
-            if(!Directory.Exists(WebViewEnvironmentPath))
-            {
-                var env = await CoreWebView2Environment.CreateAsync(userDataFolder: path);
-                await webView21.EnsureCoreWebView2Async(env);
-            }           
+            var env = await CoreWebView2Environment.CreateAsync(userDataFolder: path);
+            await webView21.EnsureCoreWebView2Async(env);
         }
-#endif
         private void WebView21_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
             if (webView21 != null && webView21.CoreWebView2 != null)
             {
                 webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
             }
+        }
+
+        private void SubsetsLists_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (SubsetsLists.CheckedItems.Count > 0)
+                Minify.Enabled = false;
+            else
+                Minify.Enabled = true;
+        }
+        private static void ShowGitRepo()
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "https://github.com/mustafa-shahin/Fonts-Downloader",
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+        }
+
+        private void GitHubLink_Click(object sender, EventArgs e)
+        {
+            ShowGitRepo();
+        }
+
+        private void GitPic_Click(object sender, EventArgs e)
+        {
+            ShowGitRepo();
         }
     }
 }
