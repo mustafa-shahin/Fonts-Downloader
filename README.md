@@ -9,7 +9,7 @@ To use the program you need a google fonts api key
 ![2](https://github.com/mustafa-shahin/Fonts-Downloader/assets/109212127/2f72183c-3ec9-42a8-b539-636747adc59b)
 ![image](https://user-images.githubusercontent.com/109212127/221409621-28c2d3c0-9a4d-426a-864d-d8da97b36d66.png)
 ![image](https://user-images.githubusercontent.com/109212127/221409629-3e4d12d4-5b70-4149-a51f-b93e2ac3fdfa.png)
-For Downloading as insataller or portable
+For Downloading as installer or portable
 
 
 [Fonts Downloader.zip](https://github.com/mustafa-shahin/Fonts-Downloader/files/13232419/Fonts.Downloader.zip)
