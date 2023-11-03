@@ -71,5 +71,11 @@ namespace Fonts_Downloader
     public class Root
     {
         public List<Item> Items { get; set; }
+        public Error Error { get; set; }
+    }
+    public class Error
+    {
+        public int Code { get; set; }
+        public string Message { get; set; }
     }
 }
