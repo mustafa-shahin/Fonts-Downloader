@@ -12,18 +12,19 @@ namespace Fonts_Downloader
         {
             using var Client = new HttpClient();
             var request = await Client.GetAsync(url);
-            if (request.IsSuccessStatusCode)
-            {
-                succeeded = true;
-                return new ApiResponse { Response = await request.Content.ReadAsStringAsync() };
-            }
-            else
-            {
-                succeeded = false;
-                return new ApiResponse { Message = request.RequestMessage.ToString() };
-            }
-                
 
+            if (request.IsSuccessStatusCode)
+                succeeded = true;
+            else
+                succeeded = false;
+
+            return new ApiResponse { Response = await request.Content.ReadAsStringAsync() };
+
+            //else
+            //{
+            //    succeeded = false;
+            //    return new ApiResponse { Message = request.RequestMessage.ToString() };
+            //}
         }
         public static bool IsInternetAvailable()
         {
@@ -41,8 +42,6 @@ namespace Fonts_Downloader
     }
     public class ApiResponse
     {
-        public bool Success => Message == null;
-        public string Message { get; set; }
         public string Response { get; set; }
     }
 }

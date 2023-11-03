@@ -94,16 +94,16 @@ namespace Fonts_Downloader
         }
         private async void TextBox2_TextChanged(object sender, EventArgs e)
         {
-           
+
             if (!string.IsNullOrEmpty(ApiKeyBox.Text))
             {
                 Key = ApiKeyBox.Text;
                 Items = await FontsComboBox.GetWebFontsAsync(Key, true);
                 try
-                {                   
+                {
                     if (Api.Succeeded)
                     {
-                        if (Items != null &&  Items.Any()) 
+                        if (Items != null && Items.Any())
                         {
                             foreach (var item in Items)
                             {
@@ -118,7 +118,6 @@ namespace Fonts_Downloader
                     }
                     else
                     {
-                        HtmlFile.ShowError();
                         webView21.Reload();
                         WOFF2.Enabled = false;
                         TTF.Enabled = false;

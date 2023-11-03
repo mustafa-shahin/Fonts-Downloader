@@ -272,6 +272,7 @@ namespace Fonts_Downloader
             // 
             // GitPanel
             // 
+            GitPanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             GitPanel.Controls.Add(GitPic);
             GitPanel.Controls.Add(GitHubLink);
             GitPanel.Location = new Point(786, 30);
@@ -281,6 +282,7 @@ namespace Fonts_Downloader
             // 
             // GitPic
             // 
+            GitPic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             GitPic.Image = (Image)resources.GetObject("GitPic.Image");
             GitPic.Location = new Point(55, 0);
             GitPic.Name = "GitPic";

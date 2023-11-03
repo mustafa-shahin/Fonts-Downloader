@@ -157,12 +157,6 @@ namespace Fonts_Downloader
             WgtItalic.Clear();
             WgtNormal.Clear();
         }
-        public static void ShowError()
-        {
-            string Error = "<html><body>\n<h1 style=\"color:#9b2b22;text-align: center;\">Check yor API key </h1>\n</body>\n</html>";
-            using StreamWriter Writer = new($"{Path}\\index.html", false);
-            Writer.WriteLine(Error,false);
-        }
     }
 }
 
