@@ -9,10 +9,10 @@ using System.Windows.Forms;
 namespace Fonts_Downloader
 {
     public class FontsComboBox
-    {
-        private static List<Item> FontsList = new();
+    {       
         public static async Task<List<Item>> GetWebFontsAsync(string apiKey, bool Woff2)
         {
+            var FontsList = new List<Item>();
             try
             {
                 var WOFF = Woff2 ? "capability=WOFF2" : "";

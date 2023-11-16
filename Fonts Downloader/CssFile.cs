@@ -8,21 +8,11 @@ namespace Fonts_Downloader
 {
     internal class CssFile
     {
-        private readonly Dictionary<string, string> FontFileStyles = new()
-        {
-            { "100", "Thin" }, { "200", "ExtraLight" },
-            { "300", "Light" }, { "400", "Regular" },
-            { "500", "Medium" }, { "600", "SemiBold" },
-            { "700", "Bold" }, { "800", "ExtraBold" },
-            { "900", "Black" },
-        };
-
         public  void CreateCSS(IEnumerable<string> variants, string folderName, string fontName, bool woff, bool minify = false, IEnumerable<string> subsets = null)
         {
-
             var CssList = GenerateCssList(variants, fontName, woff, subsets);
 
-            if (CssList.Any())
+            if (CssList !=null && CssList.Any())
             {
                 string fontFolder = Path.Combine(folderName, fontName.Replace(" ", ""));
                 if (!Directory.Exists(fontFolder))
@@ -68,20 +58,20 @@ namespace Fonts_Downloader
 
             foreach (var variant in variants)
             {
-                if (ParseCheckedItem(variant, out var fontStyle, out var fontWeight) &&
-                    FontFileStyles.TryGetValue(fontWeight, out var fontFileStyle))
+                var FontFileStyle = FontFileStyles.GetFontFileStyles(variant);
+                if (ParseCheckedItem(variant, out var fontStyle, out var fontWeight))
                 {
                     if (subsets != null && subsets.Any())
                     {
                         foreach (var subset in subsets)
                         {
-                            var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, woff, fontFileStyle, subset.ToLower());
+                            var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, woff, FontFileStyle, subset.ToLower());
                             CssList.Add(css);
                         }
                     }
                     else
                     {
-                        var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, woff, fontFileStyle);
+                        var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, woff, FontFileStyle);
                         CssList.Add(css);
                     }
 

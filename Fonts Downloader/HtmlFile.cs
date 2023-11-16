@@ -22,8 +22,9 @@ namespace Fonts_Downloader
                     <style>
                         body {{
                             font-family: 'Roboto', sans-serif;
-                            color: white !important;
+                            color: #b9b9b9 !important;
                             text-align: center !important;
+                            background: #212124;
                         }}
                         h1 {{
                             font-weight: 700 !important;
@@ -41,14 +42,6 @@ namespace Fonts_Downloader
 
         public static void CreateHtml(string SelectedFont, List<string> Variants)
         {
-            var FontFileStyles = new Dictionary<string, string>
-            {
-                { "100", "Thin" }, { "200", "ExtraLight" },
-                { "300", "Light" },  { "400", "Regular" },
-                { "500", "Medium" }, { "600", "SemiBold" },
-                { "700", "Bold" }, { "800", "ExtraBold" },
-                { "900", "Black" },
-            };
             List<string> WgtItalic = new();
             List<string> WgtNormal = new();
             foreach (var variant in Variants)
@@ -69,17 +62,18 @@ namespace Fonts_Downloader
             string GoogleFontLinkItalics = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont}:ital,wght@{Italics}&display=swap\" rel=\"stylesheet\">";
             string GoogleFontLinkItalicsNormals = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont}:wght@{Normals}&display=swap\" rel=\"stylesheet\">";
             string FontFamliyStyle = $"font-family: '{SelectedFont}', sans-serif;";
-            string BodyStyle = "body{\n" + FontFamliyStyle + "\n" + "color: white;" + "\n" + "}";
+            string BodyStyle = "body{\n" + "background: #212124;\n " + FontFamliyStyle + "\n" + "color: #b9b9b9;" + "\n" + "}";
             List<string> PTagCSS = new();
             List<string> PTags = new();
             List<string> H1Tags = new();
             List<string> H1TagsCSS = new();
             string H1Italic, H1Normal, H1TagItalic, H1TagNormal;
-            if (WgtItalic.Any() && WgtItalic != null)
+            if (WgtItalic != null && WgtItalic.Any())
             {
                 foreach (string wgt in WgtItalic)
                 {
-                    var FontFileStyle = FontFileStyles.GetValueOrDefault(wgt.Replace("1,", ""));
+
+                    var FontFileStyle = FontFileStyles.GetFontFileStyles(wgt.Replace("1,", ""));
                     //P tag italic  styling
                     PTagItalic = "\np." + "size" + $"{wgt.Replace("1,", "")}italic" + "{\n" + "font-family:" + $"'{SelectedFont}';\n" + "font-style: italic;\n" + "font-weight:" + $"{wgt.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
                     PTagCSS.Add(PTagItalic);
@@ -98,11 +92,11 @@ namespace Fonts_Downloader
 
                 }
             }
-            if (WgtNormal.Any() && WgtNormal != null)
+            if (WgtNormal != null && WgtNormal.Any())
             {
                 foreach (string wgt in WgtNormal)
                 {
-                    var FontFileStyle = FontFileStyles.GetValueOrDefault(wgt.Replace("1,", ""));
+                    var FontFileStyle = FontFileStyles.GetFontFileStyles(wgt.Replace("1,", ""));
                     //P tag normal styling
                     PTagNormal = "\np." + "size" + $"{wgt}normal" + "{\n" + "font-family:" + $"'{SelectedFont}';\n" + "font-style: normal;\n" + "font-weight:" + $"{wgt};" + "\r\nfont-stretch: 100%;" + "\n}";
                     PTagCSS.Add(PTagNormal);
