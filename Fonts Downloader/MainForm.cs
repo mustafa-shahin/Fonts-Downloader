@@ -1,10 +1,12 @@
-﻿using Microsoft.Web.WebView2.Core;
+﻿using Microsoft.Ajax.Utilities;
+using Microsoft.Web.WebView2.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -26,13 +28,21 @@ namespace Fonts_Downloader
             WindowState = FormWindowState.Normal;
             _ = InitAsync(Path.Combine(WebViewEnvironmentFolder, "WebView Environment"));
             //webView21.EnsureCoreWebView2Async();         
-            webView21.BackColor = Color.FromArgb(45, 62, 79);
+            webView21.BackColor = Color.FromArgb(32, 33, 36);
             webView21.Source = new Uri("file:///C:/FontDownloader/index.html");
             HtmlFile.DefaultHtml();
-            TTF.Enabled = false;
-            WOFF2.Enabled = false;
+            TTF.Visible = false;
+            WOFF2.Visible = false;
             FontBox1.Enabled = false;
-            Minify.Enabled = false;
+            Minify.Visible = false;
+        }
+
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            this.BackColor = System.Drawing.Color.MistyRose;
+            this.StartPosition = FormStartPosition.CenterScreen;
+
 
         }
         private void SelectFolder_Click(object sender, EventArgs e)
@@ -76,7 +86,7 @@ namespace Fonts_Downloader
                 {
                     SubsetsLists.Items.Clear();
                     SizeAndStyle.Items.Clear();
-                    Minify.Enabled = true;
+                    Minify.Visible = true;
                 }
                 SelectedFont.Text = SelectedFonts;
                 SubsetsLists.Items.AddRange(Items
@@ -110,17 +120,17 @@ namespace Fonts_Downloader
                                 FontBox1.Items.Add(item.Family);
                             }
                         }
-                        WOFF2.Enabled = true;
-                        TTF.Enabled = true;
+                        WOFF2.Visible = true;
+                        TTF.Visible = true;
                         FontBox1.Enabled = true;
-                        Minify.Enabled = true;
+                        Minify.Visible = true;
                         ApiKeyBox.Enabled = false;
                     }
                     else
                     {
                         webView21.Reload();
-                        WOFF2.Enabled = false;
-                        TTF.Enabled = false;
+                        WOFF2.Visible = false;
+                        TTF.Visible = false;
                         FontBox1.Enabled = false;
                         Minify.Enabled = false;
                         FontBox1.Items.Clear();
@@ -241,14 +251,8 @@ namespace Fonts_Downloader
             }
         }
 
-        private void GitHubLink_Click(object sender, EventArgs e)
-        {
-            ShowGitRepo();
-        }
+        private void GitHubLink_Click(object sender, EventArgs e) => ShowGitRepo();
 
-        private void GitPic_Click(object sender, EventArgs e)
-        {
-            ShowGitRepo();
-        }
+        private void GitPic_Click(object sender, EventArgs e) => ShowGitRepo();
     }
 }
