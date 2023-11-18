@@ -21,13 +21,16 @@ namespace Fonts_Downloader
         private string Key = "";
         private readonly SizeStyles SizeStyles = new();
         private readonly string WebViewEnvironmentFolder = @"C:/FontDownloader/";
+        private Point Offset;
+        private bool Ensure = false;
 
         public MainForm()
         {
             InitializeComponent();
             WindowState = FormWindowState.Normal;
-            _ = InitAsync(Path.Combine(WebViewEnvironmentFolder, "WebView Environment"));
-            //webView21.EnsureCoreWebView2Async();         
+            StartPosition = FormStartPosition.CenterScreen;
+            //_ = InitAsync(Path.Combine(WebViewEnvironmentFolder, "WebView Environment"));
+            webView21.EnsureCoreWebView2Async();
             webView21.BackColor = Color.FromArgb(32, 33, 36);
             webView21.Source = new Uri("file:///C:/FontDownloader/index.html");
             HtmlFile.DefaultHtml();
@@ -35,15 +38,6 @@ namespace Fonts_Downloader
             WOFF2.Visible = false;
             FontBox1.Enabled = false;
             Minify.Visible = false;
-        }
-
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            this.BackColor = System.Drawing.Color.MistyRose;
-            this.StartPosition = FormStartPosition.CenterScreen;
-
-
         }
         private void SelectFolder_Click(object sender, EventArgs e)
         {
@@ -124,7 +118,7 @@ namespace Fonts_Downloader
                         TTF.Visible = true;
                         FontBox1.Enabled = true;
                         Minify.Visible = true;
-                        ApiKeyBox.Enabled = false;
+                        //ApiKeyBox.Enabled = false;
                     }
                     else
                     {
@@ -145,22 +139,22 @@ namespace Fonts_Downloader
             }
 
         }
-        //private void Form1_FormClosed(object sender, FormClosedEventArgs e)
-        //{
-        //    if (Directory.Exists(@"C:/FontDownloader"))
-        //    {
-        //        if (System.IO.File.Exists(@"C:/FontDownloader/index.html"))
-        //        {
-        //            System.IO.File.Delete(@"C:/FontDownloader/index.html");
-        //        }
-        //        Directory.Delete(@"C:/FontDownloader");
-        //    }
-        //}
+        private void MianForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (Directory.Exists(@"C:/FontDownloader"))
+            {
+                if (File.Exists(@"C:/FontDownloader/index.html"))
+                {
+                    File.Delete(@"C:/FontDownloader/index.html");
+                }
+                Directory.Delete(@"C:/FontDownloader");
+            }
+        }
 
-        //private void WebView21_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
-        //{
-        //    ensure = true;
-        //}
+        private void WebView21_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+        {
+            Ensure = true;
+        }
 
         private async void CopyFont_Click(object sender, EventArgs e)
         {
@@ -207,34 +201,19 @@ namespace Fonts_Downloader
             else
                 MessageBox.Show("Please select a folder");
         }
-
-        private void Minify_CheckedChanged(object sender, EventArgs e)
-        {
-            if (Minify.Checked)
-                SubsetsLists.Enabled = false;
-            else
-                SubsetsLists.Enabled = true;
-        }
         private async Task InitAsync(string path)
         {
             var env = await CoreWebView2Environment.CreateAsync(userDataFolder: path);
             await webView21.EnsureCoreWebView2Async(env);
         }
-        private void WebView21_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
-        {
-            if (webView21 != null && webView21.CoreWebView2 != null)
-            {
-                webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
-            }
-        }
+        //private void WebView21_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+        //{
+        //    if (webView21 != null && webView21.CoreWebView2 != null)
+        //    {
+        //        webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
+        //    }
+        //}
 
-        private void SubsetsLists_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (SubsetsLists.CheckedItems.Count > 0)
-                Minify.Enabled = false;
-            else
-                Minify.Enabled = true;
-        }
         private static void ShowGitRepo()
         {
             try
@@ -254,5 +233,41 @@ namespace Fonts_Downloader
         private void GitHubLink_Click(object sender, EventArgs e) => ShowGitRepo();
 
         private void GitPic_Click(object sender, EventArgs e) => ShowGitRepo();
+
+        private void Close_Click(object sender, EventArgs e) => Application.Exit();
+
+        private void Minimize_Click(object sender, EventArgs e) => WindowState = FormWindowState.Minimized;
+
+        private void Header_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                Offset = new Point(e.X, e.Y);
+        }
+
+        private void Header_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                Location = new Point(Location.X + e.X - Offset.X, Location.Y + e.Y - Offset.Y);
+        }
+        private void Header_MouseUp(object sender, MouseEventArgs e) => Offset = Point.Empty;
+        private void Minify_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Minify.Checked)
+                MessageBox.Show("All comments will be deleted in minified version");
+        }
+
+
+        //private void Maximize_Click(object sender, EventArgs e)
+        //{
+        //    if (WindowState == FormWindowState.Normal)
+        //    {
+        //        var currentScreen = Screen.FromControl(this);
+        //        Location = currentScreen.WorkingArea.Location;
+        //        MaximizedBounds = Screen.FromHandle(Handle).WorkingArea;
+        //        WindowState = FormWindowState.Maximized;
+        //    }
+        //    else if (WindowState == FormWindowState.Maximized)
+        //        WindowState = FormWindowState.Normal;
+        //}
     }
 }
