@@ -20,22 +20,13 @@ namespace Fonts_Downloader
         public async Task Download(List<Item> Items, string SelectedFont, string FolderName, List<string> Variants, bool Woff2)
         {
             ValidateParameters(Items, SelectedFont, FolderName, Variants);
-
-            var FontFileStyles = new Dictionary<string, string>
-            {
-                { "100", "Thin" }, { "200", "ExtraLight" },
-                { "300", "Light" },  { "400", "Regular" },
-                { "500", "Medium" }, { "600", "SemiBold" },
-                { "700", "Bold" }, { "800", "ExtraBold" },
-                { "900", "Black" },
-            };
-
             foreach (var item in Variants)
             {
                 if (!string.IsNullOrEmpty(item))
                 {                   
                     var FontStyle = item.Contains("italic") ? "italic" : "normal";
-                    var FontFileStyle = FontFileStyles.GetValueOrDefault(item.Replace("italic", "")) ?? item;
+                    var FontFileStyle = FontFileStyles.GetFontFileStyles(item) ?? item;
+                    //var FontFileStyle = FontFileStyles.GetValueOrDefault(item.Replace("italic", "")) ?? item;
                     var PropertyValue = Items
                         .Where(x => x.Family == SelectedFont)
                         .Select(x => x.Files.GetType().GetProperty($"_{item}")?.GetValue(x.Files) as string)

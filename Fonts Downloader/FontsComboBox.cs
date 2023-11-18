@@ -9,10 +9,10 @@ using System.Windows.Forms;
 namespace Fonts_Downloader
 {
     public class FontsComboBox
-    {
-        private static List<Item> FontsList = new();
+    {       
         public static async Task<List<Item>> GetWebFontsAsync(string apiKey, bool Woff2)
         {
+            var FontsList = new List<Item>();
             try
             {
                 var WOFF = Woff2 ? "capability=WOFF2" : "";
@@ -35,7 +35,7 @@ namespace Fonts_Downloader
                 else
                 {
                     var Path = @"C:\FontDownloader";
-                    var Error = $"<html><body>\n<h1 style=\"color:#9b2b22;text-align: center;\">{fontResponse.Error.Message}</h1>\n</body>\n</html>";
+                    var Error = $"<html><body style=\" background: #212124;\">\n<h1 style=\"color:#9b2b22;text-align: center;\">{fontResponse.Error.Message}</h1>\n</body>\n</html>";
                     using var Writer = new StreamWriter($"{Path}\\index.html", false);
                     Writer.WriteLine(Error, false);
                 }
