@@ -11,4 +11,5 @@ To use the program you need a google fonts api key
 ![image](https://user-images.githubusercontent.com/109212127/221409629-3e4d12d4-5b70-4149-a51f-b93e2ac3fdfa.png)
 For Downloading portable:
 
-[Fonts Downloader-Portable.zip](https://github.com/mustafa-shahin/Fonts-Downloader/files/13401684/Fonts.Downloader-Portable.zip)
+
+[Fonts Downloader-Portable.zip](https://github.com/mustafa-shahin/Fonts-Downloader/files/13439213/Fonts.Downloader-Portable.zip)
