@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Fonts_Downloader
@@ -11,14 +12,10 @@ namespace Fonts_Downloader
         [STAThread]
         static void Main()
         {
-            if (Environment.OSVersion.Version.Major >= 6)
-                SetProcessDPIAware();
-
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
         }
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        private static extern bool SetProcessDPIAware();
     }
 }
