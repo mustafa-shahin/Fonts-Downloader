@@ -6,22 +6,17 @@ namespace Fonts_Downloader
 {
     internal class SizeStyles
     {
-        public  List<string> LoadSizeStyles(List<Item> Fonts, string SelectedFont)
+        public List<string> LoadSizeStyles(Item Font)
         {
-             var Variants = new List<string>();
-             var SelectedFontItems = Fonts.Where(item => item.Family == SelectedFont);
-
-            foreach (var item in SelectedFontItems)
-            {
-                Variants.AddRange(item.Variants.Select(MapVariant));
-            }
-            Variants = Variants.OrderBy(variant => variant.EndsWith("italic", StringComparison.OrdinalIgnoreCase))
-                                 .ThenBy(variant => variant)
-                                 .ToList();
+            var Variants = new List<string>();
+            var SelectedFontItems = Font.Family;
+            Variants.AddRange(Font.Variants.Select(MapVariant)
+                                           .OrderBy(variant => variant.EndsWith("italic"))
+                                           .ThenBy(variant => variant)
+                                           .ToList());
             return Variants;
         }
-
-        private string MapVariant(string variant)
+        public static string MapVariant(string variant)
         {
             return variant switch
             {
