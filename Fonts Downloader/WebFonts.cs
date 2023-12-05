@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace Fonts_Downloader
 {
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public class WebFonts
     {       
         public async Task<List<Item>> GetWebFontsAsync(string apiKey, bool Woff2)

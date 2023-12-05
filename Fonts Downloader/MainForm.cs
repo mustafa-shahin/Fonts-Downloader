@@ -11,6 +11,7 @@ using System.Windows.Forms;
 
 namespace Fonts_Downloader
 {
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public partial class MainForm : Form
     {
         private List<Item> Items;

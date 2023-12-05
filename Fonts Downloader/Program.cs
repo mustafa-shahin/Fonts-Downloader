@@ -10,6 +10,7 @@ namespace Fonts_Downloader
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
         static void Main()
         {
             Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);

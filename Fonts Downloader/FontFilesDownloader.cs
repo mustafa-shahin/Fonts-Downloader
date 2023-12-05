@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace Fonts_Downloader
 {
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public class FontFilesDownloader
     {
         public async Task Download(Item Item, string FolderName, bool Woff2)
