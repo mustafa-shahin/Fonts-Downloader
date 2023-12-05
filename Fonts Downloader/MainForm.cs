@@ -1,5 +1,4 @@
-﻿using Microsoft.Ajax.Utilities;
-using Microsoft.Web.WebView2.Core;
+﻿using Microsoft.Web.WebView2.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,15 +13,13 @@ namespace Fonts_Downloader
 {
     public partial class MainForm : Form
     {
-        private string PreviousFont = string.Empty;
         private List<Item> Items;
         private string FolderName;
-        private string SelectedFonts;
-        private string Key = "";
-        private readonly SizeStyles SizeStyles = new();
-        private readonly string WebViewEnvironmentFolder = @"C:/FontDownloader/";
+        private string SelectedFont;
         private Point Offset;
-        private bool Ensure = false;
+        private Item SelectedFontItem;
+        private readonly WebFonts Fonts = new();
+        private readonly HtmlFile Html = new();
 
         public MainForm()
         {
@@ -34,6 +31,8 @@ namespace Fonts_Downloader
             webView21.BackColor = Color.FromArgb(32, 33, 36);
             webView21.Source = new Uri("file:///C:/FontDownloader/index.html");
             HtmlFile.DefaultHtml();
+            if (!Api.IsInternetAvailable() || !Api.IsNetworkAvailable())
+                NoInternet.Visible = true;
             TTF.Visible = false;
             WOFF2.Visible = false;
             FontBox1.Enabled = false;
@@ -51,58 +50,35 @@ namespace Fonts_Downloader
             }
             SelectedFolder.Text = FolderName;
         }
-
-        private async void WOFF2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (WOFF2.Checked)
-            {
-                TTF.Checked = !WOFF2.Checked;
-                Items = await FontsComboBox.GetWebFontsAsync(Key, WOFF2.Checked);
-            }
-
-        }
-
-        private async void TTF_CheckedChanged(object sender, EventArgs e)
-        {
-            if (TTF.Checked)
-            {
-                WOFF2.Checked = !TTF.Checked;
-                Items = await FontsComboBox.GetWebFontsAsync(Key, WOFF2.Checked);
-            }
-
-        }
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            SelectedFonts = FontBox1.SelectedItem?.ToString();
-            if (!string.IsNullOrEmpty(SelectedFonts) && !(SelectedFonts == PreviousFont && SubsetsLists.Items.Count > 0))
+            var PreviousFont = string.Empty;
+            SelectedFont = FontBox1.SelectedItem?.ToString();
+            if (!string.IsNullOrEmpty(SelectedFont) && !(SelectedFont == PreviousFont && SubsetsLists.Items.Count > 0))
             {
-                if (!string.IsNullOrEmpty(PreviousFont) && PreviousFont != SelectedFonts)
+                if (!string.IsNullOrEmpty(PreviousFont) && PreviousFont != SelectedFont)
                 {
                     SubsetsLists.Items.Clear();
                     SizeAndStyle.Items.Clear();
                     Minify.Visible = true;
                 }
-                SelectedFont.Text = SelectedFonts;
-                SubsetsLists.Items.AddRange(Items
-                  .Where(item => item.Family == SelectedFonts)
-                  .SelectMany(item => item.Subsets)
-                  .Select(item => char.ToUpper(item[0]) + item[1..]).ToArray());
-
-                var Variants = SizeStyles.LoadSizeStyles(Items, SelectedFonts);
+                SelectedFontLabel.Text = SelectedFont;
+                if (Items is not null && Items.Any())
+                    SelectedFontItem = Items.FirstOrDefault(m => m.Family == SelectedFontLabel.Text);
+                SubsetsLists.Items.AddRange(SelectedFontItem.Subsets.Select(m => char.ToUpper(m[0]) + m[1..]).ToArray());
+                var FontWeights = new SizeStyles();
+                var Variants = FontWeights.LoadSizeStyles(SelectedFontItem);
                 SizeAndStyle.Items.AddRange(Variants.ToArray());
-                HtmlFile.CreateHtml(SelectedFonts, Variants);
+                Html.CreateHtml(SelectedFont, Variants);
             }
-            PreviousFont = SelectedFonts;
+            PreviousFont = SelectedFont;
             webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
-
         }
         private async void TextBox2_TextChanged(object sender, EventArgs e)
         {
-
             if (!string.IsNullOrEmpty(ApiKeyBox.Text))
             {
-                Key = ApiKeyBox.Text;
-                Items = await FontsComboBox.GetWebFontsAsync(Key, true);
+                Items = await Fonts.GetWebFontsAsync(ApiKeyBox.Text, false);
                 try
                 {
                     if (Api.Succeeded)
@@ -118,7 +94,6 @@ namespace Fonts_Downloader
                         TTF.Visible = true;
                         FontBox1.Enabled = true;
                         Minify.Visible = true;
-                        //ApiKeyBox.Enabled = false;
                     }
                     else
                     {
@@ -137,41 +112,41 @@ namespace Fonts_Downloader
                     MessageBox.Show("your api key is not correct " + ex.Message);
                 }
             }
-
         }
         private void MianForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (Directory.Exists(@"C:/FontDownloader"))
+            var RootPath = @"C:/FontDownloader";
+            if (Directory.Exists(RootPath))
             {
-                if (File.Exists(@"C:/FontDownloader/index.html"))
+                var HtmlPath = @$"{RootPath}/index.html";
+                if (File.Exists(HtmlPath))
                 {
-                    File.Delete(@"C:/FontDownloader/index.html");
+                    File.Delete(HtmlPath);
                 }
-                Directory.Delete(@"C:/FontDownloader");
+                Directory.Delete(RootPath);
             }
         }
-
-        private void WebView21_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
-        {
-            Ensure = true;
-        }
-
         private async void CopyFont_Click(object sender, EventArgs e)
         {
-            var css = new CssFile();
             if (!string.IsNullOrEmpty(FolderName))
             {
                 var Variants = SizeAndStyle.CheckedItems.Cast<string>().ToList();
-                var File = new FontFilesDownloader();
                 var minify = Minify.Checked;
                 if (Variants != null && Variants.Any())
                 {
+                    var Css = new CssFile();
                     var Subsets = SubsetsLists.CheckedItems.Cast<string>().ToList();
+
                     if (SubsetsLists.CheckedItems.Count > 0)
-                        css.CreateCSS(Variants, FolderName, SelectedFonts, WOFF2.Checked, false, Subsets);
+                        Css.CreateCSS(Variants, FolderName, SelectedFont, WOFF2.Checked, false, Subsets);
+                    else if (Minify.Checked)
+                        Css.CreateCSS(Variants, FolderName, SelectedFont, WOFF2.Checked, minify);
                     else
-                        css.CreateCSS(Variants, FolderName, SelectedFonts, WOFF2.Checked, minify);
-                    Task FileToDownload = File.Download(Items, SelectedFonts, FolderName, Variants, WOFF2.Checked);
+                        Css.CreateCSS(Variants, FolderName, SelectedFont, WOFF2.Checked);
+
+                    SelectedFontItem.Variants = Variants;
+                    var Downloader = new FontFilesDownloader();
+                    Task FileToDownload = Downloader.Download(SelectedFontItem, FolderName, WOFF2.Checked);
                     await FileToDownload;
                     if (FileToDownload.Status == TaskStatus.RanToCompletion)
                     {
@@ -180,14 +155,13 @@ namespace Fonts_Downloader
                         {
                             try
                             {
-                                var FolderToOpen = Path.Combine(FolderName, SelectedFonts.Replace(" ", ""));
-                                Process.Start("explorer.exe", FolderToOpen); ;
+                                var FolderToOpen = Path.Combine(FolderName, SelectedFont.Replace(" ", ""));
+                                Process.Start("explorer.exe", FolderToOpen);
                             }
                             catch (Exception ex)
                             {
                                 MessageBox.Show($"Error opening folder: {ex.Message}");
                             }
-
                         }
                     }
                     else if (FileToDownload.IsFaulted)
@@ -201,20 +175,7 @@ namespace Fonts_Downloader
             else
                 MessageBox.Show("Please select a folder");
         }
-        private async Task InitAsync(string path)
-        {
-            var env = await CoreWebView2Environment.CreateAsync(userDataFolder: path);
-            await webView21.EnsureCoreWebView2Async(env);
-        }
-        //private void WebView21_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
-        //{
-        //    if (webView21 != null && webView21.CoreWebView2 != null)
-        //    {
-        //        webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
-        //    }
-        //}
-
-        private static void ShowGitRepo()
+        private static void ShowGitRepo(object sender, EventArgs e)
         {
             try
             {
@@ -229,11 +190,6 @@ namespace Fonts_Downloader
                 MessageBox.Show($"Error: {ex.Message}");
             }
         }
-
-        private void GitHubLink_Click(object sender, EventArgs e) => ShowGitRepo();
-
-        private void GitPic_Click(object sender, EventArgs e) => ShowGitRepo();
-
         private void Close_Click(object sender, EventArgs e) => Application.Exit();
 
         private void Minimize_Click(object sender, EventArgs e) => WindowState = FormWindowState.Minimized;
@@ -243,22 +199,39 @@ namespace Fonts_Downloader
             if (e.Button == MouseButtons.Left)
                 Offset = new Point(e.X, e.Y);
         }
-
-        private void Header_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-                Location = new Point(Location.X + e.X - Offset.X, Location.Y + e.Y - Offset.Y);
-        }
         private void Header_MouseUp(object sender, MouseEventArgs e) => Offset = Point.Empty;
         private void Minify_CheckedChanged(object sender, EventArgs e)
         {
             if (Minify.Checked)
+            {
                 MessageBox.Show("All comments will be deleted in minified version");
+                SubsetsLists.ClearSelected();
+            }              
+            SubsetsLists.Enabled = !Minify.Checked;
         }
-
-
-        //private void Maximize_Click(object sender, EventArgs e)
-        //{
+        private new void MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                Location = new Point(Location.X + e.X - Offset.X, Location.Y + e.Y - Offset.Y);
+        }
+        private async void WOFF2_Checked(object sender, EventArgs e) => await HandleFontTypeChecked(WOFF2, TTF);
+        private async void TTF_Checked(object sender, EventArgs e) => await HandleFontTypeChecked(TTF, WOFF2);
+        private async Task HandleFontTypeChecked(CheckBox checkedBox, CheckBox otherBox)
+        {
+            if (checkedBox.Checked)
+            {
+                otherBox.Checked = !checkedBox.Checked;
+                Items = await Fonts.GetWebFontsAsync(ApiKeyBox.Text, checkedBox == WOFF2);
+                SelectedFontItem = Items.FirstOrDefault(m => m.Family == SelectedFontLabel.Text);
+            }
+        }
+        private void SubsetsLists_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (SubsetsLists.CheckedItems.Count > 0)
+                Minify.Enabled = false;
+            else
+                Minify.Enabled = true;
+        }
         //    if (WindowState == FormWindowState.Normal)
         //    {
         //        var currentScreen = Screen.FromControl(this);
@@ -268,6 +241,19 @@ namespace Fonts_Downloader
         //    }
         //    else if (WindowState == FormWindowState.Maximized)
         //        WindowState = FormWindowState.Normal;
+        //}
+
+        //private async Task InitAsync(string path)
+        //{
+        //    var env = await CoreWebView2Environment.CreateAsync(userDataFolder: path);
+        //    await webView21.EnsureCoreWebView2Async(env);
+        //}
+        //private void WebView21_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+        //{
+        //    if (webView21 != null && webView21.CoreWebView2 != null)
+        //    {
+        //        webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
+        //    }
         //}
     }
 }
