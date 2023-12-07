@@ -1,22 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 
 namespace Fonts_Downloader
 {
     internal class HtmlFile
     {
         private const string Path = @"C:\FontDownloader";
+        private const string LoremIpsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua";
         public static void DefaultHtml()
         {
-            string Text = Api.IsInternetAvailable()
+            string message = Api.IsInternetAvailable() || Api.IsNetworkAvailable()
                 ? "<h3>The program will create a folder named FontDownloader on the C drive to render the fonts.</h3>" +
-                "<h3 style=\"color:#9b2b22;\"> Please select whether you want TTF or WOFF2 files by checking one of the boxes above</h3>"
-                : "<h1 style=\"color:#9b2b22;\">Check your internet connection</h1>";
-            if(!Directory.Exists(Path))
+                  "<h3 style=\"color:#9b2b22;\"> Please select whether you want TTF or WOFF2 files by checking one of the boxes above</h3>"
+                : "<h1 style=\"color:#9b2b22;\">Check your internet connection and restart the program</h1>";
+
+            if (!Directory.Exists(Path))
                 Directory.CreateDirectory(Path);
 
-            string DefaultHtml = $@"
+            string defaultHtml = $@"
                 <head>
                     <link href=""https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap"" rel=""stylesheet"">
                     <style>
@@ -33,124 +37,92 @@ namespace Fonts_Downloader
                 </head>
                 <body>
                     <h1>Fonts Downloader </h1>
-                    {Text}
+                    {message}
                 </body>";
 
-            using StreamWriter Writer = new($"{Path}\\index.html", false);
-            Writer.WriteLine(DefaultHtml);
+            using StreamWriter writer = new($"{Path}\\index.html", false);
+            writer.WriteLine(defaultHtml);
+        }
+        public void CreateHtml(string selectedFont, List<string> variants)
+        {
+            var italicVariants = new List<string>();
+            var normalVariants = new List<string>();
+
+            foreach (var variant in variants)
+            {
+                if (!variant.Contains("italic"))
+                    normalVariants.Add(variant);
+                else
+                    italicVariants.Add($"1,{variant.Replace("italic", "")}");
+            }
+
+            string italics = string.Join(";", italicVariants);
+            string normals = string.Join(";", normalVariants);
+
+            string googleFontLinkItalics = $"<link href=\"https://fonts.googleapis.com/css2?family={selectedFont}:ital,wght@{italics}&display=swap\" rel=\"stylesheet\">";
+            string googleFontLinkItalicsNormals = $"<link href=\"https://fonts.googleapis.com/css2?family={selectedFont}:wght@{normals}&display=swap\" rel=\"stylesheet\">";
+            string fontFamilyStyle = $"font-family: '{selectedFont}', sans-serif;";
+            string bodyStyle = "body{\n" + "background: #212124;\n " + fontFamilyStyle + "\n" + "color: #b9b9b9;" + "\n" + "}";
+
+            var pTagCSS = new List<string>();
+            var pTags = new List<string>();
+            var h1Tags = new List<string>();
+            var h1TagsCSS = new List<string>();
+
+            GenerateTags("normal", normalVariants, selectedFont, pTagCSS, pTags, h1TagsCSS, h1Tags);
+            GenerateTags("italic", italicVariants, selectedFont, pTagCSS, pTags, h1TagsCSS, h1Tags);
+
+
+            using StreamWriter writer = new($"{Path}\\index.html", false);
+            writer.WriteLine("<head>");
+            if (!string.IsNullOrEmpty(italics))
+                writer.WriteLine(googleFontLinkItalics);
+
+            if (!string.IsNullOrEmpty(normals))
+                writer.WriteLine(googleFontLinkItalicsNormals);
+
+            writer.WriteLine("</head>");
+            writer.WriteLine("<style>" + "\n" + bodyStyle);
+            for (int i = 0; i < pTagCSS.Count; i++)
+            {
+                writer.WriteLine(pTagCSS[i]);
+                writer.WriteLine(h1TagsCSS[i]);
+
+                if (i == pTagCSS.Count - 1)
+                    writer.WriteLine("</style>");
+            }
+
+            for (int i = 0; i < pTags.Count; i++)
+            {
+                writer.WriteLine("<body>");
+                writer.WriteLine(h1Tags[i]);
+                writer.WriteLine(pTags[i]);
+
+                if (i == pTags.Count - 1)
+                    writer.WriteLine("</body>");
+            }
+            italicVariants.Clear();
+            normalVariants.Clear();
         }
 
-        public static void CreateHtml(string SelectedFont, List<string> Variants)
+        private static void GenerateTags(string variantType, List<string> variants, string selectedFont, List<string> pTagCSS, List<string> pTags, List<string> h1TagsCSS, List<string> h1Tags)
         {
-            List<string> WgtItalic = new();
-            List<string> WgtNormal = new();
-            foreach (var variant in Variants)
+            var FontFileStyles = new FontFileStyles();
+            foreach (string variant in variants)
             {
-                if (!variant.ToString().Contains("italic"))
-                {
-                    WgtNormal.Add(variant.ToString());
+                var fontFileStyle = FontFileStyles.GetFontFileStyles(variant.Replace("1,", ""));
+                string pTagStyle = $"\np.size{variant.Replace("1,", "")}{variantType}" + "{\n" + "font-family:" + $"'{selectedFont}';\n" + $"font-style: {variantType};\n" + "font-weight:" + $"{variant.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
+                pTagCSS.Add(pTagStyle);
 
-                }
-                else
-                {
-                    WgtItalic.Add("1," + variant.ToString().Replace("italic", ""));
-                }
+                string paragraph = $"<p class = 'size{variant.Replace("1,", "")}{variantType}'>" + $"{LoremIpsum}</p>";
+                pTags.Add(paragraph);
+
+                string h1TagStyle = $"\nh1.size{variant.Replace("1,", "")}{variantType}" + "{\n" + "font-family:" + $"'{selectedFont}';\n" + $"font-style: {variantType};\n" + "font-weight:" + $"{variant.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
+                h1TagsCSS.Add(h1TagStyle);
+
+                string h1Tag = $"<h1 class = 'size{variant.Replace("1,", "")}{variantType}'>" + $"{selectedFont}" + " " + $"{variant.Replace("1,", "")} - {fontFileStyle} {variantType} " + "</h1>";
+                h1Tags.Add(h1Tag);
             }
-            string PTagItalic, PTagNormal, ParagrapphItalic, ParagrapphNormal, Lorem = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua";
-            string Italics = string.Join(";", WgtItalic);
-            string Normals = string.Join(";", WgtNormal);
-            string GoogleFontLinkItalics = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont}:ital,wght@{Italics}&display=swap\" rel=\"stylesheet\">";
-            string GoogleFontLinkItalicsNormals = $"<link href=\"https://fonts.googleapis.com/css2?family={SelectedFont}:wght@{Normals}&display=swap\" rel=\"stylesheet\">";
-            string FontFamliyStyle = $"font-family: '{SelectedFont}', sans-serif;";
-            string BodyStyle = "body{\n" + "background: #212124;\n " + FontFamliyStyle + "\n" + "color: #b9b9b9;" + "\n" + "}";
-            List<string> PTagCSS = new();
-            List<string> PTags = new();
-            List<string> H1Tags = new();
-            List<string> H1TagsCSS = new();
-            string H1Italic, H1Normal, H1TagItalic, H1TagNormal;
-            if (WgtItalic != null && WgtItalic.Any())
-            {
-                foreach (string wgt in WgtItalic)
-                {
-
-                    var FontFileStyle = FontFileStyles.GetFontFileStyles(wgt.Replace("1,", ""));
-                    //P tag italic  styling
-                    PTagItalic = "\np." + "size" + $"{wgt.Replace("1,", "")}italic" + "{\n" + "font-family:" + $"'{SelectedFont}';\n" + "font-style: italic;\n" + "font-weight:" + $"{wgt.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
-                    PTagCSS.Add(PTagItalic);
-
-                    //P tag italic tag html
-                    ParagrapphItalic = $"<p class = 'size{wgt.Replace("1,", "")}italic'>" + $"{Lorem}</p>";
-                    PTags.Add(ParagrapphItalic);
-
-                    //H1 tag italic styling
-                    H1Italic = "\nh1." + "size" + $"{wgt.Replace("1,", "")}italic" + "{\n" + "font-family:" + $"'{SelectedFont}';\n" + "font-style: italic;\n" + "font-weight:" + $"{wgt.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
-                    H1TagsCSS.Add(H1Italic);
-
-                    //H1 tag italic html
-                    H1TagItalic = $"<h1 class = 'size{wgt.Replace("1,", "")}italic'>" + $"{SelectedFont}" + " " + $"{wgt.Replace("1,", "")} - {FontFileStyle} Italic  " + "</h1>";
-                    H1Tags.Add(H1TagItalic);
-
-                }
-            }
-            if (WgtNormal != null && WgtNormal.Any())
-            {
-                foreach (string wgt in WgtNormal)
-                {
-                    var FontFileStyle = FontFileStyles.GetFontFileStyles(wgt.Replace("1,", ""));
-                    //P tag normal styling
-                    PTagNormal = "\np." + "size" + $"{wgt}normal" + "{\n" + "font-family:" + $"'{SelectedFont}';\n" + "font-style: normal;\n" + "font-weight:" + $"{wgt};" + "\r\nfont-stretch: 100%;" + "\n}";
-                    PTagCSS.Add(PTagNormal);
-
-                    //P tag normal html
-                    ParagrapphNormal = $"<p class = 'size{wgt}normal'>" + $"{Lorem}</p>";
-                    PTags.Add(ParagrapphNormal);
-
-                    //H1 tag normal styling
-                    H1Normal = "\nh1." + "size" + $"{wgt}normal" + "{\n" + "font-family:" + $"'{SelectedFont}';\n" + "font-style: normal;\n" + "font-weight:" + $"{wgt.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
-                    H1TagsCSS.Add(H1Normal);
-
-                    //H1 tag normal html
-                    H1TagNormal = $"<h1 class = 'size{wgt}normal'>" + $"{SelectedFont}" + " " + $"{wgt.Replace("1,", "") } - {FontFileStyle} Normal " + "</h1>";
-                    H1Tags.Add(H1TagNormal);
-                }
-            }
-
-            using (StreamWriter Writer = new($"{Path}\\index.html", false))
-            {
-                Writer.WriteLine("<head>");
-                if (!string.IsNullOrEmpty(Italics))
-                {
-                    Writer.WriteLine(GoogleFontLinkItalics);
-                }
-                if (!string.IsNullOrEmpty(Normals))
-                {
-                    Writer.WriteLine(GoogleFontLinkItalicsNormals);
-                }
-                Writer.WriteLine("</head>");
-                Writer.WriteLine("<style>" + "\n" + BodyStyle);
-                for (int i = 0; i < PTagCSS.Count; i++)
-                {
-                    Writer.WriteLine(PTagCSS[i]);
-                    Writer.WriteLine(H1TagsCSS[i]);
-                    if (i == PTagCSS.Count - 1)
-                    {
-                        Writer.WriteLine("</style>");
-                    }
-                }
-                for (int i = 0; i < PTags.Count; i++)
-                {
-                    Writer.WriteLine("<body>");
-                    Writer.WriteLine(H1Tags[i]);
-                    Writer.WriteLine(PTags[i]);
-                    if (i == PTags.Count - 1)
-                    {
-                        Writer.WriteLine("</body>");
-                    }
-                }
-            }
-            WgtItalic.Clear();
-            WgtNormal.Clear();
         }
     }
 }
-

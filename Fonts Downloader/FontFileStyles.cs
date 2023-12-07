@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Fonts_Downloader
 {
-    public static class FontFileStyles
+    public  class FontFileStyles
     {
-        public static string GetFontFileStyles(string style)
+        public string GetFontFileStyles(string style)
         {
             var FontFileStyles = new Dictionary<string, string>
             {

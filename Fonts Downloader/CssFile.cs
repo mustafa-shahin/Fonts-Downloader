@@ -1,4 +1,4 @@
-﻿using Microsoft.Ajax.Utilities;
+﻿using NUglify;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +8,7 @@ namespace Fonts_Downloader
 {
     internal class CssFile
     {
-        public  void CreateCSS(IEnumerable<string> variants, string folderName, string fontName, bool woff, bool minify = false, IEnumerable<string> subsets = null)
+        public void CreateCSS(IEnumerable<string> variants, string folderName, string fontName, bool woff, bool minify = false, IEnumerable<string> subsets = null)
         {
             var CssList = GenerateCssList(variants, fontName, woff, subsets);
 
@@ -16,18 +16,15 @@ namespace Fonts_Downloader
             {
                 string fontFolder = Path.Combine(folderName, fontName.Replace(" ", ""));
                 if (!Directory.Exists(fontFolder))
-                {
+
                     Directory.CreateDirectory(fontFolder);
-                }
 
                 string cssFilePath = Path.Combine(fontFolder, $"{fontName.Replace(" ", "")}{(minify ? ".min" : "")}.css");
                 string cssContent = string.Join("\n", CssList);
 
                 if (minify)
-                {
-                    var minifier = new Minifier();
-                    cssContent = minifier.MinifyStyleSheet(cssContent);
-                }
+                    cssContent = Uglify.Css(cssContent).ToString();
+
                 if (!File.Exists(cssFilePath) || (File.Exists(cssFilePath) && string.IsNullOrEmpty(File.ReadAllText(cssFilePath))))
                     File.WriteAllText(cssFilePath, cssContent);
 
@@ -35,9 +32,8 @@ namespace Fonts_Downloader
                 {
                     string fileContents = File.ReadAllText(cssFilePath);  
                     if (woff && fileContents.Contains(".ttf") || !woff && fileContents.Contains(".woff2"))
-                    {
                         File.WriteAllText(cssFilePath, cssContent);
-                    }
+
                     else
                     {
                         if (!fileContents.Contains(cssContent))
@@ -51,13 +47,12 @@ namespace Fonts_Downloader
                 }
             }
         }
-
         private List<string> GenerateCssList(IEnumerable<string> variants, string fontName, bool woff, IEnumerable<string> subsets = null)
         {
             var CssList = new List<string>();
-
+            var FontFileStyles = new FontFileStyles();
             foreach (var variant in variants)
-            {
+            {               
                 var FontFileStyle = FontFileStyles.GetFontFileStyles(variant);
                 if (ParseCheckedItem(variant, out var fontStyle, out var fontWeight))
                 {
@@ -80,7 +75,7 @@ namespace Fonts_Downloader
             return CssList;
         }
 
-        private static bool ParseCheckedItem(string checkedItem, out string fontStyle, out string fontWeight)
+        private  bool ParseCheckedItem(string checkedItem, out string fontStyle, out string fontWeight)
         {
             fontStyle = checkedItem.Contains("italic") ? "italic" : "normal";
             fontWeight = checkedItem.Replace("italic", "").Trim();
@@ -88,7 +83,7 @@ namespace Fonts_Downloader
             return !string.IsNullOrWhiteSpace(fontWeight);
         }
 
-        private static string GenerateFontFaceCss(string fontName, string fontStyle, string fontWeight, bool woff, string fontFileStyle, string subset = null)
+        private string GenerateFontFaceCss(string fontName, string fontStyle, string fontWeight, bool woff, string fontFileStyle, string subset = null)
         {
             if (!ValidateFontParameters(fontName, fontStyle, fontWeight)) return string.Empty;
 
@@ -116,8 +111,7 @@ namespace Fonts_Downloader
 
             return css;
         }
-
-        private static bool ValidateFontParameters(string fontName, string fontStyle, string fontWeight)
+        private bool ValidateFontParameters(string fontName, string fontStyle, string fontWeight)
         {
             if (string.IsNullOrEmpty(fontName) || string.IsNullOrEmpty(fontStyle) || string.IsNullOrEmpty(fontWeight))
             {
@@ -129,8 +123,7 @@ namespace Fonts_Downloader
             }
             return true;
         }
-
-        private static string FontFileName(string fontName, string fontStyle, string fontWeight)
+        private string FontFileName(string fontName, string fontStyle, string fontWeight)
         {
             return $"{fontName.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle[1..]}-{fontWeight}";
         }

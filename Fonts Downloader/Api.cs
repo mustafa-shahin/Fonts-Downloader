@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
@@ -26,6 +27,12 @@ namespace Fonts_Downloader
             //    return new ApiResponse { Message = request.RequestMessage.ToString() };
             //}
         }
+
+        public class ApiResponse
+        {
+            public string Response { get; set; }
+        }
+
         public static bool IsInternetAvailable()
         {
             try
@@ -39,9 +46,30 @@ namespace Fonts_Downloader
                 return false;
             }
         }
-    }
-    public class ApiResponse
-    {
-        public string Response { get; set; }
+        public static bool IsNetworkAvailable()
+        {
+            try
+            {
+                NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+
+                foreach (NetworkInterface networkInterface in networkInterfaces)
+                {
+                    if (networkInterface.OperationalStatus == OperationalStatus.Up &&
+                        (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 ||
+                         networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet) &&
+                        networkInterface.Supports(NetworkInterfaceComponent.IPv4))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }
+
