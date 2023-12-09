@@ -100,15 +100,7 @@ namespace Fonts_Downloader
                        $"  font-weight: {fontWeight};\n" +
                        "  font-display: swap;\n" +
                        $"  font-stretch: 100%;\n" +
-                       $"  src: url('{fontFileName}.{format}'){formatAttribute};\n";
-
-            if (woff)
-            {
-                css += "  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;\n";
-            }
-
-            css += "}";
-
+                       $"  src: url('{fontFileName}.{format}'){formatAttribute};\n}}";
             return css;
         }
         private bool ValidateFontParameters(string fontName, string fontStyle, string fontWeight)

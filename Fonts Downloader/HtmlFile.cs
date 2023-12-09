@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 
 namespace Fonts_Downloader
@@ -71,7 +69,6 @@ namespace Fonts_Downloader
 
             GenerateTags("normal", normalVariants, selectedFont, pTagCSS, pTags, h1TagsCSS, h1Tags);
             GenerateTags("italic", italicVariants, selectedFont, pTagCSS, pTags, h1TagsCSS, h1Tags);
-
 
             using StreamWriter writer = new($"{Path}\\index.html", false);
             writer.WriteLine("<head>");

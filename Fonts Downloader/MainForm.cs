@@ -1,11 +1,9 @@
-﻿using Microsoft.Web.WebView2.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -21,6 +19,7 @@ namespace Fonts_Downloader
         private Item SelectedFontItem;
         private readonly WebFonts Fonts = new();
         private readonly HtmlFile Html = new();
+        private string PreviousFont = string.Empty;
 
         public MainForm()
         {
@@ -53,7 +52,6 @@ namespace Fonts_Downloader
         }
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            var PreviousFont = string.Empty;
             SelectedFont = FontBox1.SelectedItem?.ToString();
             if (!string.IsNullOrEmpty(SelectedFont) && !(SelectedFont == PreviousFont && SubsetsLists.Items.Count > 0))
             {
