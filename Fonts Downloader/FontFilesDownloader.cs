@@ -10,56 +10,60 @@ namespace Fonts_Downloader
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public class FontFilesDownloader
     {
-        public async Task Download(Item Item, string FolderName, bool Woff2)
+        private readonly HttpClient HttpClient;
+
+        public FontFilesDownloader()
         {
+            HttpClient = new HttpClient();
+        }
+
+        public async Task Download(Item item, string folderName, bool woff2)
+        {
+            ValidateParameters(item, folderName);
+
             var FontFileStyles = new FontFileStyles();
-            ValidateParameters(Item, FolderName);
-            foreach (var item in Item.Variants.Where(item => !string.IsNullOrEmpty(item)))
-            {               
-                var FontStyle = item.Contains("italic") ? "italic" : "normal";
-                var FontFileStyle = FontFileStyles.GetFontFileStyles(item) ?? item;
-                var PropertyValue = Item.Files.GetType().GetProperty($"_{SizeStyles.MapVariant(item)}")?.GetValue(Item.Files) as string;
-                //var FontFileStyle = FontFileStyles.GetValueOrDefault(item.Replace("italic", "")) ?? item;
-                //var PropertyValue = Items
-                //    .Where(x => x.Family == SelectedFont)
-                //    .Select(x => x.Files.GetType().GetProperty($"_{item}")?.GetValue(x.Files) as string)
-                //    .FirstOrDefault();
+
+            foreach (var variant in item.Variants.Where(v => !string.IsNullOrEmpty(v)))
+            {
+                var FontStyle = variant.Contains("italic") ? "italic" : "normal";
+                var FontFileStyle = FontFileStyles.GetFontFileStyles(variant) ?? variant;
+                var PropertyValue = item.Files.GetType().GetProperty($"_{SizeStyles.MapVariant(variant)}")?.GetValue(item.Files) as string;
 
                 if (!string.IsNullOrEmpty(PropertyValue))
                 {
-                    await DownloadFontFile(Item.Family, FolderName, PropertyValue, Woff2, FontFileStyle, FontStyle);
+                    await DownloadFontFile(item.Family, folderName, PropertyValue, woff2, FontFileStyle, FontStyle);
                 }
             }
         }
 
-        private static void ValidateParameters(Item Items, string FolderName)
+        private static void ValidateParameters(Item item, string folderName)
         {
-            if (Items == null || string.IsNullOrEmpty(FolderName))
+            if (item == null || string.IsNullOrEmpty(folderName))
             {
-                string missingParameters = string.Join(", ",
-                    (Items == null) ? "Item" : "",
-                    string.IsNullOrEmpty(FolderName) ? "FolderName" : "");
+                string MissingParameters = string.Join(", ",
+                    (item == null) ? "Item" : "",
+                    string.IsNullOrEmpty(folderName) ? "FolderName" : "");
 
-                throw new ArgumentException($"One or more required parameters are missing or invalid: {missingParameters}");
+                throw new ArgumentException($"One or more required parameters are missing or invalid: {MissingParameters}");
             }
         }
 
-        private async Task DownloadFontFile(string SelectedFont, string FolderName, string Link, bool Woff2, string FontFileStyle, string FontStyle)
+        private async Task DownloadFontFile(string selectedFont, string folderName, string link, bool woff2, string fontFileStyle, string fontStyle)
         {
-            var format = Woff2 ? "Woff2" : "ttf";
-            string FileName = Path.Combine(FolderName, SelectedFont.Replace(" ", ""), $"{SelectedFont.Replace(" ", "")}-{char.ToUpper(FontStyle[0]) + FontStyle[1..]}-{FontFileStyle}.{format}");
-            Uri url = new(Link);
+            var Format = woff2 ? "Woff2" : "ttf";
+            string FileName = Path.Combine(folderName, selectedFont.Replace(" ", ""), $"{selectedFont.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle[1..]}-{fontFileStyle}.{Format}");
+            Uri Url = new(link);
+
             if (!File.Exists(FileName))
             {
                 try
                 {
-                    var httpClient = new HttpClient();
-                    var response = await httpClient.GetAsync(url);
-                    response.EnsureSuccessStatusCode();
+                    var Response = await HttpClient.GetAsync(Url);
+                    Response.EnsureSuccessStatusCode();
 
-                    using var stream = await response.Content.ReadAsStreamAsync();
-                    using var fileStream = File.Create(FileName);
-                    await stream.CopyToAsync(fileStream);
+                    using var Stream = await Response.Content.ReadAsStreamAsync();
+                    using var FileStream = File.Create(FileName);
+                    await Stream.CopyToAsync(FileStream);
                 }
                 catch (HttpRequestException ex)
                 {
