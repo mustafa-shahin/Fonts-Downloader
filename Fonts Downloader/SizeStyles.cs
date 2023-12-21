@@ -8,7 +8,6 @@ namespace Fonts_Downloader
         public List<string> LoadSizeStyles(Item Font)
         {
             var Variants = new List<string>();
-            var SelectedFontItems = Font.Family;
             Variants.AddRange(Font.Variants.Select(MapVariant)
                                            .OrderBy(variant => variant.EndsWith("italic"))
                                            .ThenBy(variant => variant)
