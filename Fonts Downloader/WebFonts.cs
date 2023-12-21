@@ -19,14 +19,14 @@ namespace Fonts_Downloader
                 var WOFF = Woff2 ? "capability=WOFF2" : "";
                 var link = $"https://www.googleapis.com/webfonts/v1/webfonts?{WOFF}&sort=alpha&key={apiKey}";
                 var result = await Api.Get(link);
-                var fontResponse = JsonConvert.DeserializeObject<Root>(result.Response);
-                if (fontResponse.Items != null)
+                var FontResponse = JsonConvert.DeserializeObject<Root>(result.Response);
+                if (FontResponse.Items != null)
                 {
-                    if (!FontsList.Any() && fontResponse.Items.Any() && fontResponse.Error == null)
-                        FontsList = fontResponse.Items;
+                    if (FontResponse is not null && FontResponse.Items.Any() && !FontsList.Any() && FontResponse.Error == null)
+                        FontsList = FontResponse.Items;
                     else
                     {
-                        FontsList = FontsList.Zip(fontResponse.Items, (existingItem, newItem) =>
+                        FontsList = FontsList.Zip(FontResponse.Items, (existingItem, newItem) =>
                         {
                             existingItem.Files = newItem.Files;
                             return existingItem;
@@ -36,7 +36,7 @@ namespace Fonts_Downloader
                 else
                 {
                     var Path = @"C:\FontDownloader";
-                    var Error = $"<html><body style=\" background: #212124;\">\n<h1 style=\"color:#9b2b22;text-align: center;\">{fontResponse.Error.Message}</h1>\n</body>\n</html>";
+                    var Error = $"<html><body style=\" background: #212124;\">\n<h1 style=\"color:#9b2b22;text-align: center;\">{FontResponse.Error.Message}</h1>\n</body>\n</html>";
                     using var Writer = new StreamWriter($"{Path}\\index.html", false);
                     Writer.WriteLine(Error, false);
                 }
