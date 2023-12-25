@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 
 
 namespace Fonts_Downloader
@@ -58,7 +60,7 @@ namespace Fonts_Downloader
             string normals = string.Join(";", normalVariants);
 
             string googleFontLinkItalics = $"<link href=\"https://fonts.googleapis.com/css2?family={selectedFont}:ital,wght@{italics}&display=swap\" rel=\"stylesheet\">";
-            string googleFontLinkItalicsNormals = $"<link href=\"https://fonts.googleapis.com/css2?family={selectedFont}:wght@{normals}&display=swap\" rel=\"stylesheet\">";
+            string googleFontLinkNormals = $"<link href=\"https://fonts.googleapis.com/css2?family={selectedFont}:wght@{normals}&display=swap\" rel=\"stylesheet\">";
             string fontFamilyStyle = $"font-family: '{selectedFont}', sans-serif;";
             string bodyStyle = "body{\n" + "background: #212124;\n " + fontFamilyStyle + "\n" + "color: #b9b9b9;" + "\n" + "}";
 
@@ -70,33 +72,44 @@ namespace Fonts_Downloader
             GenerateTags("normal", normalVariants, selectedFont, pTagCSS, pTags, h1TagsCSS, h1Tags);
             GenerateTags("italic", italicVariants, selectedFont, pTagCSS, pTags, h1TagsCSS, h1Tags);
 
-            using StreamWriter writer = new($"{Path}\\index.html", false);
-            writer.WriteLine("<head>");
-            if (!string.IsNullOrEmpty(italics))
-                writer.WriteLine(googleFontLinkItalics);
-
-            if (!string.IsNullOrEmpty(normals))
-                writer.WriteLine(googleFontLinkItalicsNormals);
-
-            writer.WriteLine("</head>");
-            writer.WriteLine("<style>" + "\n" + bodyStyle);
-            for (int i = 0; i < pTagCSS.Count; i++)
+            using (StreamWriter writer = new($"{Path}\\index.html", false))
             {
-                writer.WriteLine(pTagCSS[i]);
-                writer.WriteLine(h1TagsCSS[i]);
+                var htmlContent = new StringBuilder();
+                var documentStart = $"<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset =\"UTF-8\">\n<meta name =\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>{selectedFont}</title >\n</head>";
+                htmlContent.AppendLine(documentStart);
 
-                if (i == pTagCSS.Count - 1)
-                    writer.WriteLine("</style>");
-            }
+                if (!string.IsNullOrEmpty(italics))
+                    htmlContent.AppendLine(googleFontLinkItalics);
 
-            for (int i = 0; i < pTags.Count; i++)
-            {
-                writer.WriteLine("<body>");
-                writer.WriteLine(h1Tags[i]);
-                writer.WriteLine(pTags[i]);
+                if (!string.IsNullOrEmpty(normals))
+                    htmlContent.AppendLine(googleFontLinkNormals);
 
-                if (i == pTags.Count - 1)
-                    writer.WriteLine("</body>");
+                htmlContent.AppendLine("</head>");
+                htmlContent.AppendLine("<style>\n" + bodyStyle);
+
+                for (int i = 0; i < pTagCSS.Count; i++)
+                {
+                    htmlContent.AppendLine(pTagCSS[i]);
+                    htmlContent.AppendLine(h1TagsCSS[i]);
+
+                    if (i == pTagCSS.Count - 1)
+                    {
+                        htmlContent.AppendLine(".separator{background: #b9b9b9;\r\nheight: 5px;\r\nborder-radius: 5px;}");
+                        htmlContent.AppendLine("</style>");
+                    }
+                }
+
+                foreach (var (h1Tag, pTag) in h1Tags.Zip(pTags, (h1, p) => (h1, p)))
+                {
+                    htmlContent.AppendLine("<body>");
+                    htmlContent.AppendLine($"{h1Tag}\n{pTag}");
+                    htmlContent.AppendLine("<div class=\"separator\"></div>");
+                }
+
+                htmlContent.AppendLine("</body> \n </html>");
+
+
+                writer.Write(htmlContent.ToString());
             }
             italicVariants.Clear();
             normalVariants.Clear();
