@@ -62,7 +62,7 @@ namespace Fonts_Downloader
             string googleFontLinkItalics = $"<link href=\"https://fonts.googleapis.com/css2?family={selectedFont}:ital,wght@{italics}&display=swap\" rel=\"stylesheet\">";
             string googleFontLinkNormals = $"<link href=\"https://fonts.googleapis.com/css2?family={selectedFont}:wght@{normals}&display=swap\" rel=\"stylesheet\">";
             string fontFamilyStyle = $"font-family: '{selectedFont}', sans-serif;";
-            string bodyStyle = "body{\n" + "background: #212124;\n " + fontFamilyStyle + "\n" + "color: #b9b9b9;" + "\n" + "}";
+            string bodyStyle = $"body{{\nbackground: #212124;\n{fontFamilyStyle}\ncolor: #b9b9b9;\n}}";
 
             var pTagCSS = new List<string>();
             var pTags = new List<string>();
@@ -85,7 +85,7 @@ namespace Fonts_Downloader
                     htmlContent.AppendLine(googleFontLinkNormals);
 
                 htmlContent.AppendLine("</head>");
-                htmlContent.AppendLine("<style>\n" + bodyStyle);
+                htmlContent.AppendLine($"<style>\n{bodyStyle}");
 
                 for (int i = 0; i < pTagCSS.Count; i++)
                 {
@@ -98,15 +98,14 @@ namespace Fonts_Downloader
                         htmlContent.AppendLine("</style>");
                     }
                 }
-
+                htmlContent.AppendLine("<body>");
                 foreach (var (h1Tag, pTag) in h1Tags.Zip(pTags, (h1, p) => (h1, p)))
-                {
-                    htmlContent.AppendLine("<body>");
+                {                
                     htmlContent.AppendLine($"{h1Tag}\n{pTag}");
                     htmlContent.AppendLine("<div class=\"separator\"></div>");
                 }
 
-                htmlContent.AppendLine("</body> \n </html>");
+                htmlContent.AppendLine("</body>\n</html>");
 
 
                 writer.Write(htmlContent.ToString());
@@ -121,16 +120,16 @@ namespace Fonts_Downloader
             foreach (string variant in variants)
             {
                 var fontFileStyle = FontFileStyles.GetFontFileStyles(variant.Replace("1,", ""));
-                string pTagStyle = $"\np.size{variant.Replace("1,", "")}{variantType}" + "{\n" + "font-family:" + $"'{selectedFont}';\n" + $"font-style: {variantType};\n" + "font-weight:" + $"{variant.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
+                string pTagStyle = $"\np.size{variant.Replace("1,", "")}{variantType}{{\nfont-family: '{selectedFont}';\nfont-style: {variantType};\nfont-weight: {variant.Replace("1,", "")};\nfont-stretch: 100%;}}";
                 pTagCSS.Add(pTagStyle);
 
-                string paragraph = $"<p class = 'size{variant.Replace("1,", "")}{variantType}'>" + $"{LoremIpsum}</p>";
+                string paragraph = $"<p class = 'size{variant.Replace("1,", "")}{variantType}'>\n{LoremIpsum}\n</p>";
                 pTags.Add(paragraph);
 
-                string h1TagStyle = $"\nh1.size{variant.Replace("1,", "")}{variantType}" + "{\n" + "font-family:" + $"'{selectedFont}';\n" + $"font-style: {variantType};\n" + "font-weight:" + $"{variant.Replace("1,", "")};" + "\r\nfont-stretch: 100%;" + "\n}";
+                string h1TagStyle = $"\nh1.size{variant.Replace("1,", "")}{variantType}{{\nfont-family: '{selectedFont}';\nfont-style: {variantType};\nfont-weight: {variant.Replace("1,", "")};\n font-stretch: 100% \n}}";
                 h1TagsCSS.Add(h1TagStyle);
 
-                string h1Tag = $"<h1 class = 'size{variant.Replace("1,", "")}{variantType}'>" + $"{selectedFont}" + " " + $"{variant.Replace("1,", "")} - {fontFileStyle} {variantType} " + "</h1>";
+                string h1Tag = $"<h1 class = 'size{variant.Replace("1,", "")}{variantType}'> \n{selectedFont} {variant.Replace("1,", "")} - {fontFileStyle}\n</h1>";
                 h1Tags.Add(h1Tag);
             }
         }
