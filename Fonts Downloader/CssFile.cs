@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Fonts_Downloader
 {
@@ -16,7 +17,6 @@ namespace Fonts_Downloader
             {
                 string fontFolder = Path.Combine(folderName, fontName.Replace(" ", ""));
                 if (!Directory.Exists(fontFolder))
-
                     Directory.CreateDirectory(fontFolder);
 
                 string cssFilePath = Path.Combine(fontFolder, $"{fontName.Replace(" ", "")}{(minify ? ".min" : "")}.css");
@@ -24,27 +24,8 @@ namespace Fonts_Downloader
 
                 if (minify)
                     cssContent = Uglify.Css(cssContent).ToString();
-
-                if (!File.Exists(cssFilePath) || (File.Exists(cssFilePath) && string.IsNullOrEmpty(File.ReadAllText(cssFilePath))))
+               
                     File.WriteAllText(cssFilePath, cssContent);
-
-                else
-                {
-                    string fileContents = File.ReadAllText(cssFilePath);  
-                    if (woff && fileContents.Contains(".ttf") || !woff && fileContents.Contains(".woff2"))
-                        File.WriteAllText(cssFilePath, cssContent);
-
-                    else
-                    {
-                        if (!fileContents.Contains(cssContent))
-                        {
-                            string newString = cssContent.Replace(fileContents, "");
-                            int index = fileContents.IndexOf(cssContent);
-                            if (index == -1)
-                                File.AppendAllText(cssFilePath, newString);
-                        }
-                    }
-                }
             }
         }
         private List<string> GenerateCssList(IEnumerable<string> variants, string fontName, bool woff, IEnumerable<string> subsets = null)
@@ -56,20 +37,14 @@ namespace Fonts_Downloader
                 var FontFileStyle = FontFileStyles.GetFontFileStyles(variant);
                 if (ParseCheckedItem(variant, out var fontStyle, out var fontWeight))
                 {
-                    if (subsets != null && subsets.Any())
+                    if (subsets is not null && subsets.Any())
                     {
-                        foreach (var subset in subsets)
-                        {
-                            var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, woff, FontFileStyle, subset.ToLower());
-                            CssList.Add(css);
-                        }
+                        foreach (var subset in subsets)                           
+                            CssList.Add(GenerateFontFaceCss(fontName, fontStyle, fontWeight, woff, FontFileStyle, subset.ToLower()));
+                        
                     }
                     else
-                    {
-                        var css = GenerateFontFaceCss(fontName, fontStyle, fontWeight, woff, FontFileStyle);
-                        CssList.Add(css);
-                    }
-
+                        CssList.Add(GenerateFontFaceCss(fontName, fontStyle, fontWeight, woff, FontFileStyle));
                 }
             }
             return CssList;
@@ -88,20 +63,21 @@ namespace Fonts_Downloader
             if (!ValidateFontParameters(fontName, fontStyle, fontWeight)) return string.Empty;
 
             var subsetComment = !string.IsNullOrEmpty(subset) ? $"/*{subset}*/\n" : "";
-
             var fontFileName = FontFileName(fontName, fontStyle, fontFileStyle);
-
             var format = woff ? "woff2" : "ttf";
             var formatAttribute = format == "ttf" ? "" : $" format('{format}')";
 
-            var css = $"{subsetComment}@font-face {{\n" +
-                       $"  font-family: '{fontName}';\n" +
-                       $"  font-style: {fontStyle};\n" +
-                       $"  font-weight: {fontWeight};\n" +
-                       "  font-display: swap;\n" +
-                       $"  font-stretch: 100%;\n" +
-                       $"  src: url('{fontFileName}.{format}'){formatAttribute};\n}}";
-            return css;
+            var cssBuilder = new StringBuilder();
+            cssBuilder.AppendLine($"{subsetComment}@font-face {{")
+                      .AppendLine($"font-family: '{fontName}';")
+                      .AppendLine($"font-style: {fontStyle};")
+                      .AppendLine($"font-weight: {fontWeight};")
+                      .AppendLine("font-display: swap;")
+                      .AppendLine($"font-stretch: 100%;")
+                      .AppendLine($"src: url('{fontFileName}.{format}'){formatAttribute};")
+                      .AppendLine("}");
+
+            return cssBuilder.ToString();
         }
         private bool ValidateFontParameters(string fontName, string fontStyle, string fontWeight)
         {
