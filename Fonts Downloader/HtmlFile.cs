@@ -47,7 +47,6 @@ namespace Fonts_Downloader
         {
             var italicVariants = new List<string>();
             var normalVariants = new List<string>();
-
             foreach (var variant in variants)
             {
                 if (!variant.Contains("italic"))
@@ -67,8 +66,11 @@ namespace Fonts_Downloader
             var tags = new StringBuilder();
             var styles = new StringBuilder();
 
-            GenerateTags("normal", normalVariants, selectedFont,styles,tags);
-            GenerateTags("italic", italicVariants, selectedFont,styles,tags);
+            if(normalVariants is not null && normalVariants.Any())
+                GenerateTags("normal", normalVariants, selectedFont, styles, tags);
+
+            if(italicVariants is not null && italicVariants.Any())
+                GenerateTags("italic", italicVariants, selectedFont, styles, tags);
 
             using (StreamWriter writer = new($"{Path}\\index.html", false))
             {
