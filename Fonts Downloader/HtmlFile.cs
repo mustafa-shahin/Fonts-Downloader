@@ -3,13 +3,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-
 namespace Fonts_Downloader
 {
     internal class HtmlFile
     {
         private const string Path = @"C:\FontDownloader";
         private const string LoremIpsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua";
+        private const string GoogleFontLinkTemplate = "<link href=\"https://fonts.googleapis.com/css2?family={0}:{1}&display=swap\" rel=\"stylesheet\">";
+        private const string FontFamilyStyle = "font-family: {0}, sans-serif;";
+        private const string BodyStyle = "body{{\nbackground: #212124;\n{0}\ncolor: #b9b9b9;\n}}";
+
         public static void DefaultHtml()
         {
             string message = Api.IsInternetAvailable() || Api.IsNetworkAvailable()
@@ -25,7 +28,7 @@ namespace Fonts_Downloader
                     <link href=""https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap"" rel=""stylesheet"">
                     <style>
                         body {{
-                            font-family: 'Roboto', sans-serif;
+                            {string.Format(FontFamilyStyle, "'Roboto'")}
                             color: #b9b9b9 !important;
                             text-align: center !important;
                             background: #212124;
@@ -43,65 +46,63 @@ namespace Fonts_Downloader
             using StreamWriter writer = new($"{Path}\\index.html", false);
             writer.WriteLine(defaultHtml);
         }
+
         public void CreateHtml(string selectedFont, List<string> variants)
         {
-            var italicVariants = new List<string>();
-            var normalVariants = new List<string>();
-            foreach (var variant in variants)
-            {
-                if (!variant.Contains("italic"))
-                    normalVariants.Add(variant);
-                else
-                    italicVariants.Add($"1,{variant.Replace("italic", "")}");
-            }
+            var italicVariants = variants.Where(v => v.Contains("italic")).Select(v => $"1,{v.Replace("italic", "")}").ToList();
+            var normalVariants = variants.Where(m=>!m.Contains("italic")).ToList();
 
             string italics = string.Join(";", italicVariants);
             string normals = string.Join(";", normalVariants);
 
-            string googleFontLinkItalics = $"<link href=\"https://fonts.googleapis.com/css2?family={selectedFont}:ital,wght@{italics}&display=swap\" rel=\"stylesheet\">";
-            string googleFontLinkNormals = $"<link href=\"https://fonts.googleapis.com/css2?family={selectedFont}:wght@{normals}&display=swap\" rel=\"stylesheet\">";
-            string fontFamilyStyle = $"font-family: '{selectedFont}', sans-serif;";
-            string bodyStyle = $"body{{\nbackground: #212124;\n{fontFamilyStyle}\ncolor: #b9b9b9;\n}}";
-
-            var tags = new StringBuilder();
-            var styles = new StringBuilder();
-
-            if(normalVariants is not null && normalVariants.Any())
-                GenerateTags("normal", normalVariants, selectedFont, styles, tags);
-
-            if(italicVariants is not null && italicVariants.Any())
-                GenerateTags("italic", italicVariants, selectedFont, styles, tags);
-
             using (StreamWriter writer = new($"{Path}\\index.html", false))
             {
-                var htmlContent = new StringBuilder();
-                var documentStart = $"<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset =\"UTF-8\">\n<meta name =\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>{selectedFont}</title >\n</head>";
-                htmlContent.AppendLine(documentStart);
-
-                if (!string.IsNullOrEmpty(italics))
-                    htmlContent.AppendLine(googleFontLinkItalics);
-
-                if (!string.IsNullOrEmpty(normals))
-                    htmlContent.AppendLine(googleFontLinkNormals);
-
-                htmlContent.AppendLine($"</head>\n<style>\n{bodyStyle}\n{styles.ToString()}")
-                            .AppendLine(".separator{background: #b9b9b9;\r\nheight: 5px;\r\nborder-radius: 5px;}\n</style>\n<body>")
-                            .AppendLine($"{tags.ToString()}\n</body>\n</html>");
-                writer.Write(htmlContent.ToString());
-                writer.Dispose();
+                var htmlContent = GenerateHtmlContent(selectedFont, italics, normals, normalVariants, italicVariants);
+                writer.Write(htmlContent);
             }
+
             italicVariants.Clear();
             normalVariants.Clear();
         }
+
+        private static string GenerateHtmlContent(string selectedFont, string italics, string normals, List<string> normalVariants, List<string> italicVariants)
+        {
+            var tags = new StringBuilder();
+            var styles = new StringBuilder();
+
+            GenerateTags("normal", normalVariants, selectedFont, styles, tags);
+            GenerateTags("italic", italicVariants, selectedFont, styles, tags);
+
+            var documentStart = $"<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset =\"UTF-8\">\n<meta name =\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>{selectedFont}</title >\n</head>";
+            var googleFontLinkItalics = string.Format(GoogleFontLinkTemplate, selectedFont, $"ital,wght@{italics}");
+            var googleFontLinkNormals = string.Format(GoogleFontLinkTemplate, selectedFont, $"wght@{normals}");
+            var bodyStyle = string.Format(BodyStyle, $"{string.Format(FontFamilyStyle, $"'{selectedFont}'")}");
+
+            var htmlContent = new StringBuilder();
+            htmlContent.AppendLine(documentStart);
+
+            if (!string.IsNullOrEmpty(italics))
+                htmlContent.AppendLine(googleFontLinkItalics);
+
+            if (!string.IsNullOrEmpty(normals))
+                htmlContent.AppendLine(googleFontLinkNormals);
+
+            htmlContent.AppendLine($"</head>\n<style>\n{bodyStyle}\n{styles.ToString()}")
+                .AppendLine(".separator{background: #b9b9b9;\r\nheight: 5px;\r\nborder-radius: 5px;}\n</style>\n<body>")
+                .AppendLine($"{tags.ToString()}\n</body>\n</html>");
+
+            return htmlContent.ToString();
+        }
+
         private static void GenerateTags(string variantType, List<string> variants, string selectedFont, StringBuilder styles, StringBuilder tags)
         {
             var FontFileStyles = new FontFileStyles();
             foreach (string variant in variants)
             {
                 var fontFileStyle = FontFileStyles.GetFontFileStyles(variant.Replace("1,", ""));
-                tags.AppendLine($"<h1 class = 'size{variant.Replace("1,", "")}{variantType}'> \n{selectedFont} {variant.Replace("1,", "")} - {variantType} - {fontFileStyle}\n</h1>")
+                tags.AppendLine($"<h1 class ='size{variant.Replace("1,", "")}{variantType}'> \n{selectedFont} {variant.Replace("1,", "")} - {variantType} - {fontFileStyle}\n</h1>")
                     .AppendLine($"<p class = 'size{variant.Replace("1,", "")}{variantType}'>\n{LoremIpsum}\n</p>")
-                    .AppendLine("<div class=\"separator\"></div>");
+                    .AppendLine("<div class = \"separator\"></div>");
                 styles.AppendLine($"\nh1.size{variant.Replace("1,", "")}{variantType}{{\nfont-family: '{selectedFont}';\nfont-style: {variantType};\nfont-weight: {variant.Replace("1,", "")};\n font-stretch: 100% \n}}")
                       .AppendLine($"\np.size{variant.Replace("1,", "")}{variantType}{{\nfont-family: '{selectedFont}';\nfont-style: {variantType};\nfont-weight: {variant.Replace("1,", "")};\nfont-stretch: 100%;}}");
             }
