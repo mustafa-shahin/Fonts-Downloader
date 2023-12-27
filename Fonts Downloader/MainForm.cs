@@ -65,10 +65,16 @@ namespace Fonts_Downloader
                 if (Items is not null && Items.Any())
                     SelectedFontItem = Items.FirstOrDefault(m => m.Family == SelectedFontLabel.Text);
                 SubsetsLists.Items.AddRange(SelectedFontItem.Subsets.Select(m => char.ToUpper(m[0]) + m[1..]).ToArray());
-                var FontWeights = new SizeStyles();
-                var Variants = FontWeights.LoadSizeStyles(SelectedFontItem);
-                SizeAndStyle.Items.AddRange(Variants.ToArray());
-                Html.CreateHtml(SelectedFont, Variants);
+                if(SelectedFontItem.Variants is not null && SelectedFontItem.Variants.Any())
+                {
+                    var Variants = SelectedFontItem.Variants.Select(FontFileStyles.MapVariant)
+                                                            .OrderBy(variant => variant.EndsWith("italic"))
+                                                            .ThenBy(variant => variant)
+                                                            .ToList();
+                    SizeAndStyle.Items.AddRange(Variants.ToArray());
+                    Html.CreateHtml(SelectedFont, SelectedFontItem.Variants);
+                }
+              
             }
             PreviousFont = SelectedFont;
             webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");

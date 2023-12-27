@@ -49,8 +49,8 @@ namespace Fonts_Downloader
 
         public void CreateHtml(string selectedFont, List<string> variants)
         {
-            var italicVariants = variants.Where(v => v.Contains("italic")).Select(v => $"1,{v.Replace("italic", "")}").ToList();
-            var normalVariants = variants.Where(m=>!m.Contains("italic")).ToList();
+            var italicVariants = variants.Select(FontFileStyles.MapVariant).Where(v => v.Contains("italic")).Select(v => $"1,{v.Replace("italic", "")}").ToList();
+            var normalVariants = variants.Select(FontFileStyles.MapVariant).Where(m=>!m.Contains("italic")).ToList();
 
             string italics = string.Join(";", italicVariants);
             string normals = string.Join(";", normalVariants);
