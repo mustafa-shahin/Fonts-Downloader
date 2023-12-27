@@ -4,7 +4,7 @@ namespace Fonts_Downloader
 {
     public  class FontFileStyles
     {
-        public string GetFontFileStyles(string style)
+        public static string GetFontFileStyles(string style)
         {
             var FontFileStyles = new Dictionary<string, string>
             {
@@ -17,6 +17,19 @@ namespace Fonts_Downloader
             var FontStyle = style.Contains("italic") ? style.Replace("italic","") : style;
             var FontFileStyle = FontFileStyles.GetValueOrDefault(FontStyle);
             return FontFileStyle;
+        }
+        public static string MapVariant(string variant)
+        {
+            return variant switch
+            {
+                "regular" => "400",
+                "italic" => "400italic",
+                _ => variant,
+            };
+        }
+        public static string FontFileName(string fontName, string fontStyle, string fontWeight)
+        {
+            return $"{fontName.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle[1..]}-{fontWeight}";
         }
     }
 }
