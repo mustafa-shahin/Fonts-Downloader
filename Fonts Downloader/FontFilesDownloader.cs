@@ -11,7 +11,6 @@ namespace Fonts_Downloader
     public class FontFilesDownloader
     {
         private readonly HttpClient HttpClient;
-
         public FontFilesDownloader()
         {
             HttpClient = new HttpClient();
@@ -28,10 +27,9 @@ namespace Fonts_Downloader
                 var FontStyle = variant.Contains("italic") ? "italic" : "normal";
                 var FontFileStyle = FontFileStyles.GetFontFileStyles(variant) ?? variant;
                 var PropertyValue = item.Files.GetType().GetProperty($"_{FontFileStyles.MapVariant(variant)}")?.GetValue(item.Files) as string;
-
                 if (!string.IsNullOrEmpty(PropertyValue))
                 {
-                    await DownloadFontFile(item.Family, folderName, PropertyValue, woff2, FontFileStyle, FontStyle);
+                    await DownloadFontFile(item.Family, folderName, PropertyValue, woff2, variant);
                 }
             }
         }
@@ -48,10 +46,10 @@ namespace Fonts_Downloader
             }
         }
 
-        private async Task DownloadFontFile(string selectedFont, string folderName, string link, bool woff2, string fontFileStyle, string fontStyle)
+        private async Task DownloadFontFile(string selectedFont, string folderName, string link, bool woff2, string variant)
         {
             var Format = woff2 ? "woff2" : "ttf";
-            string FileName = Path.Combine(folderName, selectedFont.Replace(" ", ""), $"{FontFileStyles.FontFileName(selectedFont, fontStyle, fontFileStyle)}.{Format}");
+            string FileName = Path.Combine(folderName, selectedFont.Replace(" ", ""), $"{FontFileStyles.FontFileName(selectedFont, woff2, variant)}");
             Uri Url = new(link);
 
             if (!File.Exists(FileName))
