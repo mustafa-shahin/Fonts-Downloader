@@ -67,11 +67,10 @@ namespace Fonts_Downloader
                 SubsetsLists.Items.AddRange(SelectedFontItem.Subsets.Select(m => char.ToUpper(m[0]) + m[1..]).ToArray());
                 if(SelectedFontItem.Variants is not null && SelectedFontItem.Variants.Any())
                 {
-                    var Variants = SelectedFontItem.Variants.Select(FontFileStyles.MapVariant)
+                    SizeAndStyle.Items.AddRange(SelectedFontItem.Variants.Select(FontFileStyles.MapVariant)
                                                             .OrderBy(variant => variant.EndsWith("italic"))
                                                             .ThenBy(variant => variant)
-                                                            .ToList();
-                    SizeAndStyle.Items.AddRange(Variants.ToArray());
+                                                            .ToArray());
                     Html.CreateHtml(SelectedFont, SelectedFontItem.Variants);
                 }
               
@@ -86,15 +85,14 @@ namespace Fonts_Downloader
                 Items = await Fonts.GetWebFontsAsync(ApiKeyBox.Text, false);
                 try
                 {
-                    if (Api.Succeeded)
+                    if (Api.Succeeded && (Items != null && Items.Any()))
                     {
-                        if (Items != null && Items.Any())
-                        {
-                            foreach (var item in Items)
-                            {
-                                FontBox1.Items.Add(item.Family);
-                            }
-                        }
+                            HtmlFile.DefaultHtml();
+                            webView21.Reload();
+                            if (NoInternet.Visible)
+                                NoInternet.Visible = false;
+
+                        FontBox1.Items.AddRange(Items.Select(item => item.Family).ToArray());
                         WOFF2.Visible = true;
                         TTF.Visible = true;
                         FontBox1.Enabled = true;
@@ -102,6 +100,7 @@ namespace Fonts_Downloader
                     }
                     else
                     {
+                        HtmlFile.DefaultHtml(Fonts.GetError());
                         webView21.Reload();
                         WOFF2.Visible = false;
                         TTF.Visible = false;
