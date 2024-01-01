@@ -120,7 +120,7 @@ namespace Fonts_Downloader
             SelectedFolder.Margin = new Padding(3, 2, 3, 2);
             SelectedFolder.Multiline = true;
             SelectedFolder.Name = "SelectedFolder";
-            SelectedFolder.PlaceholderText = "SelectedFolder";
+            SelectedFolder.PlaceholderText = "Selected Folder";
             SelectedFolder.Size = new Size(620, 40);
             SelectedFolder.TabIndex = 31;
             // 

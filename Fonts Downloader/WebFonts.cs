@@ -10,7 +10,9 @@ namespace Fonts_Downloader
 {
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public class WebFonts
-    {       
+    {
+
+        private Root Error;
         public async Task<List<Item>> GetWebFontsAsync(string apiKey, bool Woff2)
         {
             var FontsList = new List<Item>();
@@ -34,12 +36,8 @@ namespace Fonts_Downloader
                     }
                 }
                 else
-                {
-                    var Path = @"C:\FontDownloader";
-                    var Error = $"<html><body style=\" background: #212124;\">\n<h1 style=\"color:#9b2b22;text-align: center;\">{FontResponse.Error.Message}</h1>\n</body>\n</html>";
-                    using var Writer = new StreamWriter($"{Path}\\index.html", false);
-                    Writer.WriteLine(Error, false);
-                }
+                    Error = FontResponse;
+
             }
             catch (Exception ex)
             {
@@ -47,5 +45,10 @@ namespace Fonts_Downloader
             }
             return FontsList;
         }
+        public Root GetError()
+        {
+            return Error;
+        }
+
     }
 }

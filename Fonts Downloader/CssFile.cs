@@ -9,17 +9,17 @@ namespace Fonts_Downloader
 {
     internal class CssFile
     {
-        public void CreateCSS(IEnumerable<string> variants, string folderName, string fontName, bool woff, bool minify = false, IEnumerable<string> subsets = null)
+        public void CreateCSS(Item selectedFont, string folderName, bool woff, bool minify = false, IEnumerable<string> subsets = null)
         {
-            var CssList = GenerateCssList(variants, fontName, woff, subsets);
+            var CssList = GenerateCssList(selectedFont, woff, subsets);
 
             if (CssList is not null && CssList.Any())
             {
-                string fontFolder = Path.Combine(folderName, fontName.Replace(" ", ""));
+                string fontFolder = Path.Combine(folderName, selectedFont.Family.Replace(" ", ""));
                 if (!Directory.Exists(fontFolder))
                     Directory.CreateDirectory(fontFolder);
 
-                string cssFilePath = Path.Combine(fontFolder, $"{fontName.Replace(" ", "")}{(minify ? ".min" : "")}.css");
+                string cssFilePath = Path.Combine(fontFolder, $"{selectedFont.Family.Replace(" ", "")}{(minify ? ".min" : "")}.css");
                 string cssContent = string.Join("\n", CssList);
 
                 if (minify)
@@ -28,58 +28,52 @@ namespace Fonts_Downloader
                     File.WriteAllText(cssFilePath, cssContent);
             }
         }
-        private List<string> GenerateCssList(IEnumerable<string> variants, string fontName, bool woff, IEnumerable<string> subsets = null)
+        private List<string> GenerateCssList(Item selectedFont, bool woff, IEnumerable<string> subsets = null)
         {
             var CssList = new List<string>();
-            if(variants is not null &&  variants.Any())
+            if(selectedFont.Variants is not null && selectedFont.Variants.Any())
             {
-                foreach (var variant in variants)
+                foreach (var variant in selectedFont.Variants)
                 {
                     var FontFileStyle = FontFileStyles.GetFontFileStyles(variant);
-                    var fontStyle = variant.Contains("italic") ? "italic" : "normal";
-                    var fontWeight = variant.Replace("italic", "").Trim();
                     if (subsets is not null && subsets.Any())
                     {
                         foreach (var subset in subsets)
-                            CssList.Add(GenerateFontFaceCss(fontName, fontStyle, fontWeight, woff, FontFileStyle, subset.ToLower()));
-
+                            CssList.Add(GenerateFontFaceCss(selectedFont.Family, variant, woff, subset.ToLower()));
                     }
                     else
-                        CssList.Add(GenerateFontFaceCss(fontName, fontStyle, fontWeight, woff, FontFileStyle));
+                        CssList.Add(GenerateFontFaceCss(selectedFont.Family, variant, woff));
 
                 }
             }       
             return CssList;
         }
 
-        private string GenerateFontFaceCss(string fontName, string fontStyle, string fontWeight, bool woff, string fontFileStyle, string subset = null)
+        private string GenerateFontFaceCss(string fontName, string fontWeight, bool woff2, string subset = null)
         {
-            if (!ValidateFontParameters(fontName, fontStyle, fontWeight)) return string.Empty;
-
+            if (!ValidateFontParameters(fontName, fontWeight)) return string.Empty;
+            var fontStyle = fontWeight.Contains("italic") ? "italic" : "normal";
             var subsetComment = !string.IsNullOrEmpty(subset) ? $"/*{subset}*/\n" : "";
-            var fontFileName = FontFileStyles.FontFileName(fontName, fontStyle, fontFileStyle);
-            var format = woff ? "woff2" : "ttf";
-            var formatAttribute = format == "ttf" ? "" : $" format('{format}')";
-
+            var fontFileName = FontFileStyles.FontFileName(fontName, woff2, fontWeight);
+            var formatAttribute = woff2 ? "format('woff2')" : "";
             var cssBuilder = new StringBuilder();
             cssBuilder.AppendLine($"{subsetComment}@font-face {{")
                       .AppendLine($"font-family: '{fontName}';")
                       .AppendLine($"font-style: {fontStyle};")
-                      .AppendLine($"font-weight: {fontWeight};")
+                      .AppendLine($"font-weight: {FontFileStyles.MapVariant(fontWeight).Replace("italic","")};")
                       .AppendLine("font-display: swap;")
                       .AppendLine($"font-stretch: 100%;")
-                      .AppendLine($"src: url('{fontFileName}.{format}'){formatAttribute};")
+                      .AppendLine($"src: url('{fontFileName}') {formatAttribute};")
                       .AppendLine("}");
 
             return cssBuilder.ToString();
         }
-        private static bool ValidateFontParameters(string fontName, string fontStyle, string fontWeight)
+        private static bool ValidateFontParameters(string fontName, string fontWeight)
         {
-            if (string.IsNullOrEmpty(fontName) || string.IsNullOrEmpty(fontStyle) || string.IsNullOrEmpty(fontWeight))
+            if (string.IsNullOrEmpty(fontName) || string.IsNullOrEmpty(fontWeight))
             {
                 string missingParameters = string.Join(", ",
                     (string.IsNullOrEmpty(fontName)) ? "Font's name" : "",
-                    string.IsNullOrEmpty(fontStyle) ? "Font's style" : "",
                     string.IsNullOrEmpty(fontWeight) ? "Font's weight" : "");
                 throw new ArgumentException($"One or more required parameters are missing or invalid: {missingParameters}");
             }
