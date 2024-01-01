@@ -9,17 +9,17 @@ namespace Fonts_Downloader
 {
     internal class CssFile
     {
-        public void CreateCSS(IEnumerable<string> variants, string folderName, string fontName, bool woff, bool minify = false, IEnumerable<string> subsets = null)
+        public void CreateCSS(Item selectedFont, string folderName, bool woff, bool minify = false, IEnumerable<string> subsets = null)
         {
-            var CssList = GenerateCssList(variants, fontName, woff, subsets);
+            var CssList = GenerateCssList(selectedFont, woff, subsets);
 
             if (CssList is not null && CssList.Any())
             {
-                string fontFolder = Path.Combine(folderName, fontName.Replace(" ", ""));
+                string fontFolder = Path.Combine(folderName, selectedFont.Family.Replace(" ", ""));
                 if (!Directory.Exists(fontFolder))
                     Directory.CreateDirectory(fontFolder);
 
-                string cssFilePath = Path.Combine(fontFolder, $"{fontName.Replace(" ", "")}{(minify ? ".min" : "")}.css");
+                string cssFilePath = Path.Combine(fontFolder, $"{selectedFont.Family.Replace(" ", "")}{(minify ? ".min" : "")}.css");
                 string cssContent = string.Join("\n", CssList);
 
                 if (minify)
@@ -28,21 +28,21 @@ namespace Fonts_Downloader
                     File.WriteAllText(cssFilePath, cssContent);
             }
         }
-        private List<string> GenerateCssList(IEnumerable<string> variants, string fontName, bool woff, IEnumerable<string> subsets = null)
+        private List<string> GenerateCssList(Item selectedFont, bool woff, IEnumerable<string> subsets = null)
         {
             var CssList = new List<string>();
-            if(variants is not null &&  variants.Any())
+            if(selectedFont.Variants is not null && selectedFont.Variants.Any())
             {
-                foreach (var variant in variants)
+                foreach (var variant in selectedFont.Variants)
                 {
                     var FontFileStyle = FontFileStyles.GetFontFileStyles(variant);
                     if (subsets is not null && subsets.Any())
                     {
                         foreach (var subset in subsets)
-                            CssList.Add(GenerateFontFaceCss(fontName, variant, woff, subset.ToLower()));
+                            CssList.Add(GenerateFontFaceCss(selectedFont.Family, variant, woff, subset.ToLower()));
                     }
                     else
-                        CssList.Add(GenerateFontFaceCss(fontName, variant, woff));
+                        CssList.Add(GenerateFontFaceCss(selectedFont.Family, variant, woff));
 
                 }
             }       
@@ -60,7 +60,7 @@ namespace Fonts_Downloader
             cssBuilder.AppendLine($"{subsetComment}@font-face {{")
                       .AppendLine($"font-family: '{fontName}';")
                       .AppendLine($"font-style: {fontStyle};")
-                      .AppendLine($"font-weight: {fontWeight.Replace("italic","")};")
+                      .AppendLine($"font-weight: {FontFileStyles.MapVariant(fontWeight).Replace("italic","")};")
                       .AppendLine("font-display: swap;")
                       .AppendLine($"font-stretch: 100%;")
                       .AppendLine($"src: url('{fontFileName}') {formatAttribute};")
