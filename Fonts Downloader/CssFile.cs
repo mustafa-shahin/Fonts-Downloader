@@ -11,21 +11,24 @@ namespace Fonts_Downloader
     {
         public void CreateCSS(Item selectedFont, string folderName, bool woff, bool minify = false, IEnumerable<string> subsets = null)
         {
-            var CssList = GenerateCssList(selectedFont, woff, subsets);
-
-            if (CssList is not null && CssList.Any())
+            if(selectedFont is not null)
             {
-                string fontFolder = Path.Combine(folderName, selectedFont.Family.Replace(" ", ""));
-                if (!Directory.Exists(fontFolder))
-                    Directory.CreateDirectory(fontFolder);
+                var CssList = GenerateCssList(selectedFont, woff, subsets);
 
-                string cssFilePath = Path.Combine(fontFolder, $"{selectedFont.Family.Replace(" ", "")}{(minify ? ".min" : "")}.css");
-                string cssContent = string.Join("\n", CssList);
+                if (CssList is not null && CssList.Any())
+                {
+                    string fontFolder = Path.Combine(folderName, selectedFont.Family.Replace(" ", ""));
+                    if (!Directory.Exists(fontFolder))
+                        Directory.CreateDirectory(fontFolder);
 
-                if (minify)
-                    cssContent = Uglify.Css(cssContent).ToString();
-               
+                    string cssFilePath = Path.Combine(fontFolder, $"{selectedFont.Family.Replace(" ", "")}{(minify ? ".min" : "")}.css");
+                    string cssContent = string.Join("\n", CssList);
+
+                    if (minify)
+                        cssContent = Uglify.Css(cssContent).ToString();
+
                     File.WriteAllText(cssFilePath, cssContent);
+                }
             }
         }
         private List<string> GenerateCssList(Item selectedFont, bool woff, IEnumerable<string> subsets = null)
@@ -43,7 +46,6 @@ namespace Fonts_Downloader
                     }
                     else
                         CssList.Add(GenerateFontFaceCss(selectedFont.Family, variant, woff));
-
                 }
             }       
             return CssList;
@@ -51,7 +53,6 @@ namespace Fonts_Downloader
 
         private string GenerateFontFaceCss(string fontName, string fontWeight, bool woff2, string subset = null)
         {
-            if (!ValidateFontParameters(fontName, fontWeight)) return string.Empty;
             var fontStyle = fontWeight.Contains("italic") ? "italic" : "normal";
             var subsetComment = !string.IsNullOrEmpty(subset) ? $"/*{subset}*/\n" : "";
             var fontFileName = FontFileStyles.FontFileName(fontName, woff2, fontWeight);
@@ -67,17 +68,6 @@ namespace Fonts_Downloader
                       .AppendLine("}");
 
             return cssBuilder.ToString();
-        }
-        private static bool ValidateFontParameters(string fontName, string fontWeight)
-        {
-            if (string.IsNullOrEmpty(fontName) || string.IsNullOrEmpty(fontWeight))
-            {
-                string missingParameters = string.Join(", ",
-                    (string.IsNullOrEmpty(fontName)) ? "Font's name" : "",
-                    string.IsNullOrEmpty(fontWeight) ? "Font's weight" : "");
-                throw new ArgumentException($"One or more required parameters are missing or invalid: {missingParameters}");
-            }
-            return true;
         }
     }
 }
