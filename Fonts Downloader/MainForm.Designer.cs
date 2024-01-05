@@ -60,8 +60,8 @@ namespace Fonts_Downloader
             Titel = new Label();
             panel1 = new Panel();
             Maximize = new Button();
-            Minimize = new Button();
             Close = new Button();
+            Minimize = new Button();
             MainPanel = new Panel();
             ((System.ComponentModel.ISupportInitialize)webView21).BeginInit();
             LeftPanel.SuspendLayout();
@@ -83,7 +83,7 @@ namespace Fonts_Downloader
             SizeAndStyle.BackColor = Color.FromArgb(38, 42, 49);
             SizeAndStyle.BorderStyle = BorderStyle.None;
             SizeAndStyle.CheckOnClick = true;
-            SizeAndStyle.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            SizeAndStyle.Font = new Font("Microsoft Sans Serif", 12F);
             SizeAndStyle.ForeColor = Color.FromArgb(185, 185, 185);
             SizeAndStyle.FormattingEnabled = true;
             SizeAndStyle.Location = new Point(17, 94);
@@ -98,7 +98,7 @@ namespace Fonts_Downloader
             SelectFolder.BackColor = Color.FromArgb(18, 163, 255);
             SelectFolder.FlatAppearance.BorderColor = Color.FromArgb(35, 114, 66);
             SelectFolder.FlatStyle = FlatStyle.Flat;
-            SelectFolder.Font = new Font("Microsoft Sans Serif", 8F, FontStyle.Regular, GraphicsUnit.Point);
+            SelectFolder.Font = new Font("Microsoft Sans Serif", 8F);
             SelectFolder.ForeColor = Color.White;
             SelectFolder.Location = new Point(77, 18);
             SelectFolder.Margin = new Padding(3, 2, 3, 2);
@@ -114,7 +114,7 @@ namespace Fonts_Downloader
             SelectedFolder.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             SelectedFolder.BackColor = Color.FromArgb(38, 42, 49);
             SelectedFolder.BorderStyle = BorderStyle.None;
-            SelectedFolder.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Regular, GraphicsUnit.Point);
+            SelectedFolder.Font = new Font("Microsoft Sans Serif", 16.2F);
             SelectedFolder.ForeColor = Color.FromArgb(185, 185, 185);
             SelectedFolder.Location = new Point(250, 17);
             SelectedFolder.Margin = new Padding(3, 2, 3, 2);
@@ -128,7 +128,7 @@ namespace Fonts_Downloader
             // 
             FontBox1.BackColor = Color.FromArgb(38, 42, 49);
             FontBox1.FlatStyle = FlatStyle.Flat;
-            FontBox1.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            FontBox1.Font = new Font("Microsoft Sans Serif", 10F);
             FontBox1.ForeColor = Color.FromArgb(185, 185, 185);
             FontBox1.FormattingEnabled = true;
             FontBox1.Location = new Point(17, 13);
@@ -143,7 +143,7 @@ namespace Fonts_Downloader
             // 
             SelectedFontLabel.AutoSize = true;
             SelectedFontLabel.FlatStyle = FlatStyle.Flat;
-            SelectedFontLabel.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            SelectedFontLabel.Font = new Font("Microsoft Sans Serif", 12F);
             SelectedFontLabel.ForeColor = Color.FromArgb(185, 185, 185);
             SelectedFontLabel.Location = new Point(17, 64);
             SelectedFontLabel.Name = "SelectedFontLabel";
@@ -158,7 +158,7 @@ namespace Fonts_Downloader
             CopyFont.BackColor = Color.FromArgb(18, 163, 255);
             CopyFont.FlatAppearance.BorderColor = Color.FromArgb(35, 114, 66);
             CopyFont.FlatStyle = FlatStyle.Flat;
-            CopyFont.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            CopyFont.Font = new Font("Microsoft Sans Serif", 10F);
             CopyFont.ForeColor = Color.White;
             CopyFont.Location = new Point(17, 850);
             CopyFont.Margin = new Padding(3, 2, 3, 2);
@@ -207,7 +207,7 @@ namespace Fonts_Downloader
             // 
             Minify.Anchor = AnchorStyles.None;
             Minify.AutoSize = true;
-            Minify.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            Minify.Font = new Font("Microsoft Sans Serif", 12F);
             Minify.ForeColor = Color.FromArgb(185, 185, 185);
             Minify.Location = new Point(17, 772);
             Minify.Margin = new Padding(3, 5, 3, 5);
@@ -222,7 +222,7 @@ namespace Fonts_Downloader
             // 
             TTF.Anchor = AnchorStyles.None;
             TTF.AutoSize = true;
-            TTF.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Regular, GraphicsUnit.Point);
+            TTF.Font = new Font("Microsoft Sans Serif", 13.8F);
             TTF.ForeColor = Color.FromArgb(185, 185, 185);
             TTF.Location = new Point(172, 799);
             TTF.Margin = new Padding(3, 5, 3, 5);
@@ -237,7 +237,7 @@ namespace Fonts_Downloader
             // 
             SubsetsLabel.AutoSize = true;
             SubsetsLabel.FlatStyle = FlatStyle.Flat;
-            SubsetsLabel.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            SubsetsLabel.Font = new Font("Microsoft Sans Serif", 12F);
             SubsetsLabel.ForeColor = Color.FromArgb(185, 185, 185);
             SubsetsLabel.Location = new Point(17, 435);
             SubsetsLabel.Name = "SubsetsLabel";
@@ -249,7 +249,7 @@ namespace Fonts_Downloader
             // 
             WOFF2.Anchor = AnchorStyles.None;
             WOFF2.AutoSize = true;
-            WOFF2.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            WOFF2.Font = new Font("Microsoft Sans Serif", 12F);
             WOFF2.ForeColor = Color.FromArgb(185, 185, 185);
             WOFF2.Location = new Point(17, 803);
             WOFF2.Margin = new Padding(3, 5, 3, 5);
@@ -265,7 +265,7 @@ namespace Fonts_Downloader
             SubsetsLists.BackColor = Color.FromArgb(38, 42, 49);
             SubsetsLists.BorderStyle = BorderStyle.None;
             SubsetsLists.CheckOnClick = true;
-            SubsetsLists.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            SubsetsLists.Font = new Font("Microsoft Sans Serif", 12F);
             SubsetsLists.ForeColor = Color.FromArgb(185, 185, 185);
             SubsetsLists.FormattingEnabled = true;
             SubsetsLists.Location = new Point(17, 465);
@@ -304,7 +304,7 @@ namespace Fonts_Downloader
             ApiKeyBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             ApiKeyBox.BackColor = Color.FromArgb(38, 42, 49);
             ApiKeyBox.BorderStyle = BorderStyle.None;
-            ApiKeyBox.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Regular, GraphicsUnit.Point);
+            ApiKeyBox.Font = new Font("Microsoft Sans Serif", 13.8F);
             ApiKeyBox.ForeColor = Color.FromArgb(185, 185, 185);
             ApiKeyBox.Location = new Point(250, 64);
             ApiKeyBox.Margin = new Padding(3, 2, 3, 2);
@@ -340,7 +340,7 @@ namespace Fonts_Downloader
             // 
             GitHubLink.ActiveLinkColor = Color.White;
             GitHubLink.AutoSize = true;
-            GitHubLink.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            GitHubLink.Font = new Font("Microsoft Sans Serif", 12F);
             GitHubLink.ForeColor = Color.White;
             GitHubLink.LinkBehavior = LinkBehavior.NeverUnderline;
             GitHubLink.LinkColor = Color.White;
@@ -398,7 +398,7 @@ namespace Fonts_Downloader
             TitlePanel.Dock = DockStyle.Left;
             TitlePanel.Location = new Point(0, 0);
             TitlePanel.Name = "TitlePanel";
-            TitlePanel.Size = new Size(289, 58);
+            TitlePanel.Size = new Size(295, 58);
             TitlePanel.TabIndex = 2;
             TitlePanel.MouseMove += MouseMove;
             // 
@@ -407,7 +407,7 @@ namespace Fonts_Downloader
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
             pictureBox1.Location = new Point(12, 0);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(61, 58);
+            pictureBox1.Size = new Size(58, 58);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 56;
             pictureBox1.TabStop = false;
@@ -416,9 +416,9 @@ namespace Fonts_Downloader
             // Titel
             // 
             Titel.AutoSize = true;
-            Titel.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point);
+            Titel.Font = new Font("Segoe UI", 13.8F);
             Titel.ForeColor = Color.FromArgb(185, 185, 185);
-            Titel.Location = new Point(82, 17);
+            Titel.Location = new Point(93, 12);
             Titel.Name = "Titel";
             Titel.Size = new Size(199, 31);
             Titel.TabIndex = 1;
@@ -428,55 +428,64 @@ namespace Fonts_Downloader
             // panel1
             // 
             panel1.Controls.Add(Maximize);
-            panel1.Controls.Add(Minimize);
             panel1.Controls.Add(Close);
+            panel1.Controls.Add(Minimize);
             panel1.Dock = DockStyle.Right;
             panel1.ForeColor = Color.FromArgb(40, 41, 42);
-            panel1.Location = new Point(1268, 0);
+            panel1.Location = new Point(1243, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(148, 58);
+            panel1.Size = new Size(173, 58);
             panel1.TabIndex = 0;
             // 
             // Maximize
             // 
             Maximize.BackColor = Color.FromArgb(40, 41, 42);
             Maximize.BackgroundImage = (Image)resources.GetObject("Maximize.BackgroundImage");
+            Maximize.BackgroundImageLayout = ImageLayout.Zoom;
+            Maximize.FlatAppearance.MouseDownBackColor = Color.FromArgb(40, 41, 42);
+            Maximize.FlatAppearance.MouseOverBackColor = Color.FromArgb(40, 41, 42);
             Maximize.FlatStyle = FlatStyle.Flat;
-            Maximize.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
+            Maximize.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             Maximize.ForeColor = Color.FromArgb(40, 41, 42);
-            Maximize.Location = new Point(3, 3);
+            Maximize.Location = new Point(17, 10);
             Maximize.Name = "Maximize";
             Maximize.Size = new Size(50, 45);
             Maximize.TabIndex = 2;
             Maximize.UseVisualStyleBackColor = false;
             Maximize.Visible = false;
             // 
-            // Minimize
-            // 
-            Minimize.BackColor = Color.FromArgb(40, 41, 42);
-            Minimize.BackgroundImage = (Image)resources.GetObject("Minimize.BackgroundImage");
-            Minimize.FlatStyle = FlatStyle.Flat;
-            Minimize.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
-            Minimize.ForeColor = Color.FromArgb(40, 41, 42);
-            Minimize.Location = new Point(48, 3);
-            Minimize.Name = "Minimize";
-            Minimize.Size = new Size(50, 45);
-            Minimize.TabIndex = 1;
-            Minimize.UseVisualStyleBackColor = false;
-            Minimize.Click += Minimize_Click;
-            // 
             // Close
             // 
             Close.BackgroundImage = (Image)resources.GetObject("Close.BackgroundImage");
+            Close.BackgroundImageLayout = ImageLayout.None;
+            Close.FlatAppearance.MouseDownBackColor = Color.FromArgb(40, 41, 42);
+            Close.FlatAppearance.MouseOverBackColor = Color.FromArgb(40, 41, 42);
             Close.FlatStyle = FlatStyle.Flat;
-            Close.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
+            Close.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             Close.ForeColor = Color.FromArgb(40, 41, 42);
-            Close.Location = new Point(94, 3);
+            Close.Location = new Point(112, 7);
             Close.Name = "Close";
             Close.Size = new Size(49, 45);
             Close.TabIndex = 0;
             Close.UseVisualStyleBackColor = false;
             Close.Click += Close_Click;
+            // 
+            // Minimize
+            // 
+            Minimize.BackColor = Color.FromArgb(40, 41, 42);
+            Minimize.BackgroundImage = (Image)resources.GetObject("Minimize.BackgroundImage");
+            Minimize.BackgroundImageLayout = ImageLayout.None;
+            Minimize.FlatAppearance.MouseDownBackColor = Color.FromArgb(40, 41, 42);
+            Minimize.FlatAppearance.MouseOverBackColor = Color.FromArgb(40, 41, 42);
+            Minimize.FlatStyle = FlatStyle.Flat;
+            Minimize.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            Minimize.ForeColor = Color.FromArgb(40, 41, 42);
+            Minimize.Location = new Point(64, 7);
+            Minimize.Name = "Minimize";
+            Minimize.Size = new Size(55, 45);
+            Minimize.TabIndex = 1;
+            Minimize.UseVisualStyleBackColor = false;
+            Minimize.Click += Minimize_Click;
             // 
             // MainPanel
             // 
