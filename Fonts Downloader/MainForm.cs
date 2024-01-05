@@ -230,7 +230,7 @@ namespace Fonts_Downloader
         private async void TTF_Checked(object sender, EventArgs e) => await HandleFontTypeChecked(TTF, WOFF2);
         private async Task HandleFontTypeChecked(CheckBox checkedBox, CheckBox otherBox)
         {
-            if(Api.IsNetworkAvailable() || Api.IsInternetAvailable())
+            if (Api.IsNetworkAvailable() || Api.IsInternetAvailable())
             {
                 if (checkedBox.Checked)
                 {
