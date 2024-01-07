@@ -63,6 +63,7 @@ namespace Fonts_Downloader
             Close = new Button();
             Minimize = new Button();
             MainPanel = new Panel();
+            LinkPanel = new Panel();
             ((System.ComponentModel.ISupportInitialize)webView21).BeginInit();
             LeftPanel.SuspendLayout();
             TopPanel.SuspendLayout();
@@ -76,6 +77,7 @@ namespace Fonts_Downloader
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel1.SuspendLayout();
             MainPanel.SuspendLayout();
+            LinkPanel.SuspendLayout();
             SuspendLayout();
             // 
             // SizeAndStyle
@@ -317,8 +319,8 @@ namespace Fonts_Downloader
             // 
             // GitPanel
             // 
+            GitPanel.Controls.Add(LinkPanel);
             GitPanel.Controls.Add(GitPic);
-            GitPanel.Controls.Add(GitHubLink);
             GitPanel.Dock = DockStyle.Right;
             GitPanel.Location = new Point(950, 0);
             GitPanel.Name = "GitPanel";
@@ -344,7 +346,7 @@ namespace Fonts_Downloader
             GitHubLink.ForeColor = Color.White;
             GitHubLink.LinkBehavior = LinkBehavior.NeverUnderline;
             GitHubLink.LinkColor = Color.White;
-            GitHubLink.Location = new Point(68, 85);
+            GitHubLink.Location = new Point(14, 13);
             GitHubLink.Name = "GitHubLink";
             GitHubLink.Size = new Size(60, 25);
             GitHubLink.TabIndex = 55;
@@ -499,6 +501,15 @@ namespace Fonts_Downloader
             MainPanel.Size = new Size(1416, 941);
             MainPanel.TabIndex = 40;
             // 
+            // LinkPanel
+            // 
+            LinkPanel.Anchor = AnchorStyles.Bottom;
+            LinkPanel.Controls.Add(GitHubLink);
+            LinkPanel.Location = new Point(52, 81);
+            LinkPanel.Name = "LinkPanel";
+            LinkPanel.Size = new Size(86, 47);
+            LinkPanel.TabIndex = 37;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(120F, 120F);
@@ -534,6 +545,8 @@ namespace Fonts_Downloader
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panel1.ResumeLayout(false);
             MainPanel.ResumeLayout(false);
+            LinkPanel.ResumeLayout(false);
+            LinkPanel.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -568,5 +581,6 @@ namespace Fonts_Downloader
         private Panel TitlePanel;
         private PictureBox pictureBox1;
         private PictureBox NoInternet;
+        private Panel LinkPanel;
     }
 }
