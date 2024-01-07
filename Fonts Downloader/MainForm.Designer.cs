@@ -345,7 +345,7 @@ namespace Fonts_Downloader
             GitPic.Location = new Point(0, 0);
             GitPic.Name = "GitPic";
             GitPic.Size = new Size(91, 70);
-            GitPic.SizeMode = PictureBoxSizeMode.AutoSize;
+            GitPic.SizeMode = PictureBoxSizeMode.Zoom;
             GitPic.TabIndex = 54;
             GitPic.TabStop = false;
             GitPic.Click += ShowGitRepo;
@@ -362,12 +362,13 @@ namespace Fonts_Downloader
             // GitHubLink
             // 
             GitHubLink.ActiveLinkColor = Color.White;
+            GitHubLink.Anchor = AnchorStyles.None;
             GitHubLink.AutoSize = true;
             GitHubLink.Font = new Font("Microsoft Sans Serif", 12F);
             GitHubLink.ForeColor = Color.White;
             GitHubLink.LinkBehavior = LinkBehavior.NeverUnderline;
             GitHubLink.LinkColor = Color.White;
-            GitHubLink.Location = new Point(50, 95);
+            GitHubLink.Location = new Point(64, 95);
             GitHubLink.Name = "GitHubLink";
             GitHubLink.Size = new Size(60, 25);
             GitHubLink.TabIndex = 55;
@@ -548,7 +549,6 @@ namespace Fonts_Downloader
             TextBoxPanel.PerformLayout();
             GitPanel.ResumeLayout(false);
             PanelGitIcon.ResumeLayout(false);
-            PanelGitIcon.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)GitPic).EndInit();
             LinkPanel.ResumeLayout(false);
             LinkPanel.PerformLayout();
