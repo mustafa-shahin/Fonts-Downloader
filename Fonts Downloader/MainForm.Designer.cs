@@ -50,8 +50,9 @@ namespace Fonts_Downloader
             TextBoxPanel = new Panel();
             ApiKeyBox = new TextBox();
             GitPanel = new Panel();
-            GitPic = new PictureBox();
+            LinkPanel = new Panel();
             GitHubLink = new LinkLabel();
+            GitPic = new PictureBox();
             WebPanel = new Panel();
             NoInternet = new PictureBox();
             Header = new Panel();
@@ -63,12 +64,13 @@ namespace Fonts_Downloader
             Close = new Button();
             Minimize = new Button();
             MainPanel = new Panel();
-            LinkPanel = new Panel();
+            PanelGitIcon = new Panel();
             ((System.ComponentModel.ISupportInitialize)webView21).BeginInit();
             LeftPanel.SuspendLayout();
             TopPanel.SuspendLayout();
             TextBoxPanel.SuspendLayout();
             GitPanel.SuspendLayout();
+            LinkPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)GitPic).BeginInit();
             WebPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)NoInternet).BeginInit();
@@ -77,7 +79,7 @@ namespace Fonts_Downloader
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel1.SuspendLayout();
             MainPanel.SuspendLayout();
-            LinkPanel.SuspendLayout();
+            PanelGitIcon.SuspendLayout();
             SuspendLayout();
             // 
             // SizeAndStyle
@@ -319,24 +321,22 @@ namespace Fonts_Downloader
             // 
             // GitPanel
             // 
+            GitPanel.Controls.Add(PanelGitIcon);
             GitPanel.Controls.Add(LinkPanel);
-            GitPanel.Controls.Add(GitPic);
             GitPanel.Dock = DockStyle.Right;
             GitPanel.Location = new Point(950, 0);
             GitPanel.Name = "GitPanel";
             GitPanel.Size = new Size(161, 131);
             GitPanel.TabIndex = 56;
             // 
-            // GitPic
+            // LinkPanel
             // 
-            GitPic.Image = (Image)resources.GetObject("GitPic.Image");
-            GitPic.Location = new Point(64, 18);
-            GitPic.Name = "GitPic";
-            GitPic.Size = new Size(64, 64);
-            GitPic.SizeMode = PictureBoxSizeMode.AutoSize;
-            GitPic.TabIndex = 54;
-            GitPic.TabStop = false;
-            GitPic.Click += ShowGitRepo;
+            LinkPanel.Anchor = AnchorStyles.Bottom;
+            LinkPanel.Controls.Add(GitHubLink);
+            LinkPanel.Location = new Point(52, 81);
+            LinkPanel.Name = "LinkPanel";
+            LinkPanel.Size = new Size(86, 47);
+            LinkPanel.TabIndex = 37;
             // 
             // GitHubLink
             // 
@@ -354,6 +354,17 @@ namespace Fonts_Downloader
             GitHubLink.Text = "Code";
             GitHubLink.VisitedLinkColor = Color.White;
             GitHubLink.Click += ShowGitRepo;
+            // 
+            // GitPic
+            // 
+            GitPic.Image = (Image)resources.GetObject("GitPic.Image");
+            GitPic.Location = new Point(14, 3);
+            GitPic.Name = "GitPic";
+            GitPic.Size = new Size(64, 64);
+            GitPic.SizeMode = PictureBoxSizeMode.AutoSize;
+            GitPic.TabIndex = 54;
+            GitPic.TabStop = false;
+            GitPic.Click += ShowGitRepo;
             // 
             // WebPanel
             // 
@@ -501,14 +512,14 @@ namespace Fonts_Downloader
             MainPanel.Size = new Size(1416, 941);
             MainPanel.TabIndex = 40;
             // 
-            // LinkPanel
+            // PanelGitIcon
             // 
-            LinkPanel.Anchor = AnchorStyles.Bottom;
-            LinkPanel.Controls.Add(GitHubLink);
-            LinkPanel.Location = new Point(52, 81);
-            LinkPanel.Name = "LinkPanel";
-            LinkPanel.Size = new Size(86, 47);
-            LinkPanel.TabIndex = 37;
+            PanelGitIcon.Anchor = AnchorStyles.Top;
+            PanelGitIcon.Controls.Add(GitPic);
+            PanelGitIcon.Location = new Point(47, 5);
+            PanelGitIcon.Name = "PanelGitIcon";
+            PanelGitIcon.Size = new Size(91, 70);
+            PanelGitIcon.TabIndex = 37;
             // 
             // MainForm
             // 
@@ -535,7 +546,8 @@ namespace Fonts_Downloader
             TextBoxPanel.ResumeLayout(false);
             TextBoxPanel.PerformLayout();
             GitPanel.ResumeLayout(false);
-            GitPanel.PerformLayout();
+            LinkPanel.ResumeLayout(false);
+            LinkPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)GitPic).EndInit();
             WebPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)NoInternet).EndInit();
@@ -545,8 +557,8 @@ namespace Fonts_Downloader
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panel1.ResumeLayout(false);
             MainPanel.ResumeLayout(false);
-            LinkPanel.ResumeLayout(false);
-            LinkPanel.PerformLayout();
+            PanelGitIcon.ResumeLayout(false);
+            PanelGitIcon.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -582,5 +594,6 @@ namespace Fonts_Downloader
         private PictureBox pictureBox1;
         private PictureBox NoInternet;
         private Panel LinkPanel;
+        private Panel PanelGitIcon;
     }
 }
