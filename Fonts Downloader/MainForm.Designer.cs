@@ -447,9 +447,9 @@ namespace Fonts_Downloader
             Maximize.FlatStyle = FlatStyle.Flat;
             Maximize.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             Maximize.ForeColor = Color.FromArgb(40, 41, 42);
-            Maximize.Location = new Point(17, 10);
+            Maximize.Location = new Point(17, 7);
             Maximize.Name = "Maximize";
-            Maximize.Size = new Size(50, 45);
+            Maximize.Size = new Size(46, 45);
             Maximize.TabIndex = 2;
             Maximize.UseVisualStyleBackColor = false;
             Maximize.Visible = false;
@@ -457,7 +457,7 @@ namespace Fonts_Downloader
             // Close
             // 
             Close.BackgroundImage = (Image)resources.GetObject("Close.BackgroundImage");
-            Close.BackgroundImageLayout = ImageLayout.None;
+            Close.BackgroundImageLayout = ImageLayout.Zoom;
             Close.FlatAppearance.MouseDownBackColor = Color.FromArgb(40, 41, 42);
             Close.FlatAppearance.MouseOverBackColor = Color.FromArgb(40, 41, 42);
             Close.FlatStyle = FlatStyle.Flat;
@@ -465,7 +465,7 @@ namespace Fonts_Downloader
             Close.ForeColor = Color.FromArgb(40, 41, 42);
             Close.Location = new Point(112, 7);
             Close.Name = "Close";
-            Close.Size = new Size(49, 45);
+            Close.Size = new Size(46, 45);
             Close.TabIndex = 0;
             Close.UseVisualStyleBackColor = false;
             Close.Click += Close_Click;
@@ -474,7 +474,7 @@ namespace Fonts_Downloader
             // 
             Minimize.BackColor = Color.FromArgb(40, 41, 42);
             Minimize.BackgroundImage = (Image)resources.GetObject("Minimize.BackgroundImage");
-            Minimize.BackgroundImageLayout = ImageLayout.None;
+            Minimize.BackgroundImageLayout = ImageLayout.Zoom;
             Minimize.FlatAppearance.MouseDownBackColor = Color.FromArgb(40, 41, 42);
             Minimize.FlatAppearance.MouseOverBackColor = Color.FromArgb(40, 41, 42);
             Minimize.FlatStyle = FlatStyle.Flat;
@@ -482,7 +482,7 @@ namespace Fonts_Downloader
             Minimize.ForeColor = Color.FromArgb(40, 41, 42);
             Minimize.Location = new Point(64, 7);
             Minimize.Name = "Minimize";
-            Minimize.Size = new Size(55, 45);
+            Minimize.Size = new Size(46, 45);
             Minimize.TabIndex = 1;
             Minimize.UseVisualStyleBackColor = false;
             Minimize.Click += Minimize_Click;
