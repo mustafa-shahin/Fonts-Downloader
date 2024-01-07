@@ -69,6 +69,7 @@ namespace Fonts_Downloader
                     SizeAndStyle.Items.AddRange(SelectedFontItem.Variants.Select(FontFileStyles.MapVariant)
                                                             .OrderBy(variant => variant.EndsWith("italic"))
                                                             .ThenBy(variant => variant)
+                                                            .Select(variant => variant.Replace("italic", " italic"))
                                                             .ToArray());
                     HtmlFile.CreateHtml(SelectedFontItem);
                 }
