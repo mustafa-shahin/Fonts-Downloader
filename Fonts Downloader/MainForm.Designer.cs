@@ -63,6 +63,7 @@ namespace Fonts_Downloader
             Close = new Button();
             Minimize = new Button();
             MainPanel = new Panel();
+            LinkPanel = new Panel();
             ((System.ComponentModel.ISupportInitialize)webView21).BeginInit();
             LeftPanel.SuspendLayout();
             TopPanel.SuspendLayout();
@@ -76,6 +77,7 @@ namespace Fonts_Downloader
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel1.SuspendLayout();
             MainPanel.SuspendLayout();
+            LinkPanel.SuspendLayout();
             SuspendLayout();
             // 
             // SizeAndStyle
@@ -317,8 +319,8 @@ namespace Fonts_Downloader
             // 
             // GitPanel
             // 
+            GitPanel.Controls.Add(LinkPanel);
             GitPanel.Controls.Add(GitPic);
-            GitPanel.Controls.Add(GitHubLink);
             GitPanel.Dock = DockStyle.Right;
             GitPanel.Location = new Point(950, 0);
             GitPanel.Name = "GitPanel";
@@ -344,7 +346,7 @@ namespace Fonts_Downloader
             GitHubLink.ForeColor = Color.White;
             GitHubLink.LinkBehavior = LinkBehavior.NeverUnderline;
             GitHubLink.LinkColor = Color.White;
-            GitHubLink.Location = new Point(68, 85);
+            GitHubLink.Location = new Point(14, 13);
             GitHubLink.Name = "GitHubLink";
             GitHubLink.Size = new Size(60, 25);
             GitHubLink.TabIndex = 55;
@@ -447,9 +449,9 @@ namespace Fonts_Downloader
             Maximize.FlatStyle = FlatStyle.Flat;
             Maximize.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             Maximize.ForeColor = Color.FromArgb(40, 41, 42);
-            Maximize.Location = new Point(17, 10);
+            Maximize.Location = new Point(17, 7);
             Maximize.Name = "Maximize";
-            Maximize.Size = new Size(50, 45);
+            Maximize.Size = new Size(46, 45);
             Maximize.TabIndex = 2;
             Maximize.UseVisualStyleBackColor = false;
             Maximize.Visible = false;
@@ -457,7 +459,7 @@ namespace Fonts_Downloader
             // Close
             // 
             Close.BackgroundImage = (Image)resources.GetObject("Close.BackgroundImage");
-            Close.BackgroundImageLayout = ImageLayout.None;
+            Close.BackgroundImageLayout = ImageLayout.Zoom;
             Close.FlatAppearance.MouseDownBackColor = Color.FromArgb(40, 41, 42);
             Close.FlatAppearance.MouseOverBackColor = Color.FromArgb(40, 41, 42);
             Close.FlatStyle = FlatStyle.Flat;
@@ -465,7 +467,7 @@ namespace Fonts_Downloader
             Close.ForeColor = Color.FromArgb(40, 41, 42);
             Close.Location = new Point(112, 7);
             Close.Name = "Close";
-            Close.Size = new Size(49, 45);
+            Close.Size = new Size(46, 45);
             Close.TabIndex = 0;
             Close.UseVisualStyleBackColor = false;
             Close.Click += Close_Click;
@@ -474,7 +476,7 @@ namespace Fonts_Downloader
             // 
             Minimize.BackColor = Color.FromArgb(40, 41, 42);
             Minimize.BackgroundImage = (Image)resources.GetObject("Minimize.BackgroundImage");
-            Minimize.BackgroundImageLayout = ImageLayout.None;
+            Minimize.BackgroundImageLayout = ImageLayout.Zoom;
             Minimize.FlatAppearance.MouseDownBackColor = Color.FromArgb(40, 41, 42);
             Minimize.FlatAppearance.MouseOverBackColor = Color.FromArgb(40, 41, 42);
             Minimize.FlatStyle = FlatStyle.Flat;
@@ -482,7 +484,7 @@ namespace Fonts_Downloader
             Minimize.ForeColor = Color.FromArgb(40, 41, 42);
             Minimize.Location = new Point(64, 7);
             Minimize.Name = "Minimize";
-            Minimize.Size = new Size(55, 45);
+            Minimize.Size = new Size(46, 45);
             Minimize.TabIndex = 1;
             Minimize.UseVisualStyleBackColor = false;
             Minimize.Click += Minimize_Click;
@@ -498,6 +500,15 @@ namespace Fonts_Downloader
             MainPanel.Name = "MainPanel";
             MainPanel.Size = new Size(1416, 941);
             MainPanel.TabIndex = 40;
+            // 
+            // LinkPanel
+            // 
+            LinkPanel.Anchor = AnchorStyles.Bottom;
+            LinkPanel.Controls.Add(GitHubLink);
+            LinkPanel.Location = new Point(52, 81);
+            LinkPanel.Name = "LinkPanel";
+            LinkPanel.Size = new Size(86, 47);
+            LinkPanel.TabIndex = 37;
             // 
             // MainForm
             // 
@@ -534,6 +545,8 @@ namespace Fonts_Downloader
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panel1.ResumeLayout(false);
             MainPanel.ResumeLayout(false);
+            LinkPanel.ResumeLayout(false);
+            LinkPanel.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -568,5 +581,6 @@ namespace Fonts_Downloader
         private Panel TitlePanel;
         private PictureBox pictureBox1;
         private PictureBox NoInternet;
+        private Panel LinkPanel;
     }
 }
