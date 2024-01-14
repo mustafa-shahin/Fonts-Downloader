@@ -19,7 +19,7 @@ namespace Fonts_Downloader
         {
             if(selectedFont is not null && selectedFont.Variants.Any() && !string.IsNullOrEmpty(folderName))
             {
-                foreach (var variant in selectedFont.Variants.Where(v => !string.IsNullOrEmpty(v)))
+                foreach (var variant in selectedFont.Variants.Where(v => !string.IsNullOrEmpty(v)).Select(variant => variant.Replace(" ","")))
                 {
                     var FontStyle = variant.Contains("italic") ? "italic" : "normal";
                     var FontFileStyle = FontFileStyles.GetFontFileStyles(variant) ?? variant;

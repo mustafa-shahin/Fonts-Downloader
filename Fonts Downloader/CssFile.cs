@@ -36,7 +36,7 @@ namespace Fonts_Downloader
             var CssList = new List<string>();
             if(selectedFont.Variants is not null && selectedFont.Variants.Any())
             {
-                foreach (var variant in selectedFont.Variants)
+                foreach (var variant in selectedFont.Variants.Where(v => !string.IsNullOrEmpty(v)).Select(variant => variant.Replace(" ", "")))
                 {
                     var FontFileStyle = FontFileStyles.GetFontFileStyles(variant);
                     if (subsets is not null && subsets.Any())
@@ -61,7 +61,7 @@ namespace Fonts_Downloader
             cssBuilder.AppendLine($"{subsetComment}@font-face {{")
                       .AppendLine($"font-family: '{fontName}';")
                       .AppendLine($"font-style: {fontStyle};")
-                      .AppendLine($"font-weight: {FontFileStyles.MapVariant(fontWeight.Replace("italic",""))};")
+                      .AppendLine($"font-weight: {FontFileStyles.MapVariant(fontWeight).Replace("italic", "")};")
                       .AppendLine("font-display: swap;")
                       .AppendLine($"font-stretch: 100%;")
                       .AppendLine($"src: url('{fontFileName}') {formatAttribute};")
