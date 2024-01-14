@@ -107,7 +107,7 @@ namespace Fonts_Downloader
                         }
                         else
                         {
-                            HtmlFile.DefaultHtml(Fonts.GetError());
+                            HtmlFile.DefaultHtml(Fonts.Error);
                             webView21.Reload();
                         }
                     }
@@ -279,6 +279,23 @@ namespace Fonts_Downloader
             HtmlFile.DefaultHtml();
             webView21.Reload();
             MessageBox.Show("Check your internet connection");
+        }
+
+        private void NoInternet_Click(object sender, EventArgs e)
+        {
+            if (Api.IsInternetAvailable() || Api.IsNetworkAvailable())
+            {
+                if (SelectedFontItem is not null)
+                    HtmlFile.CreateHtml(SelectedFontItem);
+                else
+                    HtmlFile.DefaultHtml();
+
+                NoInternet.Visible = false;
+            }
+            else
+                HtmlFile.DefaultHtml(Fonts.Error);
+
+            webView21.Reload();
         }
     }
 }
