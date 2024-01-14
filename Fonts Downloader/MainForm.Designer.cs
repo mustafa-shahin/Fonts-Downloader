@@ -348,7 +348,7 @@ namespace Fonts_Downloader
             GitPic.SizeMode = PictureBoxSizeMode.Zoom;
             GitPic.TabIndex = 54;
             GitPic.TabStop = false;
-            GitPic.Click += ShowGitRepo;
+            GitPic.Click += MainForm.ShowGitRepo;
             // 
             // LinkPanel
             // 
@@ -375,7 +375,7 @@ namespace Fonts_Downloader
             GitHubLink.TabStop = true;
             GitHubLink.Text = "Code";
             GitHubLink.VisitedLinkColor = Color.White;
-            GitHubLink.Click += ShowGitRepo;
+            GitHubLink.Click += MainForm.ShowGitRepo;
             // 
             // WebPanel
             // 
@@ -400,6 +400,7 @@ namespace Fonts_Downloader
             NoInternet.TabIndex = 36;
             NoInternet.TabStop = false;
             NoInternet.Visible = false;
+            NoInternet.Click += NoInternet_Click;
             // 
             // Header
             // 

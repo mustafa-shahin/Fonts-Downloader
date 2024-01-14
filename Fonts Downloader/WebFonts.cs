@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Fonts_Downloader
 {
@@ -12,7 +13,7 @@ namespace Fonts_Downloader
     public class WebFonts
     {
 
-        private Root Error;
+        private Root _Error;
         public async Task<List<Item>> GetWebFontsAsync(string apiKey, bool Woff2)
         {
             var FontsList = new List<Item>();
@@ -36,7 +37,7 @@ namespace Fonts_Downloader
                     }
                 }
                 else
-                    Error = FontResponse;
+                    _Error = FontResponse;
 
             }
             catch (Exception ex)
@@ -45,10 +46,10 @@ namespace Fonts_Downloader
             }
             return FontsList;
         }
-        public Root GetError()
-        {
-            return Error;
-        }
 
+        public Root Error
+        {
+            get {return _Error;}
+        }
     }
 }

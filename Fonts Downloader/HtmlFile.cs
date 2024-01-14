@@ -7,7 +7,6 @@ namespace Fonts_Downloader
 {
     internal class HtmlFile
     {
-
         private const string Path = @"C:\FontDownloader";
         private const string LoremIpsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua";
         private const string GoogleFontLinkTemplate = "<link href=\"https://fonts.googleapis.com/css2?family={0}:{1}&display=swap\" rel=\"stylesheet\">";
@@ -20,10 +19,10 @@ namespace Fonts_Downloader
                  message = (Api.IsInternetAvailable() || Api.IsNetworkAvailable())
                             ? "<h3>The program will create a folder named FontDownloader on the C drive to render the fonts.</h3>" +
                              "<h3 style=\"color:#9b2b22;\"> Please select whether you want TTF or WOFF2 files by checking one of the boxes above</h3>"
-                               : "<h1 style=\"color:#9b2b22;\">Check your internet connection and restart the program</h1>";
+                               : "<h1 style=\"color:#9b2b22;\">Check your internet connection and restart the program</h1>\n<h2>Click on the image to refresh</h2>";
             }
             else
-                message = $"<html><body style=\" background: #212124;\">\n<h1 style=\"color:#9b2b22;text-align: center;\">{Error.Error.Message}</h1>\n</body>\n</html>";
+                message = $"<html><body style=\" background: #212124;\">\n<h1 style=\"color:#9b2b22;text-align: center;\">{Error.Error.Message}</h1>\n></body>\n</html>";
 
             if (!Directory.Exists(Path))
                 Directory.CreateDirectory(Path);
@@ -47,11 +46,9 @@ namespace Fonts_Downloader
                     <h1>Google Fonts Downloader </h1>
                     {message}
                 </body>";
-
             using StreamWriter writer = new($"{Path}\\index.html", false);
             writer.WriteLine(defaultHtml);
         }
-
         public static void CreateHtml(Item selectedFont)
         {
             var tags = new StringBuilder();
@@ -89,7 +86,6 @@ namespace Fonts_Downloader
             using StreamWriter writer = new($"{Path}\\index.html", false);
             writer.Write(htmlContent);
         }
-
         private static void GenerateTags(string variantType, List<string> variants, string selectedFont, StringBuilder styles, StringBuilder tags)
         {
             foreach (string variant in variants)
