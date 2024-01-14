@@ -66,7 +66,7 @@ namespace Fonts_Downloader
             var documentStart = $"{DocumentStart}\n<title>{selectedFont}</title >\n</head>";
             var googleFontLinkItalics = string.Format(GoogleFontLinkTemplate, selectedFont.Family, $"ital,wght@{string.Join(";", italicVariants)}");
             var googleFontLinkNormals = string.Format(GoogleFontLinkTemplate, selectedFont.Family, $"wght@{string.Join(";", normalVariants)}");
-            var bodyStyle = $"body{{\nbackground: #212124;\ncolor: #fff;\n" + $"font-family:\"{selectedFont.Family}\"}}";
+            var bodyStyle = $"body{{\nbackground: #212124;\ncolor: #b9b9b9;\n" + $"font-family:\"{selectedFont.Family}\"}}";
 
             var htmlContent = new StringBuilder();
             htmlContent.AppendLine(documentStart);
