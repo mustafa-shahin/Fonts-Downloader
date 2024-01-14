@@ -61,7 +61,7 @@ namespace Fonts_Downloader
             cssBuilder.AppendLine($"{subsetComment}@font-face {{")
                       .AppendLine($"font-family: '{fontName}';")
                       .AppendLine($"font-style: {fontStyle};")
-                      .AppendLine($"font-weight: {FontFileStyles.MapVariant(fontWeight).Replace("italic","")};")
+                      .AppendLine($"font-weight: {FontFileStyles.MapVariant(fontWeight.Replace("italic",""))};")
                       .AppendLine("font-display: swap;")
                       .AppendLine($"font-stretch: 100%;")
                       .AppendLine($"src: url('{fontFileName}') {formatAttribute};")
