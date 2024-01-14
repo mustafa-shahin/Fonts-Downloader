@@ -139,9 +139,8 @@ namespace Fonts_Downloader
             {
                 if (!string.IsNullOrEmpty(FolderName))
                 {
-                    var Variants = SizeAndStyle.CheckedItems.Cast<string>().ToList();
-
-                    if (Variants != null && Variants.Any())
+                    SelectedFontItem.Variants = SizeAndStyle.CheckedItems.Cast<string>().ToList();
+                    if (SelectedFontItem.Variants != null && SelectedFontItem.Variants.Any())
                     {
                         var Css = new CssFile();
                         var Subsets = SubsetsLists.CheckedItems.Cast<string>().ToList();
@@ -153,7 +152,7 @@ namespace Fonts_Downloader
                         else
                             Css.CreateCSS(SelectedFontItem, FolderName, WOFF2.Checked);
 
-                        SelectedFontItem.Variants = Variants;
+                        
                         var Downloader = new FontFilesDownloader();
                         Task FileToDownload = Downloader.Download(SelectedFontItem, FolderName, WOFF2.Checked);
                         await FileToDownload;
@@ -173,6 +172,7 @@ namespace Fonts_Downloader
                                 }
                             }
                         }
+                 
                         else if (FileToDownload.IsFaulted)
                         {
                             MessageBox.Show("Download failed ");
@@ -186,7 +186,6 @@ namespace Fonts_Downloader
             }
             else
                 NoInternetAvailable();
-
         }
         private static void ShowGitRepo(object sender, EventArgs e)
         {
