@@ -15,7 +15,7 @@ namespace Fonts_Downloader
                 { "700", "Bold" }, { "800", "ExtraBold" },
                 { "900", "Black" },
             };
-            var FontFileStyle = FontFileStyles.GetValueOrDefault(weight.Replace("italic", ""));
+            var FontFileStyle = FontFileStyles.GetValueOrDefault(weight.Replace(" italic", ""));
             return FontFileStyle;
         }
         public static string MapVariant(string variant)
@@ -23,7 +23,7 @@ namespace Fonts_Downloader
             return variant switch
             {
                 "regular" => "400",
-                "italic" => "400italic",
+                "400 italic" => "400italic",
                 _ => variant,
             };
         }
