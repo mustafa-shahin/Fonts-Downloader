@@ -11,9 +11,7 @@ namespace Fonts_Downloader
         private const string Path = @"C:\FontDownloader";
         private const string LoremIpsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua";
         private const string GoogleFontLinkTemplate = "<link href=\"https://fonts.googleapis.com/css2?family={0}:{1}&display=swap\" rel=\"stylesheet\">";
-        private const string FontFamilyStyle = "font-family: {0}, sans-serif;";
-        private const string BodyStyle = "body{{\nbackground: #212124;\n{0}\ncolor: #b9b9b9;\n}}";
-
+        private const string DocumentStart = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset =\"UTF-8\">\n<meta name =\"viewport\" content=\"width=device-width, initial-scale=1.0\">";
         public static void DefaultHtml(Root Error = null)
         {
             string message;
@@ -30,12 +28,12 @@ namespace Fonts_Downloader
             if (!Directory.Exists(Path))
                 Directory.CreateDirectory(Path);
 
-            string defaultHtml = $@"
-                <head>
+            string defaultHtml = $@"{DocumentStart}
+                                    <title>Google Fonts Downloader</title >
                     <link href=""https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap"" rel=""stylesheet"">
                     <style>
                         body {{
-                            {string.Format(FontFamilyStyle, "'Roboto'")}
+                            font-family: 'Roboto', 'sans-serif';
                             color: #b9b9b9 !important;
                             text-align: center !important;
                             background: #212124;
@@ -46,7 +44,7 @@ namespace Fonts_Downloader
                     </style>
                 </head>
                 <body>
-                    <h1>Fonts Downloader </h1>
+                    <h1>Google Fonts Downloader </h1>
                     {message}
                 </body>";
 
@@ -65,10 +63,10 @@ namespace Fonts_Downloader
                                   .ToList();
             var normalVariants = selectedFont.Variants.Select(FontFileStyles.MapVariant).Where(m => !m.Contains("italic")).ToList();
 
-            var documentStart = $"<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset =\"UTF-8\">\n<meta name =\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>{selectedFont}</title >\n</head>";
+            var documentStart = $"{DocumentStart}\n<title>{selectedFont}</title >\n</head>";
             var googleFontLinkItalics = string.Format(GoogleFontLinkTemplate, selectedFont.Family, $"ital,wght@{string.Join(";", italicVariants)}");
             var googleFontLinkNormals = string.Format(GoogleFontLinkTemplate, selectedFont.Family, $"wght@{string.Join(";", normalVariants)}");
-            var bodyStyle = string.Format(BodyStyle, $"{string.Format(FontFamilyStyle, $"'{selectedFont.Family}'")}");
+            var bodyStyle = $"body{{\nbackground: #212124;\ncolor: #fff;\n" + $"font-family:\"{selectedFont.Family}\"}}";
 
             var htmlContent = new StringBuilder();
             htmlContent.AppendLine(documentStart);
