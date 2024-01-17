@@ -14,7 +14,7 @@ namespace Fonts_Downloader
     {
         private List<Item> Items;
         private string FolderName;
-        private string SelectedFont;
+        private string SelectedFontFamily;
         private Point Offset;
         private Item SelectedFontItem;
         private readonly WebFonts Fonts = new();
@@ -51,19 +51,21 @@ namespace Fonts_Downloader
         }
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            SelectedFont = FontBox1.SelectedItem?.ToString();
-            if (!string.IsNullOrEmpty(SelectedFont) && !(SelectedFont == PreviousFont && SubsetsLists.Items.Count > 0))
+            SelectedFontFamily = FontBox1.SelectedItem?.ToString();
+            if (!string.IsNullOrEmpty(SelectedFontFamily) && SelectedFontFamily != PreviousFont)
             {
-                if (!string.IsNullOrEmpty(PreviousFont) && PreviousFont != SelectedFont)
+                if (!string.IsNullOrEmpty(PreviousFont))
                 {
                     SubsetsLists.Items.Clear();
                     SizeAndStyle.Items.Clear();
                     Minify.Visible = true;
                 }
-                SelectedFontLabel.Text = SelectedFont;
+                SelectedFontLabel.Text = SelectedFontFamily;
                 if (Items is not null && Items.Any())
                     SelectedFontItem = Items.FirstOrDefault(m => m.Family == SelectedFontLabel.Text);
+
                 SubsetsLists.Items.AddRange(SelectedFontItem.Subsets.Select(m => char.ToUpper(m[0]) + m[1..]).ToArray());
+
                 if (SelectedFontItem.Variants is not null && SelectedFontItem.Variants.Any())
                 {
                     SizeAndStyle.Items.AddRange(SelectedFontItem.Variants.Select(FontFileStyles.MapVariant)
@@ -73,10 +75,9 @@ namespace Fonts_Downloader
                                                             .ToArray());
                     HtmlFile.CreateHtml(SelectedFontItem);
                 }
-
-            }
-            PreviousFont = SelectedFont;
-            webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
+                PreviousFont = SelectedFontFamily;
+                webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
+            }         
         }
         private async void TextBox2_TextChanged(object sender, EventArgs e)
         {
@@ -139,6 +140,8 @@ namespace Fonts_Downloader
             {
                 if (!string.IsNullOrEmpty(FolderName))
                 {
+                    var SelectedFont = SelectedFontItem;
+                    SelectedFont.Variants = SizeAndStyle.CheckedItems.Cast<string>().Where(m => !string.IsNullOrEmpty(m)).ToList();
                     SelectedFontItem.Variants = SizeAndStyle.CheckedItems.Cast<string>().ToList();
                     if (SelectedFontItem.Variants != null && SelectedFontItem.Variants.Any())
                     {
@@ -146,15 +149,15 @@ namespace Fonts_Downloader
                         var Subsets = SubsetsLists.CheckedItems.Cast<string>().ToList();
 
                         if (SubsetsLists.CheckedItems.Count > 0)
-                            Css.CreateCSS(SelectedFontItem, FolderName, WOFF2.Checked, false, Subsets);
+                            Css.CreateCSS(SelectedFont, FolderName, WOFF2.Checked, false, Subsets);
                         else if (Minify.Checked)
-                            Css.CreateCSS(SelectedFontItem, FolderName, WOFF2.Checked, Minify.Checked);
+                            Css.CreateCSS(SelectedFont, FolderName, WOFF2.Checked, Minify.Checked);
                         else
-                            Css.CreateCSS(SelectedFontItem, FolderName, WOFF2.Checked);
+                            Css.CreateCSS(SelectedFont, FolderName, WOFF2.Checked);
 
                         
                         var Downloader = new FontFilesDownloader();
-                        Task FileToDownload = Downloader.Download(SelectedFontItem, FolderName, WOFF2.Checked);
+                        Task FileToDownload = Downloader.Download(SelectedFont, FolderName, WOFF2.Checked);
                         await FileToDownload;
                         if (FileToDownload.Status == TaskStatus.RanToCompletion)
                         {
@@ -163,7 +166,7 @@ namespace Fonts_Downloader
                             {
                                 try
                                 {
-                                    var FolderToOpen = Path.Combine(FolderName, SelectedFont.Replace(" ", ""));
+                                    var FolderToOpen = Path.Combine(FolderName, SelectedFontFamily.Replace(" ", ""));
                                     Process.Start("explorer.exe", FolderToOpen);
                                 }
                                 catch (Exception ex)

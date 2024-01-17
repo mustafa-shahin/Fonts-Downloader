@@ -36,7 +36,7 @@ namespace Fonts_Downloader
             var CssList = new List<string>();
             if(selectedFont.Variants is not null && selectedFont.Variants.Any())
             {
-                foreach (var variant in selectedFont.Variants.Where(v => !string.IsNullOrEmpty(v)).Select(variant => variant.Replace(" ", "")))
+                foreach (var variant in selectedFont.Variants.Select(variant => variant.Replace(" ", "")))
                 {
                     var FontFileStyle = FontFileStyles.GetFontFileStyles(variant);
                     if (subsets is not null && subsets.Any())
