@@ -11,43 +11,37 @@ namespace Fonts_Downloader
     {
         public void CreateCSS(Item selectedFont, string folderName, bool woff, bool minify = false, IEnumerable<string> subsets = null)
         {
-            if(selectedFont is not null)
+            var CssList = GenerateCssList(selectedFont, woff, subsets);
+
+            if (CssList is not null && CssList.Any())
             {
-                var CssList = GenerateCssList(selectedFont, woff, subsets);
+                string fontFolder = Path.Combine(folderName, selectedFont.Family.Replace(" ", ""));
+                if (!Directory.Exists(fontFolder))
+                    Directory.CreateDirectory(fontFolder);
 
-                if (CssList is not null && CssList.Any())
-                {
-                    string fontFolder = Path.Combine(folderName, selectedFont.Family.Replace(" ", ""));
-                    if (!Directory.Exists(fontFolder))
-                        Directory.CreateDirectory(fontFolder);
+                string cssFilePath = Path.Combine(fontFolder, $"{selectedFont.Family.Replace(" ", "")}{(minify ? ".min" : "")}.css");
+                string cssContent = string.Join("\n", CssList);
 
-                    string cssFilePath = Path.Combine(fontFolder, $"{selectedFont.Family.Replace(" ", "")}{(minify ? ".min" : "")}.css");
-                    string cssContent = string.Join("\n", CssList);
+                if (minify)
+                    cssContent = Uglify.Css(cssContent).ToString();
 
-                    if (minify)
-                        cssContent = Uglify.Css(cssContent).ToString();
-
-                    File.WriteAllText(cssFilePath, cssContent);
-                }
+                File.WriteAllText(cssFilePath, cssContent);
             }
         }
         private List<string> GenerateCssList(Item selectedFont, bool woff, IEnumerable<string> subsets = null)
         {
             var CssList = new List<string>();
-            if(selectedFont.Variants is not null && selectedFont.Variants.Any())
+            foreach (var variant in selectedFont.Variants.Select(variant => variant.Replace(" ", "")))
             {
-                foreach (var variant in selectedFont.Variants.Select(variant => variant.Replace(" ", "")))
+                var FontFileStyle = FontFileStyles.GetFontFileStyles(variant);
+                if (subsets is not null && subsets.Any())
                 {
-                    var FontFileStyle = FontFileStyles.GetFontFileStyles(variant);
-                    if (subsets is not null && subsets.Any())
-                    {
-                        foreach (var subset in subsets)
-                            CssList.Add(GenerateFontFaceCss(selectedFont.Family, variant, woff, subset.ToLower()));
-                    }
-                    else
-                        CssList.Add(GenerateFontFaceCss(selectedFont.Family, variant, woff));
+                    foreach (var subset in subsets)
+                        CssList.Add(GenerateFontFaceCss(selectedFont.Family, variant, woff, subset.ToLower()));
                 }
-            }       
+                else
+                    CssList.Add(GenerateFontFaceCss(selectedFont.Family, variant, woff));
+            }
             return CssList;
         }
 

@@ -22,7 +22,7 @@ namespace Fonts_Downloader
                                : "<h1 style=\"color:#9b2b22;\">Check your internet connection and restart the program</h1>\n<h2>Click on the image to refresh</h2>";
             }
             else
-                message = $"<html><body style=\" background: #212124;\">\n<h1 style=\"color:#9b2b22;text-align: center;\">{Error.Error.Message}</h1>\n></body>\n</html>";
+                message = $"<html><body style=\" background: #212124;\">\n<h1 style=\"color:#9b2b22;text-align: center;\">{Error.Error.Message}</h1>\n</body>\n</html>";
 
             if (!Directory.Exists(Path))
                 Directory.CreateDirectory(Path);

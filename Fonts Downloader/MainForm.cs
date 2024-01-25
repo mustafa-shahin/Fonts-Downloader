@@ -77,7 +77,7 @@ namespace Fonts_Downloader
                 }
                 PreviousFont = SelectedFontFamily;
                 webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
-            }         
+            }
         }
         private async void TextBox2_TextChanged(object sender, EventArgs e)
         {
@@ -94,7 +94,6 @@ namespace Fonts_Downloader
                     try
                     {
                         Items = await Fonts.GetWebFontsAsync(ApiKeyBox.Text, false);
-
                         if (Api.Succeeded)
                         {
                             if (Items != null && Items.Any())
@@ -104,6 +103,13 @@ namespace Fonts_Downloader
                                 TTF.Visible = true;
                                 FontBox1.Enabled = true;
                                 Minify.Visible = true;
+                                if(Fonts.Error is not null)
+                                {
+                                    HtmlFile.DefaultHtml();
+                                    webView21.Reload();
+                                    Fonts.Error = null;
+                                }
+                                
                             }
                         }
                         else
@@ -136,60 +142,67 @@ namespace Fonts_Downloader
         }
         private async void CopyFont_Click(object sender, EventArgs e)
         {
-            if (Api.IsInternetAvailable() || Api.IsNetworkAvailable())
+            if (!(Api.IsInternetAvailable() || Api.IsNetworkAvailable()))
             {
-                if (!string.IsNullOrEmpty(FolderName))
-                {
-                    var SelectedFont = SelectedFontItem;
-                    SelectedFont.Variants = SizeAndStyle.CheckedItems.Cast<string>().Where(m => !string.IsNullOrEmpty(m)).ToList();
-                    SelectedFontItem.Variants = SizeAndStyle.CheckedItems.Cast<string>().ToList();
-                    if (SelectedFontItem.Variants != null && SelectedFontItem.Variants.Any())
-                    {
-                        var Css = new CssFile();
-                        var Subsets = SubsetsLists.CheckedItems.Cast<string>().ToList();
-
-                        if (SubsetsLists.CheckedItems.Count > 0)
-                            Css.CreateCSS(SelectedFont, FolderName, WOFF2.Checked, false, Subsets);
-                        else if (Minify.Checked)
-                            Css.CreateCSS(SelectedFont, FolderName, WOFF2.Checked, Minify.Checked);
-                        else
-                            Css.CreateCSS(SelectedFont, FolderName, WOFF2.Checked);
-
-                        
-                        var Downloader = new FontFilesDownloader();
-                        Task FileToDownload = Downloader.Download(SelectedFont, FolderName, WOFF2.Checked);
-                        await FileToDownload;
-                        if (FileToDownload.Status == TaskStatus.RanToCompletion)
-                        {
-                            DialogResult dialogResult = MessageBox.Show("The Download has been completed. Do you want to check downloaded files? ", "Download completed", MessageBoxButtons.YesNo);
-                            if (dialogResult == DialogResult.Yes)
-                            {
-                                try
-                                {
-                                    var FolderToOpen = Path.Combine(FolderName, SelectedFontFamily.Replace(" ", ""));
-                                    Process.Start("explorer.exe", FolderToOpen);
-                                }
-                                catch (Exception ex)
-                                {
-                                    MessageBox.Show($"Error opening folder: {ex.Message}");
-                                }
-                            }
-                        }
-                 
-                        else if (FileToDownload.IsFaulted)
-                        {
-                            MessageBox.Show("Download failed ");
-                        }
-                    }
-                    else
-                        MessageBox.Show("Please choose a variant ");
-                }
-                else
-                    MessageBox.Show("Please select a folder");
-            }
-            else
                 NoInternetAvailable();
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(FolderName))
+            {
+                MessageBox.Show("Please select a folder");
+                return;
+            }
+            if (SizeAndStyle.CheckedItems.Count == 0)
+            {
+                MessageBox.Show("Please choose a variant");
+                return;
+            }
+            if (SelectedFontItem is not null && SelectedFontItem.Variants is not null && SelectedFontItem.Variants.Any())
+            {
+                var selectedFont = SelectedFontItem;
+                selectedFont.Variants = SizeAndStyle.CheckedItems.Cast<string>().Where(m => !string.IsNullOrEmpty(m)).ToList();
+                if (selectedFont is not null && selectedFont.Variants != null && selectedFont.Variants.Any())
+                {
+                    var css = new CssFile();
+                    var subsets = SubsetsLists.CheckedItems.Cast<string>().ToList();
+
+                    if (subsets.Count > 0)
+                        css.CreateCSS(selectedFont, FolderName, WOFF2.Checked, false, subsets);
+                    else if (Minify.Checked)
+                        css.CreateCSS(selectedFont, FolderName, WOFF2.Checked, Minify.Checked);
+                    else
+                        css.CreateCSS(selectedFont, FolderName, WOFF2.Checked);
+
+                    var downloader = new FontFilesDownloader();
+                    try
+                    {
+                        await downloader.Download(selectedFont, FolderName, WOFF2.Checked);
+                        OpenDownloadFolder(FolderName, selectedFont.Family.Replace(" ", ""));
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Download failed: {ex.Message}");
+                    }
+                }
+            }
         }
+        private static void OpenDownloadFolder(string folderName, string fontFolderName)
+        {
+            try
+            {
+                DialogResult dialogResult = MessageBox.Show("The Download has been completed. Do you want to check downloaded files? ", "Download completed", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    var folderToOpen = Path.Combine(folderName, fontFolderName);
+                    Process.Start("explorer.exe", folderToOpen);
+                }                
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show($"Error opening folder: {ex.Message}");
+            }
+        }
+
         private static void ShowGitRepo(object sender, EventArgs e)
         {
             try

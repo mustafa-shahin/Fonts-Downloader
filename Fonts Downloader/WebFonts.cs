@@ -49,6 +49,7 @@ namespace Fonts_Downloader
 
         public Root Error
         {
+            set { _Error = value; }
             get {return _Error;}
         }
     }
