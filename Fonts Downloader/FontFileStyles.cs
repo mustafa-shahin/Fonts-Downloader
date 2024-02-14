@@ -1,21 +1,24 @@
-﻿using NUglify.JavaScript.Syntax;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Fonts_Downloader
 {
     public  class FontFileStyles
     {
+        private static readonly Dictionary<string, string> FontWeights = new()
+        {
+            ["100"] = "Thin",
+            ["200"] = "ExtraLight",
+            ["300"] = "Light",
+            ["400"] = "Regular",
+            ["500"] = "Medium",
+            ["600"] = "SemiBold",
+            ["700"] = "Bold",
+            ["800"] = "ExtraBold",
+            ["900"] = "Black",
+        };
         public static string GetFontFileStyles(string weight)
         {
-            var FontFileStyles = new Dictionary<string, string>
-            {
-                { "100", "Thin" }, { "200", "ExtraLight" },
-                { "300", "Light" },  { "400", "Regular" },
-                { "500", "Medium" }, { "600", "SemiBold" },
-                { "700", "Bold" }, { "800", "ExtraBold" },
-                { "900", "Black" },
-            };
-            var FontFileStyle = FontFileStyles.GetValueOrDefault(weight.Replace("italic", ""));
+            var FontFileStyle = FontWeights.GetValueOrDefault(weight.Replace("italic", ""));
             return FontFileStyle;
         }
         public static string MapVariant(string variant)
