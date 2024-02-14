@@ -9,59 +9,58 @@ namespace Fonts_Downloader
 {
     internal class CssFile
     {
-        public void CreateCSS(Item selectedFont, string folderName, bool woff, bool minify = false, IEnumerable<string> subsets = null)
+        public void CreateCSS(Item selectedFont, string folderName, bool includeWoff2, bool minify = false, IEnumerable<string> subsets = null)
         {
-            var CssList = GenerateCssList(selectedFont, woff, subsets);
+            var cssEntries = GenerateCssEntries(selectedFont, includeWoff2, subsets);
 
-            if (CssList is not null && CssList.Any())
+            if (cssEntries is not null && cssEntries.Any())
             {
                 string fontFolder = Path.Combine(folderName, selectedFont.Family.Replace(" ", ""));
                 if (!Directory.Exists(fontFolder))
                     Directory.CreateDirectory(fontFolder);
 
-                string cssFilePath = Path.Combine(fontFolder, $"{selectedFont.Family.Replace(" ", "")}{(minify ? ".min" : "")}.css");
-                string cssContent = string.Join("\n", CssList);
+                string cssFileName = $"{selectedFont.Family.Replace(" ", "")}{(minify ? ".min" : "")}.css";
+                string cssFilePath = Path.Combine(fontFolder, cssFileName);
+                string cssContent = string.Join(Environment.NewLine, cssEntries);
 
                 if (minify)
-                    cssContent = Uglify.Css(cssContent).ToString();
+                {
+                    var result = Uglify.Css(cssContent);
+                    if (result.HasErrors)
+                        throw new Exception("CSS Minification failed.");
+
+                    cssContent = result.Code;
+                }
 
                 File.WriteAllText(cssFilePath, cssContent);
             }
         }
-        private List<string> GenerateCssList(Item selectedFont, bool woff, IEnumerable<string> subsets = null)
+        private IEnumerable<string> GenerateCssEntries(Item selectedFont, bool includeWoff2, IEnumerable<string> subsets = null)
         {
-            var CssList = new List<string>();
-            foreach (var variant in selectedFont.Variants.Select(variant => variant.Replace(" ", "")))
-            {
-                var FontFileStyle = FontFileStyles.GetFontFileStyles(variant);
-                if (subsets is not null && subsets.Any())
-                {
-                    foreach (var subset in subsets)
-                        CssList.Add(GenerateFontFaceCss(selectedFont.Family, variant, woff, subset.ToLower()));
-                }
-                else
-                    CssList.Add(GenerateFontFaceCss(selectedFont.Family, variant, woff));
-            }
-            return CssList;
+            return selectedFont.Variants.SelectMany(variant =>
+                (subsets?.Any() ?? false) ? subsets.Select(subset => GenerateFontFace(selectedFont.Family, variant, includeWoff2, subset)) :
+                new[] { GenerateFontFace(selectedFont.Family, variant, includeWoff2) });
         }
 
-        private string GenerateFontFaceCss(string fontName, string fontWeight, bool woff2, string subset = null)
+        private string GenerateFontFace(string fontFamily, string fontWeight, bool woff2, string subset = null)
         {
-            var fontStyle = fontWeight.Contains("italic") ? "italic" : "normal";
-            var subsetComment = !string.IsNullOrEmpty(subset) ? $"/*{subset}*/\n" : "";
-            var fontFileName = FontFileStyles.FontFileName(fontName, woff2, fontWeight);
-            var formatAttribute = woff2 ? "format('woff2')" : "";
-            var cssBuilder = new StringBuilder();
-            cssBuilder.AppendLine($"{subsetComment}@font-face {{")
-                      .AppendLine($"font-family: '{fontName}';")
-                      .AppendLine($"font-style: {fontStyle};")
-                      .AppendLine($"font-weight: {FontFileStyles.MapVariant(fontWeight).Replace("italic", "")};")
-                      .AppendLine("font-display: swap;")
-                      .AppendLine($"font-stretch: 100%;")
-                      .AppendLine($"src: url('{fontFileName}') {formatAttribute};")
-                      .AppendLine("}");
+            string fontStyle = fontWeight.Contains("italic") ? "italic" : "normal";
+            string subsetComment = subset != null ? $"/*{subset}*/\n" : string.Empty;
+            string fontFileName = FontFileStyles.FontFileName(fontFamily, woff2, fontWeight);
+            string formatAttribute = woff2 ? " format('woff2')" : string.Empty;
+            string fontVariant = FontFileStyles.MapVariant(fontWeight).TrimEnd("italic".ToCharArray());
+            var cssBuilder = new StringBuilder()
+                .AppendLine($"{subsetComment}@font-face {{")
+                .AppendLine($"font-family: '{fontFamily}';")
+                .AppendLine($"font-style: {fontStyle};")
+                .AppendLine($"font-weight: {fontVariant};")
+                .AppendLine("font-display: swap;")
+                .AppendLine("font-stretch: normal;")
+                .AppendLine($"src: url('{fontFileName}'){formatAttribute};")
+                .AppendLine("}");
 
             return cssBuilder.ToString();
         }
+
     }
 }
