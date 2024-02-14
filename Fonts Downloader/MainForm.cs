@@ -77,6 +77,9 @@ namespace Fonts_Downloader
                 }
                 PreviousFont = SelectedFontFamily;
                 webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
+
+                if(Minify.Enabled == false)
+                    Minify.Enabled = true;
             }
         }
         private async void TextBox2_TextChanged(object sender, EventArgs e)
@@ -161,22 +164,24 @@ namespace Fonts_Downloader
             {
                 var selectedFont = SelectedFontItem;
                 selectedFont.Variants = SizeAndStyle.CheckedItems.Cast<string>().Where(m => !string.IsNullOrEmpty(m)).ToList();
-                if (selectedFont is not null && selectedFont.Variants != null && selectedFont.Variants.Any())
+                if (selectedFont.Variants is not null && selectedFont.Variants.Any())
                 {
                     var css = new CssFile();
                     var subsets = SubsetsLists.CheckedItems.Cast<string>().ToList();
 
-                    if (subsets.Count > 0)
+                    if (subsets is not null && subsets.Any())
                         css.CreateCSS(selectedFont, FolderName, WOFF2.Checked, false, subsets);
                     else if (Minify.Checked)
                         css.CreateCSS(selectedFont, FolderName, WOFF2.Checked, Minify.Checked);
                     else
                         css.CreateCSS(selectedFont, FolderName, WOFF2.Checked);
 
-                    var downloader = new FontFilesDownloader();
                     try
                     {
-                        await downloader.Download(selectedFont, FolderName, WOFF2.Checked);
+                        using (var downloader = new FontFilesDownloader())
+                        {
+                            await downloader.DownloadAsync(selectedFont, FolderName, WOFF2.Checked);
+                        }
                         OpenDownloadFolder(FolderName, selectedFont.Family.Replace(" ", ""));
                     }
                     catch (Exception ex)
