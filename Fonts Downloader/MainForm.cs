@@ -36,6 +36,13 @@ namespace Fonts_Downloader
             WOFF2.Visible = false;
             FontBox1.Enabled = false;
             Minify.Visible = false;
+#if DEBUG
+            string keyPath = "C:/Users/musta/Desktop/key.txt";
+            if (File.Exists(keyPath))
+            {
+                ApiKeyBox.Text  = File.ReadAllText(keyPath);
+            }
+#endif
         }
         private void SelectFolder_Click(object sender, EventArgs e)
         {
@@ -84,6 +91,7 @@ namespace Fonts_Downloader
         }
         private async void TextBox2_TextChanged(object sender, EventArgs e)
         {
+
             if (!string.IsNullOrEmpty(ApiKeyBox.Text))
             {
                 if (Api.IsInternetAvailable() || Api.IsNetworkAvailable())
