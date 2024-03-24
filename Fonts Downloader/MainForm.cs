@@ -29,20 +29,29 @@ namespace Fonts_Downloader
             webView21.EnsureCoreWebView2Async();
             webView21.BackColor = Color.FromArgb(32, 33, 36);
             webView21.Source = new Uri("file:///C:/FontDownloader/index.html");
-            HtmlFile.DefaultHtml();
-            if (!Api.IsInternetAvailable() || !Api.IsNetworkAvailable())
-                NoInternet.Visible = true;
-            TTF.Visible = false;
-            WOFF2.Visible = false;
-            FontBox1.Enabled = false;
-            Minify.Visible = false;
+            if (Helper.IsInternetAvailable() || Helper.IsNetworkAvailable())
+            {                                         
+                HtmlFile.DefaultHtml();
+                //if (!Helper.IsInternetAvailable() || !Helper.IsNetworkAvailable())
+                //    NoInternet.Visible = true;
+                TTF.Visible = false;
+                WOFF2.Visible = false;
+                FontBox1.Enabled = false;
+                Minify.Visible = false;
 #if DEBUG
-            string keyPath = "C:/Users/musta/Desktop/key.txt";
-            if (File.Exists(keyPath))
-            {
-                ApiKeyBox.Text  = File.ReadAllText(keyPath);
-            }
+
+                string keyPath = "C:/Users/musta/Desktop/key.txt";
+                if (File.Exists(keyPath))
+                {
+                    ApiKeyBox.Text = File.ReadAllText(keyPath);
+                }
+                FolderName = "C:/Users/musta/Desktop/GoogleFonts";
+                SelectedFolder.Text = FolderName;
 #endif
+            }
+            else
+                NoInternetAvailable();
+
         }
         private void SelectFolder_Click(object sender, EventArgs e)
         {
@@ -75,7 +84,7 @@ namespace Fonts_Downloader
 
                 if (SelectedFontItem.Variants is not null && SelectedFontItem.Variants.Any())
                 {
-                    SizeAndStyle.Items.AddRange(SelectedFontItem.Variants.Select(FontFileStyles.MapVariant)
+                    SizeAndStyle.Items.AddRange(SelectedFontItem.Variants.Select(Helper.MapVariant)
                                                             .OrderBy(variant => variant.EndsWith("italic"))
                                                             .ThenBy(variant => variant)
                                                             .Select(variant => variant.Replace("italic", " italic"))
@@ -94,7 +103,7 @@ namespace Fonts_Downloader
 
             if (!string.IsNullOrEmpty(ApiKeyBox.Text))
             {
-                if (Api.IsInternetAvailable() || Api.IsNetworkAvailable())
+                if (Helper.IsInternetAvailable() || Helper.IsNetworkAvailable())
                 {
                     if (NoInternet.Visible)
                     {
@@ -153,7 +162,7 @@ namespace Fonts_Downloader
         }
         private async void CopyFont_Click(object sender, EventArgs e)
         {
-            if (!(Api.IsInternetAvailable() || Api.IsNetworkAvailable()))
+            if (!(Helper.IsInternetAvailable() || Helper.IsNetworkAvailable()))
             {
                 NoInternetAvailable();
                 return;
@@ -259,7 +268,7 @@ namespace Fonts_Downloader
         private async void TTF_Checked(object sender, EventArgs e) => await HandleFontTypeChecked(TTF, WOFF2);
         private async Task HandleFontTypeChecked(CheckBox checkedBox, CheckBox otherBox)
         {
-            if (Api.IsNetworkAvailable() || Api.IsInternetAvailable())
+            if (Helper.IsNetworkAvailable() || Helper.IsInternetAvailable())
             {
                 if (checkedBox.Checked)
                 {
@@ -305,13 +314,12 @@ namespace Fonts_Downloader
         {
             NoInternet.Visible = true;
             HtmlFile.DefaultHtml();
-            webView21.Reload();
             MessageBox.Show("Check your internet connection");
         }
 
         private void NoInternet_Click(object sender, EventArgs e)
         {
-            if (Api.IsInternetAvailable() || Api.IsNetworkAvailable())
+            if (Helper.IsInternetAvailable() || Helper.IsNetworkAvailable())
             {
                 if (SelectedFontItem is not null)
                     HtmlFile.CreateHtml(SelectedFontItem);

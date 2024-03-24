@@ -16,7 +16,7 @@ namespace Fonts_Downloader
             string message;
             if (Error is null)
             {
-                 message = (Api.IsInternetAvailable() || Api.IsNetworkAvailable())
+                 message = (Helper.IsInternetAvailable() || Helper.IsNetworkAvailable())
                             ? "<h3>The program will create a folder named FontDownloader on the C drive to render the fonts.</h3>" +
                              "<h3 style=\"color:#9b2b22;\"> Please select whether you want TTF or WOFF2 files by checking one of the boxes above</h3>"
                                : "<h1 style=\"color:#9b2b22;\">Check your internet connection and restart the program</h1>\n<h2>Click on the image to refresh</h2>";
@@ -54,11 +54,11 @@ namespace Fonts_Downloader
             var tags = new StringBuilder();
             var styles = new StringBuilder();
 
-            var italicVariants = selectedFont.Variants.Select(FontFileStyles.MapVariant)
+            var italicVariants = selectedFont.Variants.Select(Helper.MapVariant)
                                   .Where(v => v.Contains("italic"))
                                   .Select(v => $"1,{v.Replace("italic", "")}")
                                   .ToList();
-            var normalVariants = selectedFont.Variants.Select(FontFileStyles.MapVariant).Where(m => !m.Contains("italic")).ToList();
+            var normalVariants = selectedFont.Variants.Select(Helper.MapVariant).Where(m => !m.Contains("italic")).ToList();
 
             var documentStart = $"{DocumentStart}\n<title>{selectedFont}</title >\n</head>";
             var googleFontLinkItalics = string.Format(GoogleFontLinkTemplate, selectedFont.Family, $"ital,wght@{string.Join(";", italicVariants)}");
@@ -90,7 +90,7 @@ namespace Fonts_Downloader
         {
             foreach (string variant in variants)
             {
-                var fontFileStyle = FontFileStyles.GetFontFileStyles(variant.Replace("1,", ""));
+                var fontFileStyle = Helper.GetFontFileStyles(variant.Replace("1,", ""));
                 tags.AppendLine($"<h1 class ='size{variant.Replace("1,", "")}{variantType}'> \n{selectedFont} {variant.Replace("1,", "")} - {variantType} - {fontFileStyle}\n</h1>")
                     .AppendLine($"<p class = 'size{variant.Replace("1,", "")}{variantType}'>\n{LoremIpsum}\n</p>")
                     .AppendLine("<div class = \"separator\"></div>");

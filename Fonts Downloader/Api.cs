@@ -32,44 +32,6 @@ namespace Fonts_Downloader
         {
             public string Response { get; set; }
         }
-
-        public static bool IsInternetAvailable()
-        {
-            try
-            {
-                using var Ping = new Ping();
-                var result = Ping.Send("www.google.com");
-                return (result.Status == IPStatus.Success);
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        public static bool IsNetworkAvailable()
-        {
-            try
-            {
-                NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
-
-                foreach (NetworkInterface networkInterface in networkInterfaces)
-                {
-                    if (networkInterface.OperationalStatus == OperationalStatus.Up &&
-                        (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 ||
-                         networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet) &&
-                        networkInterface.Supports(NetworkInterfaceComponent.IPv4))
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
     }
 }
 
