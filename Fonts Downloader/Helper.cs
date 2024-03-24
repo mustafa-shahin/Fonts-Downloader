@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.NetworkInformation;
 
 namespace Fonts_Downloader
 {
-    public  class FontFileStyles
+    public  class Helper
     {
         private static readonly Dictionary<string, string> FontWeights = new()
         {
@@ -38,5 +40,43 @@ namespace Fonts_Downloader
             var format = woff2 ? "woff2" : "ttf";
             return $"{fontName.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle[1..]}-{fontFileStyle}.{format}";
         }
+        public static bool IsInternetAvailable()
+        {
+            try
+            {
+                using var Ping = new Ping();
+                var result = Ping.Send("www.google.com");
+                return (result.Status == IPStatus.Success);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public static bool IsNetworkAvailable()
+        {
+            try
+            {
+                NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+
+                foreach (NetworkInterface networkInterface in networkInterfaces)
+                {
+                    if (networkInterface.OperationalStatus == OperationalStatus.Up &&
+                        (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 ||
+                         networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet) &&
+                        networkInterface.Supports(NetworkInterfaceComponent.IPv4))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
     }
 }

@@ -21,12 +21,12 @@ namespace Fonts_Downloader
         {
             foreach (var variant in selectedFont.Variants.Select(v => v.Replace(" ", "")))
             {
-                var fontFileStyle = FontFileStyles.GetFontFileStyles(variant) ?? variant;
-                var propertyValue = selectedFont.Files.GetType().GetProperty($"_{FontFileStyles.MapVariant(variant)}")?.GetValue(selectedFont.Files) as string;
+                var fontFileStyle = Helper.GetFontFileStyles(variant) ?? variant;
+                var propertyValue = selectedFont.Files.GetType().GetProperty($"_{Helper.MapVariant(variant)}")?.GetValue(selectedFont.Files) as string;
 
                 if (!string.IsNullOrEmpty(propertyValue))
                 {
-                    string FileName = Path.Combine(folderName, selectedFont.Family.Replace(" ", ""), $"{FontFileStyles.FontFileName(selectedFont.Family, woff2, variant)}");
+                    string FileName = Path.Combine(folderName, selectedFont.Family.Replace(" ", ""), $"{Helper.FontFileName(selectedFont.Family, woff2, variant)}");
                     Uri url = new(propertyValue);
 
                     if (!File.Exists(FileName))

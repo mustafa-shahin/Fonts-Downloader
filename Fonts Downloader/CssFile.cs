@@ -46,9 +46,9 @@ namespace Fonts_Downloader
         {
             string fontStyle = fontWeight.Contains("italic") ? "italic" : "normal";
             string subsetComment = subset != null ? $"/*{subset}*/\n" : string.Empty;
-            string fontFileName = FontFileStyles.FontFileName(fontFamily, woff2, fontWeight);
+            string fontFileName = Helper.FontFileName(fontFamily, woff2, fontWeight);
             string formatAttribute = woff2 ? " format('woff2')" : string.Empty;
-            string fontVariant = FontFileStyles.MapVariant(fontWeight).TrimEnd("italic".ToCharArray());
+            string fontVariant = Helper.MapVariant(fontWeight).TrimEnd("italic".ToCharArray());
             var cssBuilder = new StringBuilder()
                 .AppendLine($"{subsetComment}@font-face {{")
                 .AppendLine($"font-family: '{fontFamily}';")
