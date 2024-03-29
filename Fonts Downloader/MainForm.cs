@@ -45,7 +45,7 @@ namespace Fonts_Downloader
                 {
                     ApiKeyBox.Text = File.ReadAllText(keyPath);
                 }
-                FolderName = "C:/Users/musta/Desktop/GoogleFonts";
+                FolderName = "C:\\Users\\musta\\Desktop\\GoogleFonts";
                 SelectedFolder.Text = FolderName;
 #endif
             }
@@ -186,13 +186,7 @@ namespace Fonts_Downloader
                     var css = new CssFile();
                     var subsets = SubsetsLists.CheckedItems.Cast<string>().ToList();
 
-                    if (subsets is not null && subsets.Any())
-                        css.CreateCSS(selectedFont, FolderName, WOFF2.Checked, false, subsets);
-                    else if (Minify.Checked)
-                        css.CreateCSS(selectedFont, FolderName, WOFF2.Checked, Minify.Checked);
-                    else
-                        css.CreateCSS(selectedFont, FolderName, WOFF2.Checked);
-
+                    css.CreateCSS(selectedFont, FolderName, WOFF2.Checked, Minify.Checked, subsets);
                     try
                     {
                         using (var downloader = new FontFilesDownloader())
