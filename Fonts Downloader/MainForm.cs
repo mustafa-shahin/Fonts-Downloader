@@ -121,6 +121,7 @@ namespace Fonts_Downloader
                                 FontBox1.Items.AddRange(Items.Select(item => item.Family).ToArray());
                                 WOFF2.Visible = true;
                                 TTF.Visible = true;
+                                TTF.Checked = true;
                                 FontBox1.Enabled = true;
                                 Minify.Visible = true;
                                 if(Fonts.Error is not null)
@@ -184,7 +185,7 @@ namespace Fonts_Downloader
                 if (selectedFont.Variants is not null && selectedFont.Variants.Any())
                 {
                     var css = new CssFile();
-                    var subsets = SubsetsLists.CheckedItems.Cast<string>().ToList();
+                    var subsets = SubsetsLists.CheckedItems.Cast<string>().ToArray();
 
                     css.CreateCSS(selectedFont, FolderName, WOFF2.Checked, Minify.Checked, subsets);
                     try
