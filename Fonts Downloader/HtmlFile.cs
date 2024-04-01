@@ -94,7 +94,7 @@ namespace Fonts_Downloader
 #if DEBUG
                 writer.Write(HtmlContent);
 #else
-            writer.WriteLine(Uglify.Html(htmlContent.ToString()));   
+            writer.WriteLine(Uglify.Html(HtmlContent.ToString()));   
 #endif
             
 
