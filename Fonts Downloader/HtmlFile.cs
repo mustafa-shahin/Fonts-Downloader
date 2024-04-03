@@ -59,9 +59,9 @@ namespace Fonts_Downloader
         }
         public static void CreateHtml(Item selectedFont)
         {
-            if(selectedFont is null || selectedFont.Variants is null || !selectedFont.Variants.Any())
+            if (selectedFont is null || selectedFont.Variants is null || !selectedFont.Variants.Any())
             {
-                return; 
+                return;
             }
             var Tags = new StringBuilder();
             var Styles = new StringBuilder();
@@ -71,46 +71,68 @@ namespace Fonts_Downloader
                               .GroupBy(v => v.Contains("italic"))
                               .SelectMany(g => g.Key ? g.Select(v => $"1,{v.Replace("italic", "")}") : [.. g])
                               .ToArray();
-           
-                var documentStart = $"{DocumentStart}\n<title>{selectedFont}</title >\n</head>";
-                var GoogleFontLink = string.Format(GoogleFontLinkTemplate, selectedFont.Family, $"ital,wght@{string.Join(";", AllVariants.Where(m => m.StartsWith("1,")))}")
-                                            + "\n" + string.Format(GoogleFontLinkTemplate, selectedFont.Family, $"wght@{string.Join(";", AllVariants.Where(m => !m.StartsWith("1,")))}");
 
-                var BodyStyle = $"body{{\nbackground: #212124;\ncolor: #b9b9b9;\n" + $"font-family:\"{selectedFont.Family}\"}}";
+            var documentStart = $"{DocumentStart}\n<title>{selectedFont}</title >\n</head>";
+            var GoogleFontLink = string.Format(GoogleFontLinkTemplate, selectedFont.Family, $"ital,wght@{string.Join(";", AllVariants.Where(m => m.StartsWith("1,")))}")
+                                        + "\n" + string.Format(GoogleFontLinkTemplate, selectedFont.Family, $"wght@{string.Join(";", AllVariants.Where(m => !m.StartsWith("1,")))}");
 
-              
-                HtmlContent.AppendLine(documentStart);
+            var BodyStyle = $"body{{\nbackground: #212124;\ncolor: #b9b9b9;\n" + $"font-family:\"{selectedFont.Family}\"}}";
 
-                GenerateTags(AllVariants, selectedFont.Family, Styles, Tags);
-                if(!string.IsNullOrEmpty(GoogleFontLink))
-                    HtmlContent.AppendLine(GoogleFontLink);
 
-                HtmlContent.AppendLine($"</head>\n<style>\n{BodyStyle}\n{Styles.ToString()}")
-                    .AppendLine(".separator{background: #b9b9b9;\r\nheight: 5px;\r\nborder-radius: 5px;}\n</style>\n<body>")
-                    .AppendLine($"{Tags.ToString()}\n</body>\n</html>");
+            HtmlContent.AppendLine(documentStart);
 
-                using StreamWriter writer = new($"{Path}\\index.html", false);
+            GenerateTags(AllVariants, selectedFont.Family, Styles, Tags);
+            if (!string.IsNullOrEmpty(GoogleFontLink))
+                HtmlContent.AppendLine(GoogleFontLink);
+
+            HtmlContent.AppendLine($"</head>\n<style>\n{BodyStyle}\n{Styles.ToString()}")
+                .AppendLine(".separator{background: #b9b9b9;\r\nheight: 5px;\r\nborder-radius: 5px;}\n</style>\n<body>")
+                .AppendLine($"{Tags.ToString()}\n</body>\n</html>");
+
+            using StreamWriter writer = new($"{Path}\\index.html", false);
 
 #if DEBUG
-                writer.Write(HtmlContent);
+            writer.Write(HtmlContent);
 #else
             writer.WriteLine(Uglify.Html(HtmlContent.ToString()));   
 #endif
-            
+
 
         }
         private static void GenerateTags(string[] variants, string selectedFont, StringBuilder styles, StringBuilder tags)
         {
-            foreach (string variant in variants)
+            var Colors = new List<string> { "#27AE60", "#16A085", "#F1C40F", "#E67E22", "#8E44AD", "#C0392B", "#02B875", "#065F46", "#018574", "#0063B1", "#0099BC", "#CA5010", "#498205", "#E74856", "#09B83E", "#25D366", "#00C300", "#00AFF0" };
+            Colors = Shuffle(Colors);
+            var counter = 0;
+            foreach (var variant in variants)
             {
+                var Color = Colors[0];
+                Colors.RemoveAt(0);
+
                 string VariantType = variant.Contains("1,") ? "italic" : "normal";
                 var fontFileStyle = Helper.GetFontFileStyles(variant.Replace("1,", ""));
-                tags.AppendLine($"<h1 class ='size{variant.Replace("1,", "")}{VariantType}'> \n{selectedFont} {variant.Replace("1,", "")} - {VariantType} - {fontFileStyle}\n</h1>")
-                    .AppendLine($"<p class = 'size{variant.Replace("1,", "")}{VariantType}'>\n{LoremIpsum}\n</p>")
+                tags.AppendLine($"<div class = \"container{counter}\"><h1 class ='size{variant.Replace("1,", "")}{VariantType}'> \n{selectedFont} {variant.Replace("1,", "")} - {VariantType} - {fontFileStyle}\n</h1>")
+                    .AppendLine($"<p class = 'size{variant.Replace("1,", "")}{VariantType}'>\n{LoremIpsum}\n</p></div>")
                     .AppendLine("<div class = \"separator\"></div>");
-                styles.AppendLine($"\nh1.size{variant.Replace("1,", "")}{VariantType}{{\nfont-family: '{selectedFont}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("1,", "")};\n font-stretch: 100% \n}}")
-                      .AppendLine($"\np.size{variant.Replace("1,", "")}{VariantType}{{\nfont-family: '{selectedFont}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("1,", "")};\nfont-stretch: 100%;}}");
+                styles.AppendLine($"\nh1.size{variant.Replace("1,", "")}{VariantType}{{\nfont-family: '{selectedFont}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("1,", "")};\n font-stretch: 100%; \n color: white;\n}}")
+                      .AppendLine($"\np.size{variant.Replace("1,", "")}{VariantType}{{\nfont-family: '{selectedFont}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("1,", "")};\nfont-stretch: 100%; color: white;\n}}")
+                      .AppendLine($"\n.container{counter}{{\nbackground: {Color};\n     padding: 10px 15px;\n    border-radius: 15px;\n       margin: 10px 0;\n}}");
+                counter++;
             }
+
         }
+        private static List<T> Shuffle<T>(List<T> list)
+        {
+            var rng = new Random();
+            var n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                (list[n], list[k]) = (list[k], list[n]);
+            }
+            return list;
+        }
+
     }
 }
