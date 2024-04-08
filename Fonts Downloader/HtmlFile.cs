@@ -81,7 +81,7 @@ namespace Fonts_Downloader
 
             HtmlContent.AppendLine(documentStart);
 
-            GenerateTags(AllVariants, selectedFont.Family, Styles, Tags);
+            GenerateTags(selectedFont, Styles, Tags);
             if (!string.IsNullOrEmpty(GoogleFontLink))
                 HtmlContent.AppendLine(GoogleFontLink);
 
@@ -99,23 +99,25 @@ namespace Fonts_Downloader
 
 
         }
-        private static void GenerateTags(string[] variants, string selectedFont, StringBuilder styles, StringBuilder tags)
+        private static void GenerateTags(Item selectedFont, StringBuilder styles, StringBuilder tags)
         {
-            var Colors = new List<string> { "#27AE60", "#16A085", "#F1C40F", "#E67E22", "#8E44AD", "#C0392B", "#02B875", "#065F46", "#018574", "#0063B1", "#0099BC", "#CA5010", "#498205", "#E74856", "#09B83E", "#25D366", "#00C300", "#00AFF0" };
+            var Colors = new List<string> { "#58A399", "#77B0AA", "#144272", "#1F6E8C", "#5C8374", "#183D3D", "#03C988", "#1E5128", "#A12568", "#3B185F", "#78A083", "#346751", "#7B113A", "#003F5C", "#363062", "#3E3232", "#83142C", "#005B41" };
             Colors = Shuffle(Colors);
             var counter = 0;
-            foreach (var variant in variants)
+            foreach (var variant in selectedFont.Variants)
             {
                 var Color = Colors[0];
-                Colors.RemoveAt(0);
-
-                string VariantType = variant.Contains("1,") ? "italic" : "normal";
-                var fontFileStyle = Helper.GetFontFileStyles(variant.Replace("1,", ""));
-                tags.AppendLine($"<div class = \"container{counter}\"><h1 class ='size{variant.Replace("1,", "")}{VariantType}'> \n{selectedFont} {variant.Replace("1,", "")} - {VariantType} - {fontFileStyle}\n</h1>")
-                    .AppendLine($"<p class = 'size{variant.Replace("1,", "")}{VariantType}'>\n{LoremIpsum}\n</p></div>")
+                Colors.RemoveAt(0);               
+                var VariantType = variant.Contains("italic") ? "italic" : "normal";
+                var ClassName = $"size{variant.Replace("italic", "")}{VariantType}";              
+                var FontFileStyle = Helper.GetFontFileStyles(Helper.MapVariant(variant));
+                var Title = $"{selectedFont.Family + $" {Helper.MapVariant(variant).Replace("italic", "")}"} - {char.ToUpper(VariantType[0]) + VariantType[1..]} - {FontFileStyle}";
+                tags.AppendLine($"<div class = \"container{counter}\">")
+                    .Append($"<h1 class ='{ClassName}'> \n{Title}\n</h1>")
+                    .AppendLine($"<p class = '{ClassName}'>\n{LoremIpsum}\n</p></div>")
                     .AppendLine("<div class = \"separator\"></div>");
-                styles.AppendLine($"\nh1.size{variant.Replace("1,", "")}{VariantType}{{\nfont-family: '{selectedFont}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("1,", "")};\n font-stretch: 100%; \n color: white;\n}}")
-                      .AppendLine($"\np.size{variant.Replace("1,", "")}{VariantType}{{\nfont-family: '{selectedFont}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("1,", "")};\nfont-stretch: 100%; color: white;\n}}")
+                styles.AppendLine($"\nh1.{ClassName}{{\nfont-family: '{selectedFont.Family}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("italic", "")};\n font-stretch: 100%; \n color: white;\n}}")
+                      .AppendLine($"\np.{ClassName}{{\nfont-family: '{selectedFont.Family}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("italic", "")};\nfont-stretch: 100%; color: white;\n}}")
                       .AppendLine($"\n.container{counter}{{\nbackground: {Color};\n     padding: 10px 15px;\n    border-radius: 15px;\n       margin: 10px 0;\n}}");
                 counter++;
             }
