@@ -19,6 +19,7 @@ namespace Fonts_Downloader
         private Item SelectedFontItem;
         private readonly WebFonts Fonts = new();
         private string PreviousFont = string.Empty;
+        private static readonly string HtmlPath = AppDomain.CurrentDomain.BaseDirectory + "/index.html";
 
         public MainForm()
         {
@@ -28,7 +29,7 @@ namespace Fonts_Downloader
             //_ = InitAsync(Path.Combine(WebViewEnvironmentFolder, "WebView Environment"));
             webView21.EnsureCoreWebView2Async();
             webView21.BackColor = Color.FromArgb(32, 33, 36);
-            webView21.Source = new Uri("file:///C:/FontDownloader/index.html");
+            webView21.Source = new Uri(HtmlPath);
             if (Helper.IsInternetAvailable() || Helper.IsNetworkAvailable())
             {                                         
                 HtmlFile.DefaultHtml();
@@ -92,7 +93,7 @@ namespace Fonts_Downloader
                     HtmlFile.CreateHtml(SelectedFontItem);
                 }
                 PreviousFont = SelectedFontFamily;
-                webView21.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
+                webView21.CoreWebView2.Navigate(HtmlPath);
 
                 if(Minify.Enabled == false)
                     Minify.Enabled = true;
