@@ -5,13 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System;
-using Microsoft.VisualBasic;
 
 namespace Fonts_Downloader
 {
     internal class HtmlFile
     {
-        private const string Path = @"C:\FontDownloader";
+        private static readonly string HtmlPath = AppDomain.CurrentDomain.BaseDirectory + "/index.html";
         private const string LoremIpsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua";
         private const string GoogleFontLinkTemplate = "<link href=\"https://fonts.googleapis.com/css2?family={0}:{1}&display=swap\" rel=\"stylesheet\">";
         private const string DocumentStart = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset =\"UTF-8\">\n<meta name =\"viewport\" content=\"width=device-width, initial-scale=1.0\">";
@@ -21,15 +20,12 @@ namespace Fonts_Downloader
             if (Error is null)
             {
                 message = (Helper.IsInternetAvailable() || Helper.IsNetworkAvailable())
-                           ? "<h3>The program will create a folder named FontDownloader on the C drive to render the fonts.</h3>" +
-                            "<h3 style=\"color:#9b2b22;\"> Please select whether you want TTF or WOFF2 files by checking one of the boxes above</h3>"
+                           ?  "<h3 style=\"color:#9b2b22;\"> Please select whether you want TTF or WOFF2 files by checking one of the boxes above</h3>"
                               : "<h1 style=\"color:#9b2b22;\">Check your internet connection and restart the program</h1>\n<h2>Click on the image to refresh</h2>";
             }
             else
                 message = $"<html><body style=\" background: #212124;\">\n<h1 style=\"color:#9b2b22;text-align: center;\">{Error.Error.Message}</h1>\n</body>\n</html>";
 
-            if (!Directory.Exists(Path))
-                Directory.CreateDirectory(Path);
 
             string defaultHtml = $@"{DocumentStart}
                                     <title>Google Fonts Downloader</title >
@@ -50,7 +46,7 @@ namespace Fonts_Downloader
                     <h1>Google Fonts Downloader </h1>
                     {message}
                 </body>";
-            using StreamWriter writer = new($"{Path}\\index.html", false);
+            using StreamWriter writer = new(HtmlPath, false);
 #if DEBUG
             writer.Write(defaultHtml);
 #else
@@ -81,7 +77,7 @@ namespace Fonts_Downloader
 
             HtmlContent.AppendLine(documentStart);
 
-            GenerateTags(AllVariants, selectedFont.Family, Styles, Tags);
+            GenerateTags(selectedFont, Styles, Tags);
             if (!string.IsNullOrEmpty(GoogleFontLink))
                 HtmlContent.AppendLine(GoogleFontLink);
 
@@ -89,7 +85,7 @@ namespace Fonts_Downloader
                 .AppendLine(".separator{background: #b9b9b9;\r\nheight: 5px;\r\nborder-radius: 5px;}\n</style>\n<body>")
                 .AppendLine($"{Tags.ToString()}\n</body>\n</html>");
 
-            using StreamWriter writer = new($"{Path}\\index.html", false);
+            using StreamWriter writer = new(HtmlPath, false);
 
 #if DEBUG
             writer.Write(HtmlContent);
@@ -99,23 +95,25 @@ namespace Fonts_Downloader
 
 
         }
-        private static void GenerateTags(string[] variants, string selectedFont, StringBuilder styles, StringBuilder tags)
+        private static void GenerateTags(Item selectedFont, StringBuilder styles, StringBuilder tags)
         {
-            var Colors = new List<string> { "#27AE60", "#16A085", "#F1C40F", "#E67E22", "#8E44AD", "#C0392B", "#02B875", "#065F46", "#018574", "#0063B1", "#0099BC", "#CA5010", "#498205", "#E74856", "#09B83E", "#25D366", "#00C300", "#00AFF0" };
+            var Colors = new List<string> { "#58A399", "#77B0AA", "#144272", "#1F6E8C", "#5C8374", "#183D3D", "#03C988", "#1E5128", "#A12568", "#3B185F", "#78A083", "#346751", "#7B113A", "#003F5C", "#363062", "#3E3232", "#83142C", "#005B41" };
             Colors = Shuffle(Colors);
             var counter = 0;
-            foreach (var variant in variants)
+            foreach (var variant in selectedFont.Variants)
             {
                 var Color = Colors[0];
-                Colors.RemoveAt(0);
-
-                string VariantType = variant.Contains("1,") ? "italic" : "normal";
-                var fontFileStyle = Helper.GetFontFileStyles(variant.Replace("1,", ""));
-                tags.AppendLine($"<div class = \"container{counter}\"><h1 class ='size{variant.Replace("1,", "")}{VariantType}'> \n{selectedFont} {variant.Replace("1,", "")} - {VariantType} - {fontFileStyle}\n</h1>")
-                    .AppendLine($"<p class = 'size{variant.Replace("1,", "")}{VariantType}'>\n{LoremIpsum}\n</p></div>")
+                Colors.RemoveAt(0);               
+                var VariantType = variant.Contains("italic") ? "italic" : "normal";
+                var ClassName = $"size{variant.Replace("italic", "")}{VariantType}";              
+                var FontFileStyle = Helper.GetFontFileStyles(Helper.MapVariant(variant));
+                var Title = $"{selectedFont.Family + $" {Helper.MapVariant(variant).Replace("italic", "")}"} - {char.ToUpper(VariantType[0]) + VariantType[1..]} - {FontFileStyle}";
+                tags.AppendLine($"<div class = \"container{counter}\">")
+                    .Append($"<h1 class ='{ClassName}'> \n{Title}\n</h1>")
+                    .AppendLine($"<p class = '{ClassName}'>\n{LoremIpsum}\n</p></div>")
                     .AppendLine("<div class = \"separator\"></div>");
-                styles.AppendLine($"\nh1.size{variant.Replace("1,", "")}{VariantType}{{\nfont-family: '{selectedFont}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("1,", "")};\n font-stretch: 100%; \n color: white;\n}}")
-                      .AppendLine($"\np.size{variant.Replace("1,", "")}{VariantType}{{\nfont-family: '{selectedFont}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("1,", "")};\nfont-stretch: 100%; color: white;\n}}")
+                styles.AppendLine($"\nh1.{ClassName}{{\nfont-family: '{selectedFont.Family}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("italic", "")};\n font-stretch: 100%; \n color: white;\n}}")
+                      .AppendLine($"\np.{ClassName}{{\nfont-family: '{selectedFont.Family}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("italic", "")};\nfont-stretch: 100%; color: white;\n}}")
                       .AppendLine($"\n.container{counter}{{\nbackground: {Color};\n     padding: 10px 15px;\n    border-radius: 15px;\n       margin: 10px 0;\n}}");
                 counter++;
             }
