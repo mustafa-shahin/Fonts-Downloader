@@ -541,7 +541,6 @@ namespace Fonts_Downloader
             Name = "MainForm";
             Text = "Fonts Downloader";
             WindowState = FormWindowState.Minimized;
-            FormClosed += MianForm_FormClosed;
             ((System.ComponentModel.ISupportInitialize)webView21).EndInit();
             LeftPanel.ResumeLayout(false);
             LeftPanel.PerformLayout();

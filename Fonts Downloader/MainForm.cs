@@ -149,21 +149,6 @@ namespace Fonts_Downloader
                     NoInternetAvailable();
             }
         }
-        private void MianForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-//            var RootPath = @"C:/FontDownloader";
-//            if (Directory.Exists(RootPath))
-//            {
-//                var HtmlPath = @$"{RootPath}/index.html";
-//#if !DEBUG
-//                if (File.Exists(HtmlPath))
-//                {
-//                    File.Delete(HtmlPath);
-//                }
-//                Directory.Delete(RootPath);
-//#endif
-//            }
-        }
         private async void CopyFont_Click(object sender, EventArgs e)
         {
             if (!(Helper.IsInternetAvailable() || Helper.IsNetworkAvailable()))

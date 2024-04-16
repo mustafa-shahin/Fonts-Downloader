@@ -68,7 +68,7 @@ namespace Fonts_Downloader
                               .SelectMany(g => g.Key ? g.Select(v => $"1,{v.Replace("italic", "")}") : [.. g])
                               .ToArray();
 
-            var documentStart = $"{DocumentStart}\n<title>{selectedFont}</title >\n</head>";
+            var documentStart = $"{DocumentStart}\n<title>{selectedFont.Family}</title >\n</head>";
             var GoogleFontLink = string.Format(GoogleFontLinkTemplate, selectedFont.Family, $"ital,wght@{string.Join(";", AllVariants.Where(m => m.StartsWith("1,")))}")
                                         + "\n" + string.Format(GoogleFontLinkTemplate, selectedFont.Family, $"wght@{string.Join(";", AllVariants.Where(m => !m.StartsWith("1,")))}");
 
