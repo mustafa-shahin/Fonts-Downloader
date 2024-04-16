@@ -20,7 +20,7 @@ namespace Fonts_Downloader
             if (Error is null)
             {
                 message = (Helper.IsInternetAvailable() || Helper.IsNetworkAvailable())
-                           ?  "<h3 style=\"color:#9b2b22;\"> Please select whether you want TTF or WOFF2 files by checking one of the boxes above</h3>"
+                           ? "<h3 style=\"color:#9b2b22;\"> Please select whether you want to download TTF or WOFF2 files</h3>"
                               : "<h1 style=\"color:#9b2b22;\">Check your internet connection and restart the program</h1>\n<h2>Click on the image to refresh</h2>";
             }
             else
