@@ -82,9 +82,9 @@ namespace Fonts_Downloader
                 HtmlContent.AppendLine(GoogleFontLink);
 
             HtmlContent.AppendLine($"</head>\n<style>\n{BodyStyle}\n{Styles.ToString()}")
-                .AppendLine(".separator{background: #b9b9b9;\r\nheight: 5px;\r\nborder-radius: 5px;}\n</style>\n<body>")
+                .AppendLine(".separator{\nbackground: #b9b9b9;\r\nheight: 5px;\r\nborder-radius: 5px;\n}\n</style>\n<body>")
+                .AppendLine($"<h1 style=\"text-align: center;\">{selectedFont.Family}</h1>")
                 .AppendLine($"{Tags.ToString()}\n</body>\n</html>");
-
             using StreamWriter writer = new(HtmlPath, false);
 
 #if DEBUG
@@ -111,10 +111,10 @@ namespace Fonts_Downloader
                 tags.AppendLine($"<div class = \"container{counter}\">")
                     .Append($"<h1 class ='{ClassName}'> \n{Title}\n</h1>")
                     .AppendLine($"<p class = '{ClassName}'>\n{LoremIpsum}\n</p></div>")
-                    .AppendLine("<div class = \"separator\"></div>");
-                styles.AppendLine($"\nh1.{ClassName}{{\nfont-family: '{selectedFont.Family}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("italic", "")};\n font-stretch: 100%; \n color: white;\n}}")
+                    .AppendLine(counter < selectedFont.Variants.Count - 1 ? "<div class = \"separator\"></div>" : "") ;
+                styles.AppendLine($"\nh1.{ClassName}{{\nfont-family: '{selectedFont.Family}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("italic", "")};\nfont-stretch: 100%; \ncolor: white;\n}}")
                       .AppendLine($"\np.{ClassName}{{\nfont-family: '{selectedFont.Family}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("italic", "")};\nfont-stretch: 100%; color: white;\n}}")
-                      .AppendLine($"\n.container{counter}{{\nbackground: {Color};\n     padding: 10px 15px;\n    border-radius: 15px;\n       margin: 10px 0;\n}}");
+                      .AppendLine($"\n.container{counter}{{\nbackground: {Color};\npadding: 10px 15px;\nborder-radius: 15px;\nmargin: 10px 0;\n}}");
                 counter++;
             }
 
