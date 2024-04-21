@@ -10,7 +10,7 @@ namespace Fonts_Downloader
 {
     internal class HtmlFile
     {
-        private static readonly string HtmlPath = AppDomain.CurrentDomain.BaseDirectory + "/index.html";
+        private static readonly string HtmlPath = AppDomain.CurrentDomain.BaseDirectory + "index.html";
         private const string LoremIpsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua";
         private const string GoogleFontLinkTemplate = "<link href=\"https://fonts.googleapis.com/css2?family={0}:{1}&display=swap\" rel=\"stylesheet\">";
         private const string DocumentStart = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset =\"UTF-8\">\n<meta name =\"viewport\" content=\"width=device-width, initial-scale=1.0\">";

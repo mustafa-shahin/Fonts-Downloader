@@ -38,8 +38,9 @@ namespace Fonts_Downloader
         private IEnumerable<string> GenerateCssEntries(Item selectedFont, bool includeWoff2, IEnumerable<string> subsets = null)
         {
             return selectedFont.Variants.SelectMany(variant =>
-                (subsets?.Any() ?? false) ? subsets.Select(subset => GenerateFontFace(selectedFont.Family, variant, includeWoff2, subset)) :
-                new[] { GenerateFontFace(selectedFont.Family, variant, includeWoff2) });
+                                            subsets != null && subsets.Any()
+                                            ? subsets.Select(subset => GenerateFontFace(selectedFont.Family, variant, includeWoff2, subset))
+                                            : new[] { GenerateFontFace(selectedFont.Family, variant, includeWoff2) });
         }
 
         private string GenerateFontFace(string fontFamily, string fontWeight, bool woff2, string subset = null)
