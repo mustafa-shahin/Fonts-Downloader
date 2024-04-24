@@ -63,7 +63,7 @@ namespace Fonts_Downloader
             var Styles = new StringBuilder();
             var HtmlContent = new StringBuilder();
             var AllVariants = selectedFont.Variants
-                              .Select(Helper.MapVariant)
+                              .Select(m => m == "regular" || m == "italic" ? Helper.MapVariant(m) : m)
                               .GroupBy(v => v.Contains("italic"))
                               .SelectMany(g => g.Key ? g.Select(v => $"1,{v.Replace("italic", "")}") : [.. g])
                               .ToArray();
