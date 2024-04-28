@@ -105,8 +105,8 @@ namespace Fonts_Downloader
                 var Color = Colors[0];
                 Colors.RemoveAt(0);               
                 var VariantType = variant.Contains("italic") ? "italic" : "normal";
-                var ClassName = $"size{variant.Replace("italic", "")}{VariantType}";              
-                var FontFileStyle = Helper.GetFontFileStyles(Helper.MapVariant(variant));
+                var ClassName = $"{selectedFont.Family}-{variant.Replace(" italic", "")}-{VariantType}";              
+                var FontFileStyle = Helper.GetFontFileStyles(variant);
                 var Title = $"{selectedFont.Family + $" {Helper.MapVariant(variant).Replace("italic", "")}"} - {char.ToUpper(VariantType[0]) + VariantType[1..]} - {FontFileStyle}";
                 tags.AppendLine($"<div class = \"container{counter}\">")
                     .Append($"<h1 class ='{ClassName}'> \n{Title}\n</h1>")

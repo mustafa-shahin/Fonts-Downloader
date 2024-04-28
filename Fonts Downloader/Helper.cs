@@ -20,7 +20,7 @@ namespace Fonts_Downloader
         };
         public static string GetFontFileStyles(string weight)
         {
-            var FontFileStyle = FontWeights.GetValueOrDefault(weight.Replace("italic", ""));
+            FontWeights.TryGetValue(weight.Replace(" italic",""), out string FontFileStyle);
             return FontFileStyle;
         }
         public static string MapVariant(string variant)

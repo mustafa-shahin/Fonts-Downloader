@@ -85,11 +85,17 @@ namespace Fonts_Downloader
 
                 if (SelectedFontItem.Variants is not null && SelectedFontItem.Variants.Any())
                 {
-                    SizeAndStyle.Items.AddRange(SelectedFontItem.Variants.Select(Helper.MapVariant)
-                                                            .OrderBy(variant => variant.EndsWith("italic"))
-                                                            .ThenBy(variant => variant)
-                                                            .Select(variant => variant.Replace("italic", " italic"))
-                                                            .ToArray());
+
+                    SelectedFontItem.Variants = [.. SelectedFontItem.Variants
+                        .Select(variant =>
+                        {
+                            string mappedVariant = (variant == "regular" || variant == "italic") ? Helper.MapVariant(variant) : variant;
+                            return mappedVariant.EndsWith("italic") && !mappedVariant.Contains(' ') ? mappedVariant.Replace("italic", " italic") : mappedVariant;
+                        })
+                        .OrderBy(variant => variant.EndsWith(" italic")) 
+                        .ThenBy(variant => variant)];
+
+                    SizeAndStyle.Items.AddRange(SelectedFontItem.Variants.ToArray());
                     HtmlFile.CreateHtml(SelectedFontItem);
                 }
                 PreviousFont = SelectedFontFamily;
