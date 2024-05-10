@@ -14,11 +14,9 @@ namespace Fonts_Downloader
     {
         private List<Item> Items;
         private string FolderName;
-        private string SelectedFontFamily;
         private Point Offset;
         private Item SelectedFontItem;
         private readonly WebFonts Fonts = new();
-        private string PreviousFont = string.Empty;
         private static readonly string HtmlPath = AppDomain.CurrentDomain.BaseDirectory + "/index.html";
 
         public MainForm()
@@ -68,42 +66,21 @@ namespace Fonts_Downloader
         }
         private void FontBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            SelectedFontFamily = FontBox1.SelectedItem?.ToString();
-            if (!string.IsNullOrEmpty(SelectedFontFamily) && SelectedFontFamily != PreviousFont)
-            {
-                if (!string.IsNullOrEmpty(PreviousFont))
-                {
-                    SubsetsLists.Items.Clear();
-                    SizeAndStyle.Items.Clear();
-                    Minify.Visible = true;
-                }
-                SelectedFontLabel.Text = SelectedFontFamily;
-                if (Items is not null && Items.Any())
-                    SelectedFontItem = Items.FirstOrDefault(m => m.Family == SelectedFontLabel.Text);
+            string selectedFontFamily = FontBox1.SelectedItem?.ToString();
+            var fontSelector = new FontSelector();
 
-                SubsetsLists.Items.AddRange(SelectedFontItem.Subsets.Select(m => char.ToUpper(m[0]) + m[1..]).ToArray());
-
-                if (SelectedFontItem.Variants is not null && SelectedFontItem.Variants.Any())
-                {
-
-                    SelectedFontItem.Variants = [.. SelectedFontItem.Variants
-                        .Select(variant =>
-                        {
-                            string mappedVariant = (variant == "regular" || variant == "italic") ? Helper.MapVariant(variant) : variant;
-                            return mappedVariant.EndsWith("italic") && !mappedVariant.Contains(' ') ? mappedVariant.Replace("italic", " italic") : mappedVariant;
-                        })
-                        .OrderBy(variant => variant.EndsWith(" italic")) 
-                        .ThenBy(variant => variant)];
-
-                    SizeAndStyle.Items.AddRange(SelectedFontItem.Variants.ToArray());
-                    HtmlFile.CreateHtml(SelectedFontItem);
-                }
-                PreviousFont = SelectedFontFamily;
-                webView21.CoreWebView2.Navigate(HtmlPath);
-
-                if(Minify.Enabled == false)
-                    Minify.Enabled = true;
-            }
+            fontSelector.ProcessFontSelection(selectedFontFamily, Items, UpdateUIComponents);
+        }
+        private void UpdateUIComponents(string selectedFontLabel, IEnumerable<string> subsets, IEnumerable<string> variants)
+        {
+            SubsetsLists.Items.Clear();
+            SizeAndStyle.Items.Clear();
+            SelectedFontLabel.Text = selectedFontLabel;
+            SubsetsLists.Items.AddRange(subsets.ToArray());
+            SizeAndStyle.Items.AddRange(variants.ToArray());
+            webView21.CoreWebView2.Navigate(HtmlPath);
+            Minify.Visible = true;
+            Minify.Enabled = true;
         }
         private async void TextBox2_TextChanged(object sender, EventArgs e)
         {
