@@ -17,18 +17,17 @@ namespace Fonts_Downloader
                 if (selectedFontItem != null)
                 {
                     var subsets = selectedFontItem.Subsets.Select(m => char.ToUpper(m[0]) + m[1..]);
-                    var variants = selectedFontItem.Variants.Select(variant =>
+                    selectedFontItem.Variants = [.. selectedFontItem.Variants.Select(variant =>
                     {
                         string mappedVariant = (variant == "regular" || variant == "italic") ? Helper.MapVariant(variant) : variant;
                         return mappedVariant.EndsWith("italic") && !mappedVariant.Contains(' ') ? mappedVariant.Replace("italic", " italic") : mappedVariant;
                     })
                     .OrderBy(variant => variant.EndsWith(" italic"))
-                    .ThenBy(variant => variant)
-                    .ToList();
+                    .ThenBy(variant => variant)];
 
                     HtmlFile.CreateHtml(selectedFontItem);
 
-                    updateUIComponents(selectedFontFamily, subsets, variants);
+                    updateUIComponents(selectedFontFamily, subsets, selectedFontItem.Variants);
                 }
                 PreviousFont = selectedFontFamily;
             }
