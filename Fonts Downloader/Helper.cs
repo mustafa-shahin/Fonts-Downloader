@@ -20,7 +20,7 @@ namespace Fonts_Downloader
         };
         public static string GetFontFileStyles(string weight)
         {
-            FontWeights.TryGetValue(weight.Replace(" italic",""), out string FontFileStyle);
+            FontWeights.TryGetValue(weight.Replace(" italic","").Replace("italic", ""), out string FontFileStyle);
             return FontFileStyle;
         }
         public static string MapVariant(string variant)
@@ -35,7 +35,7 @@ namespace Fonts_Downloader
         }
         public static string FontFileName(string fontName, bool woff2, string weight)
         {
-            var fontFileStyle = GetFontFileStyles(MapVariant(weight).Replace(" italic",""));
+            var fontFileStyle = GetFontFileStyles(MapVariant(weight).Replace(" italic","").Replace("italic", ""));
             var fontStyle = weight.Contains("italic") ? "italic" : "normal";
             var format = woff2 ? "woff2" : "ttf";
             return $"{fontName.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle[1..]}-{fontFileStyle}.{format}";
