@@ -29,7 +29,7 @@ namespace Fonts_Downloader
             webView21.BackColor = Color.FromArgb(32, 33, 36);
             webView21.Source = new Uri(HtmlPath);
             if (Helper.IsInternetAvailable() || Helper.IsNetworkAvailable())
-            {                                         
+            {
                 HtmlFile.DefaultHtml();
                 //if (!Helper.IsInternetAvailable() || !Helper.IsNetworkAvailable())
                 //    NoInternet.Visible = true;
@@ -69,7 +69,7 @@ namespace Fonts_Downloader
             string selectedFontFamily = FontBox1.SelectedItem?.ToString();
             var fontSelector = new FontSelector();
 
-            fontSelector.ProcessFontSelection(out SelectedFontItem,selectedFontFamily, Items, UpdateUIComponents);
+            fontSelector.ProcessFontSelection( out SelectedFontItem, selectedFontFamily, Items, UpdateUIComponents);
         }
         private void UpdateUIComponents(string selectedFontLabel, IEnumerable<string> subsets, IEnumerable<string> variants)
         {
@@ -108,13 +108,13 @@ namespace Fonts_Downloader
                                 TTF.Checked = true;
                                 FontBox1.Enabled = true;
                                 Minify.Visible = true;
-                                if(Fonts.Error is not null)
+                                if (Fonts.Error is not null)
                                 {
                                     HtmlFile.DefaultHtml();
                                     webView21.Reload();
                                     Fonts.Error = null;
                                 }
-                                
+
                             }
                         }
                         else
@@ -149,30 +149,45 @@ namespace Fonts_Downloader
                 MessageBox.Show("Please choose a variant");
                 return;
             }
-            if (SelectedFontItem is not null && SelectedFontItem.Variants is not null && SelectedFontItem.Variants.Any())
+            if (SelectedFontItem is null || SelectedFontItem.Variants is null || !SelectedFontItem.Variants.Any())
             {
-                var selectedFont = SelectedFontItem;
-                selectedFont.Variants = SizeAndStyle.CheckedItems.Cast<string>().Where(m => !string.IsNullOrEmpty(m)).ToList();
-                if (selectedFont.Variants is not null && selectedFont.Variants.Any())
+#if DEBUG
+                string errorMessage = "";
+                if (SelectedFontItem is null)
                 {
-                    var css = new CssFile();
-                    var subsets = SubsetsLists.CheckedItems.Cast<string>().ToArray();
-
-                    css.CreateCSS(selectedFont, FolderName, WOFF2.Checked, Minify.Checked, subsets);
-                    try
-                    {
-                        using (var downloader = new FontFilesDownloader())
-                        {
-                            await downloader.DownloadAsync(selectedFont, FolderName, WOFF2.Checked);
-                        }
-                        OpenDownloadFolder(FolderName, selectedFont.Family.Replace(" ", ""));
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Download failed: {ex.Message}");
-                    }
+                    errorMessage += "SelectedFontItem is null. ";
                 }
+                else if (SelectedFontItem.Variants is null)
+                {
+                    errorMessage += "SelectedFontItem.Variants is null. ";
+                }
+                else if(SelectedFontItem.Variants != null && !SelectedFontItem.Variants.Any())
+                {
+                    errorMessage += "SelectedFontItem.Variants has no elements. ";
+                }
+                throw new Exception(errorMessage);
+#endif
             }
+
+            var selectedFont = SelectedFontItem;
+            selectedFont.Variants = SizeAndStyle.CheckedItems.Cast<string>().Where(m => !string.IsNullOrEmpty(m)).ToList();
+            var css = new CssFile();
+            var subsets = SubsetsLists.CheckedItems.Cast<string>().ToArray();
+
+            css.CreateCSS(selectedFont, FolderName, WOFF2.Checked, Minify.Checked, subsets);
+            try
+            {
+                using (var downloader = new FontFilesDownloader())
+                {
+                    await downloader.DownloadAsync(selectedFont, FolderName, WOFF2.Checked);
+                }
+                OpenDownloadFolder(FolderName, selectedFont.Family.Replace(" ", ""));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Download failed: {ex.Message}");
+            }
+
         }
         private static void OpenDownloadFolder(string folderName, string fontFolderName)
         {
@@ -183,7 +198,7 @@ namespace Fonts_Downloader
                 {
                     var folderToOpen = Path.Combine(folderName, fontFolderName);
                     Process.Start("explorer.exe", folderToOpen);
-                }                
+                }
             }
             catch (IOException ex)
             {

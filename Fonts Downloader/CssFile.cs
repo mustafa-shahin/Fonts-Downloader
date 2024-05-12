@@ -5,36 +5,44 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+
 namespace Fonts_Downloader
 {
     internal class CssFile
     {
         public void CreateCSS(Item selectedFont, string folderName, bool includeWoff2, bool minify = false, IEnumerable<string> subsets = null)
         {
-            var cssEntries = GenerateCssEntries(selectedFont, includeWoff2, subsets);
-
-            if (cssEntries is not null && cssEntries.Any())
+            try
             {
-                string fontFolder = Path.Combine(folderName, selectedFont.Family.Replace(" ", ""));
-                if (!Directory.Exists(fontFolder))
+                var cssEntries = GenerateCssEntries(selectedFont, includeWoff2, subsets);
+                if (cssEntries.Any())
+                {
+                    string fontFolder = Path.Combine(folderName, selectedFont.Family.Replace(" ", ""));
                     Directory.CreateDirectory(fontFolder);
 
-                string cssFileName = $"{selectedFont.Family.Replace(" ", "")}{(minify ? ".min" : "")}.css";
-                string cssFilePath = Path.Combine(fontFolder, cssFileName);
-                string cssContent = string.Join(Environment.NewLine, cssEntries);
+                    string cssFileName = $"{selectedFont.Family.Replace(" ", "")}{(minify ? ".min" : "")}.css";
+                    string cssFilePath = Path.Combine(fontFolder, cssFileName);
+                    string cssContent = string.Join(Environment.NewLine, cssEntries);
 
-                if (minify)
-                {
-                    var result = Uglify.Css(cssContent);
-                    if (result.HasErrors)
-                        throw new Exception("CSS Minification failed.");
+                    if (minify)
+                    {
+                        var result = Uglify.Css(cssContent);
+                        if (result.HasErrors)
+                        {
+                            throw new Exception("CSS Minification failed: " + result.Errors.First().Message);
+                        }
+                        cssContent = result.Code;
+                    }
 
-                    cssContent = result.Code;
+                    File.WriteAllText(cssFilePath, cssContent);
                 }
-
-                File.WriteAllText(cssFilePath, cssContent);
             }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to create CSS file", ex);
+            }          
         }
+
         private IEnumerable<string> GenerateCssEntries(Item selectedFont, bool includeWoff2, IEnumerable<string> subsets = null)
         {
             return selectedFont.Variants.SelectMany(variant =>
@@ -62,6 +70,5 @@ namespace Fonts_Downloader
 
             return cssBuilder.ToString();
         }
-
     }
 }

@@ -7,7 +7,7 @@ namespace Fonts_Downloader
     public class FontSelector
     {
         private string PreviousFont;
-        public void ProcessFontSelection(out Item selectedFontItem,string selectedFontFamily, IEnumerable<Item> items,
+        public void ProcessFontSelection(out Item selectedFontItem, string selectedFontFamily, IEnumerable<Item> items,
             Action<string, IEnumerable<string>, IEnumerable<string>> updateUIComponents)
         {
             selectedFontItem = null;
