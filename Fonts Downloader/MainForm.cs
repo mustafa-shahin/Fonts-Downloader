@@ -69,7 +69,7 @@ namespace Fonts_Downloader
             string selectedFontFamily = FontBox1.SelectedItem?.ToString();
             var fontSelector = new FontSelector();
 
-            fontSelector.ProcessFontSelection(selectedFontFamily, Items, UpdateUIComponents);
+            fontSelector.ProcessFontSelection(out SelectedFontItem,selectedFontFamily, Items, UpdateUIComponents);
         }
         private void UpdateUIComponents(string selectedFontLabel, IEnumerable<string> subsets, IEnumerable<string> variants)
         {

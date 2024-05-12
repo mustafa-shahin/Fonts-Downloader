@@ -6,13 +6,14 @@ namespace Fonts_Downloader
 {
     public class FontSelector
     {
-        public string PreviousFont { get; set; }
-        public void ProcessFontSelection(string selectedFontFamily, IEnumerable<Item> items,
+        private string PreviousFont;
+        public void ProcessFontSelection(out Item selectedFontItem,string selectedFontFamily, IEnumerable<Item> items,
             Action<string, IEnumerable<string>, IEnumerable<string>> updateUIComponents)
         {
+            selectedFontItem = null;
             if (!string.IsNullOrEmpty(selectedFontFamily) && selectedFontFamily != PreviousFont)
             {
-                var selectedFontItem = items.FirstOrDefault(m => m.Family == selectedFontFamily);
+                 selectedFontItem = items.FirstOrDefault(m => m.Family == selectedFontFamily);
                 if (selectedFontItem != null)
                 {
                     var subsets = selectedFontItem.Subsets.Select(m => char.ToUpper(m[0]) + m[1..]);
