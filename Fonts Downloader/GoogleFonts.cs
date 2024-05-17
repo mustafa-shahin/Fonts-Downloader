@@ -66,6 +66,7 @@ namespace Fonts_Downloader
         public List<string> Variants { get; set; }
         public List<string> Subsets { get; set; }
         public Files Files { get; set; }
+        public string category { get; set; }
     }
 
     public class Root
