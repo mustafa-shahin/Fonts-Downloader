@@ -235,7 +235,7 @@ namespace Fonts_Downloader
             TTF.TabIndex = 53;
             TTF.Text = "TTF";
             TTF.UseVisualStyleBackColor = true;
-            TTF.CheckedChanged += TTF_Checked;
+            TTF.Click += TTF_Click;
             // 
             // SubsetsLabel
             // 
@@ -262,7 +262,7 @@ namespace Fonts_Downloader
             WOFF2.TabIndex = 52;
             WOFF2.Text = "WOFF2";
             WOFF2.UseVisualStyleBackColor = true;
-            WOFF2.CheckedChanged += WOFF2_Checked;
+            WOFF2.Click += WOFF2_Click;
             // 
             // SubsetsLists
             // 
@@ -348,7 +348,6 @@ namespace Fonts_Downloader
             GitPic.SizeMode = PictureBoxSizeMode.Zoom;
             GitPic.TabIndex = 54;
             GitPic.TabStop = false;
-            GitPic.Click += MainForm.ShowGitRepo;
             // 
             // LinkPanel
             // 
@@ -375,7 +374,6 @@ namespace Fonts_Downloader
             GitHubLink.TabStop = true;
             GitHubLink.Text = "Code";
             GitHubLink.VisitedLinkColor = Color.White;
-            GitHubLink.Click += MainForm.ShowGitRepo;
             // 
             // WebPanel
             // 

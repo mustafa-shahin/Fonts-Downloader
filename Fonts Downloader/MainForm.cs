@@ -68,8 +68,7 @@ namespace Fonts_Downloader
         {
             string selectedFontFamily = FontBox1.SelectedItem?.ToString();
             var fontSelector = new FontSelector();
-
-            fontSelector.ProcessFontSelection( out SelectedFontItem, selectedFontFamily, Items, UpdateUIComponents);
+            SelectedFontItem = fontSelector.FontSelection(selectedFontFamily, Items, UpdateUIComponents);
         }
         private void UpdateUIComponents(string selectedFontLabel, IEnumerable<string> subsets, IEnumerable<string> variants)
         {
@@ -97,6 +96,7 @@ namespace Fonts_Downloader
                     }
                     try
                     {
+
                         Items = await Fonts.GetWebFontsAsync(ApiKeyBox.Text, false);
                         if (Api.Succeeded)
                         {
@@ -114,7 +114,6 @@ namespace Fonts_Downloader
                                     webView21.Reload();
                                     Fonts.Error = null;
                                 }
-
                             }
                         }
                         else
@@ -161,14 +160,15 @@ namespace Fonts_Downloader
                 {
                     errorMessage += "SelectedFontItem.Variants is null. ";
                 }
-                else if(SelectedFontItem.Variants != null && !SelectedFontItem.Variants.Any())
+                else if (SelectedFontItem.Variants != null && !SelectedFontItem.Variants.Any())
                 {
                     errorMessage += "SelectedFontItem.Variants has no elements. ";
                 }
                 throw new Exception(errorMessage);
+#else
+                return;
 #endif
             }
-
             var selectedFont = SelectedFontItem;
             selectedFont.Variants = SizeAndStyle.CheckedItems.Cast<string>().Where(m => !string.IsNullOrEmpty(m)).ToList();
             var css = new CssFile();
@@ -187,7 +187,6 @@ namespace Fonts_Downloader
             {
                 MessageBox.Show($"Download failed: {ex.Message}");
             }
-
         }
         private static void OpenDownloadFolder(string folderName, string fontFolderName)
         {
@@ -205,7 +204,6 @@ namespace Fonts_Downloader
                 MessageBox.Show($"Error opening folder: {ex.Message}");
             }
         }
-
         private static void ShowGitRepo(object sender, EventArgs e)
         {
             try
@@ -245,8 +243,8 @@ namespace Fonts_Downloader
             if (e.Button == MouseButtons.Left)
                 Location = new Point(Location.X + e.X - Offset.X, Location.Y + e.Y - Offset.Y);
         }
-        private async void WOFF2_Checked(object sender, EventArgs e) => await HandleFontTypeChecked(WOFF2, TTF);
-        private async void TTF_Checked(object sender, EventArgs e) => await HandleFontTypeChecked(TTF, WOFF2);
+        private async void WOFF2_Click(object sender, EventArgs e) => await HandleFontTypeChecked(WOFF2, TTF);
+        private async void TTF_Click(object sender, EventArgs e) => await HandleFontTypeChecked(TTF, WOFF2);
         private async Task HandleFontTypeChecked(CheckBox checkedBox, CheckBox otherBox)
         {
             if (Helper.IsNetworkAvailable() || Helper.IsInternetAvailable())
@@ -255,7 +253,6 @@ namespace Fonts_Downloader
                 {
                     otherBox.Checked = !checkedBox.Checked;
                     Items = await Fonts.GetWebFontsAsync(ApiKeyBox.Text, checkedBox == WOFF2);
-                    SelectedFontItem = Items.FirstOrDefault(m => m.Family == SelectedFontLabel.Text);
                 }
             }
             else
