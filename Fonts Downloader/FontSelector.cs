@@ -7,14 +7,14 @@ namespace Fonts_Downloader
     public class FontSelector
     {
         private string PreviousFont;
-        public void ProcessFontSelection(out Item selectedFontItem, string selectedFontFamily, IEnumerable<Item> items,
+        public Item FontSelection(string selectedFontFamily, IEnumerable<Item> items,
             Action<string, IEnumerable<string>, IEnumerable<string>> updateUIComponents)
         {
-            selectedFontItem = null;
+            var selectedFontItem = new Item();
             if (!string.IsNullOrEmpty(selectedFontFamily) && selectedFontFamily != PreviousFont)
             {
-                 selectedFontItem = items.FirstOrDefault(m => m.Family == selectedFontFamily);
-                if (selectedFontItem != null)
+                selectedFontItem = items.FirstOrDefault(m => m.Family == selectedFontFamily);
+                if (selectedFontItem != null && selectedFontItem.Variants.Any())
                 {
                     var subsets = selectedFontItem.Subsets.Select(m => char.ToUpper(m[0]) + m[1..]);
                     selectedFontItem.Variants = [.. selectedFontItem.Variants.Select(variant =>
@@ -31,6 +31,7 @@ namespace Fonts_Downloader
                 }
                 PreviousFont = selectedFontFamily;
             }
+            return selectedFontItem;
         }
     }
 }
