@@ -8,23 +8,37 @@ using System;
 
 namespace Fonts_Downloader
 {
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     internal class HtmlFile
     {
         private static readonly string HtmlPath = AppDomain.CurrentDomain.BaseDirectory + "index.html";
         private const string LoremIpsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua";
         private const string GoogleFontLinkTemplate = "<link href=\"https://fonts.googleapis.com/css2?family={0}:{1}&display=swap\" rel=\"stylesheet\">";
         private const string DocumentStart = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset =\"UTF-8\">\n<meta name =\"viewport\" content=\"width=device-width, initial-scale=1.0\">";
-        public static void DefaultHtml(Root Error = null)
+        public static void DefaultHtml(WebFonts Fonts = null, bool notEmpty = false)
         {
             string message;
-            if (Error is null)
+            if (File.Exists(HtmlPath) && notEmpty)
+            {
+                try
+                {
+                    string fileContent = File.ReadAllText(HtmlPath);
+                    if (!string.IsNullOrEmpty(fileContent))
+                        File.WriteAllText(HtmlPath, string.Empty);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+            if (Fonts?.FontResponse?.Error is null)
             {
                 message = (Helper.IsInternetAvailable() || Helper.IsNetworkAvailable())
                            ? "<h3 style=\"color:#9b2b22;\"> Please select whether you want to download TTF or WOFF2 files</h3>"
                               : "<h1 style=\"color:#9b2b22;\">Check your internet connection and restart the program</h1>\n<h2>Click on the image to refresh</h2>";
             }
             else
-                message = $"<html><body style=\" background: #212124;\">\n<h1 style=\"color:#9b2b22;text-align: center;\">{Error.Error.Message}</h1>\n</body>\n</html>";
+                message = $"<html><body style=\" background: #212124;\">\n<h1 style=\"color:#9b2b22;text-align: center;\">{Fonts.FontResponse.Error.Message}</h1>\n</body>\n</html>";
 
 
             string defaultHtml = $@"{DocumentStart}
@@ -110,7 +124,7 @@ namespace Fonts_Downloader
                     .Append($"<h1 class ='{ClassName}'> \n{Title}\n</h1>")
                     .AppendLine($"<p class = '{ClassName}'>\n{LoremIpsum}\n</p></div>")
                     .AppendLine(counter < selectedFont.Variants.Count - 1 ? "<div class = \"separator\"></div>" : "") ;
-                styles.AppendLine($"\nh1.{ClassName}{{\nfont-family: '{selectedFont.Family}', {selectedFont.category};\nfont-style: {VariantType};\nfont-weight: {variant.Replace("italic", "")};\nfont-stretch: 100%; \ncolor: white;\n}}")
+                styles.AppendLine($"\nh1.{ClassName}{{\nfont-family: '{selectedFont.Family}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("italic", "")};\nfont-stretch: 100%; \ncolor: white;\n}}")
                       .AppendLine($"\np.{ClassName}{{\nfont-family: '{selectedFont.Family}';\nfont-style: {VariantType};\nfont-weight: {variant.Replace("italic", "")};\nfont-stretch: 100%; color: white;\n}}")
                       .AppendLine($"\n.container{counter}{{\nbackground: {Color};\npadding: 10px 15px;\nborder-radius: 15px;\nmargin: 10px 0;\n}}");
                 counter++;
