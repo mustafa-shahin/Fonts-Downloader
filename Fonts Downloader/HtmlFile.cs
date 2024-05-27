@@ -69,7 +69,7 @@ namespace Fonts_Downloader
         }
         public static void CreateHtml(Item selectedFont)
         {
-            if (selectedFont is null || selectedFont.Variants is null || !selectedFont.Variants.Any())
+            if (selectedFont is null || selectedFont.Variants is null || selectedFont.Variants.Count == 0)
             {
                 return;
             }

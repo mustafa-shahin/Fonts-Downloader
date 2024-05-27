@@ -39,7 +39,7 @@ namespace Fonts_Downloader
             FontBox1 = new ComboBox();
             SelectedFontLabel = new Label();
             CopyFont = new Button();
-            webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
+            webView = new Microsoft.Web.WebView2.WinForms.WebView2();
             LeftPanel = new Panel();
             Minify = new CheckBox();
             TTF = new CheckBox();
@@ -65,7 +65,7 @@ namespace Fonts_Downloader
             Close = new Button();
             Minimize = new Button();
             MainPanel = new Panel();
-            ((System.ComponentModel.ISupportInitialize)webView21).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)webView).BeginInit();
             LeftPanel.SuspendLayout();
             TopPanel.SuspendLayout();
             TextBoxPanel.SuspendLayout();
@@ -173,20 +173,20 @@ namespace Fonts_Downloader
             CopyFont.UseVisualStyleBackColor = false;
             CopyFont.Click += CopyFont_Click;
             // 
-            // webView21
+            // webView
             // 
-            webView21.AllowExternalDrop = true;
-            webView21.BackColor = Color.FromArgb(33, 33, 36);
-            webView21.CreationProperties = null;
-            webView21.DefaultBackgroundColor = Color.FromArgb(32, 33, 36);
-            webView21.Dock = DockStyle.Fill;
-            webView21.ForeColor = Color.White;
-            webView21.Location = new Point(0, 0);
-            webView21.Margin = new Padding(3, 5, 3, 5);
-            webView21.Name = "webView21";
-            webView21.Size = new Size(1111, 757);
-            webView21.TabIndex = 35;
-            webView21.ZoomFactor = 1D;
+            webView.AllowExternalDrop = true;
+            webView.BackColor = Color.FromArgb(33, 33, 36);
+            webView.CreationProperties = null;
+            webView.DefaultBackgroundColor = Color.FromArgb(32, 33, 36);
+            webView.Dock = DockStyle.Fill;
+            webView.ForeColor = Color.White;
+            webView.Location = new Point(0, 0);
+            webView.Margin = new Padding(3, 5, 3, 5);
+            webView.Name = "webView";
+            webView.Size = new Size(1111, 757);
+            webView.TabIndex = 35;
+            webView.ZoomFactor = 1D;
             // 
             // LeftPanel
             // 
@@ -380,7 +380,7 @@ namespace Fonts_Downloader
             WebPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             WebPanel.BackColor = Color.FromArgb(32, 33, 36);
             WebPanel.Controls.Add(NoInternet);
-            WebPanel.Controls.Add(webView21);
+            WebPanel.Controls.Add(webView);
             WebPanel.ForeColor = Color.FromArgb(142, 181, 245);
             WebPanel.Location = new Point(293, 165);
             WebPanel.Margin = new Padding(3, 5, 3, 5);
@@ -539,7 +539,7 @@ namespace Fonts_Downloader
             Name = "MainForm";
             Text = "Fonts Downloader";
             WindowState = FormWindowState.Minimized;
-            ((System.ComponentModel.ISupportInitialize)webView21).EndInit();
+            ((System.ComponentModel.ISupportInitialize)webView).EndInit();
             LeftPanel.ResumeLayout(false);
             LeftPanel.PerformLayout();
             TopPanel.ResumeLayout(false);
@@ -568,7 +568,7 @@ namespace Fonts_Downloader
         private ComboBox FontBox1;
         private Label SelectedFontLabel;
         private Button CopyFont;
-        private Microsoft.Web.WebView2.WinForms.WebView2 webView21;
+        private Microsoft.Web.WebView2.WinForms.WebView2 webView;
         private Panel LeftPanel;
         private Panel TopPanel;
         private Panel WebPanel;
