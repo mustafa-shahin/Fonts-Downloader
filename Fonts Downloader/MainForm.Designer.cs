@@ -187,6 +187,7 @@ namespace Fonts_Downloader
             webView.Size = new Size(1111, 757);
             webView.TabIndex = 35;
             webView.ZoomFactor = 1D;
+            webView.NavigationStarting += webView_NavigationStarting;
             // 
             // LeftPanel
             // 

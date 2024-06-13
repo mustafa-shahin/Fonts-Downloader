@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System;
+using System.Net;
 
 namespace Fonts_Downloader
 {
@@ -78,9 +79,9 @@ namespace Fonts_Downloader
             var HtmlContent = new StringBuilder();
             var allVariants = selectedFont.Variants
                 .Select(m => m == "regular" || m == "italic" ? Helper.MapVariant(m) : m)
-                .GroupBy(v => v.Contains("italic")) 
+                .GroupBy(v => v.Contains("italic"))
                 .SelectMany(g => g.Key
-                    ? g.Select(v => $"1,{v.Replace("italic", "")}") 
+                    ? g.Select(v => $"1,{v.Replace("italic", "")}")
                     : g.Select(v => $"0,{v}")
                 )
                 .ToArray();
@@ -93,9 +94,12 @@ namespace Fonts_Downloader
             if (!string.IsNullOrEmpty(GoogleFontLink))
                 HtmlContent.AppendLine(GoogleFontLink);
 
+            string FontName = WebUtility.UrlEncode(selectedFont.Family).Replace("%20", "+");
+
             HtmlContent.AppendLine($"</head>\n<style>\n{BodyStyle}\n{Styles.ToString()}")
                 .AppendLine(".separator{\nbackground: #b9b9b9;\r\nheight: 5px;\r\nborder-radius: 5px;\n}\n</style>\n<body>")
                 .AppendLine($"<h1 style=\"text-align: center;\">{selectedFont.Family}</h1>")
+                .AppendLine($"<a style=\"text-align: center; width: 100%; display: block; color: #b9b9b9;text-decoration: none;;\" id = \"{selectedFont.Family.Replace(" ", "")}\" href =  \"{$"https://fonts.google.com/specimen/{FontName}?query={FontName.ToLower()}"}\">See it on Google Fonts</a>")
                 .AppendLine($"{Tags.ToString()}\n</body>\n</html>");
             using StreamWriter writer = new(HtmlPath, false);
 
@@ -104,8 +108,6 @@ namespace Fonts_Downloader
 #else
             writer.WriteLine(Uglify.Html(HtmlContent.ToString()));   
 #endif
-
-
         }
         private static void GenerateTags(Item selectedFont, StringBuilder styles, StringBuilder tags)
         {

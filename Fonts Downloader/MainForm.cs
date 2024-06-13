@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace Fonts_Downloader
 {
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
@@ -17,8 +18,10 @@ namespace Fonts_Downloader
         private Point Offset;
         private Item SelectedFontItem;
         private readonly WebFonts Fonts = new();
-        private static readonly string HtmlPath = AppDomain.CurrentDomain.BaseDirectory + "/index.html";
+        private static readonly string HtmlPath = AppDomain.CurrentDomain.BaseDirectory + "/FontsWebView.html";
         private Error Error;
+
+
 
         public MainForm()
         {
@@ -69,7 +72,8 @@ namespace Fonts_Downloader
         {
             string selectedFontFamily = FontBox1.SelectedItem?.ToString();
             var fontSelector = new FontSelector();
-            SelectedFontItem = fontSelector.FontSelection(selectedFontFamily, Items, UpdateUIComponents);
+            SelectedFontItem = fontSelector?.FontSelection(selectedFontFamily, Items, UpdateUIComponents);
+
         }
         private void UpdateUIComponents(string selectedFontLabel, IEnumerable<string> subsets, IEnumerable<string> variants)
         {
@@ -81,6 +85,8 @@ namespace Fonts_Downloader
             webView.CoreWebView2.Navigate(HtmlPath);
             Minify.Visible = true;
             Minify.Enabled = true;
+
+
         }
         private async void TextBox2_TextChanged(object sender, EventArgs e)
         {
@@ -279,7 +285,7 @@ namespace Fonts_Downloader
         //{
         //    if (webView != null && webView.CoreWebView2 != null)
         //    {
-        //        webView.CoreWebView2.Navigate("file:///C:/FontDownloader/index.html");
+        //        webView.CoreWebView2.Navigate("file:///C:/FontDownloader/FontsWebView.html");
         //    }
         //}
         private void NoInternetAvailable()
@@ -304,6 +310,13 @@ namespace Fonts_Downloader
                 HtmlFile.DefaultHtml(Fonts);
 
             webView.Reload();
+        }
+
+        private void webView_NavigationStarting(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs e)
+        {
+            if(!e.Uri.Contains("FontsWebView.html"))
+                e.Cancel = true;
+            Process.Start(new ProcessStartInfo(e.Uri) { UseShellExecute = true });
         }
     }
 }
