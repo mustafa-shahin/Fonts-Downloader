@@ -31,10 +31,25 @@ namespace Fonts_Downloader
             //_ = InitAsync(Path.Combine(WebViewEnvironmentFolder, "WebView Environment"));
             webView.EnsureCoreWebView2Async();
             webView.BackColor = Color.FromArgb(32, 33, 36);
-            webView.Source = new Uri(HtmlPath);
+            if (File.Exists(HtmlPath))
+            {
+                try
+                {
+                    string fileContent = File.ReadAllText(HtmlPath);
+                    if (!string.IsNullOrEmpty(fileContent))
+                    {
+                        File.WriteAllText(HtmlPath, string.Empty);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+                webView.Source = new Uri(HtmlPath);
             if (Helper.IsInternetAvailable() || Helper.IsNetworkAvailable())
             {
-                HtmlFile.DefaultHtml(null, true);
+                //HtmlFile.DefaultHtml(null, true);
                 //if (!Helper.IsInternetAvailable() || !Helper.IsNetworkAvailable())
                 //    NoInternet.Visible = true;
                 TTF.Visible = false;
