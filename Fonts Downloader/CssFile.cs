@@ -58,17 +58,17 @@ namespace Fonts_Downloader
             string fontFileName = Helper.FontFileName(fontFamily, woff2, fontWeight);
             string formatAttribute = woff2 ? " format('woff2')" : string.Empty;
             string fontVariant = Helper.MapVariant(fontWeight).TrimEnd("italic".ToCharArray());
-            var cssBuilder = new StringBuilder()
-                .AppendLine($"{subsetComment}@font-face {{")
-                .AppendLine($"font-family: '{fontFamily}';")
-                .AppendLine($"font-style: {fontStyle};")
-                .AppendLine($"font-weight: {fontVariant};")
-                .AppendLine("font-display: swap;")
-                .AppendLine("font-stretch: normal;")
-                .AppendLine($"src: url('{fontFileName}'){formatAttribute};")
-                .AppendLine("}");
-
-            return cssBuilder.ToString();
+            CssStyle styles = new();
+            styles.Properties[$"{subsetComment}@font-face"] = new Dictionary<string, string>
+            {
+                {"font-family",$"'{fontFamily}'"},
+                {"font-style",fontStyle},
+                {"font-weight", fontVariant},
+                {"font-display", "swap"},
+                { "font-stretch", "normal"},
+                {"src", $"url('{fontFileName}'){formatAttribute}"}
+            };
+            return styles.Render();
         }
     }
 }
