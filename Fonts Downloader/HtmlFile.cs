@@ -18,45 +18,47 @@ namespace Fonts_Downloader
 
         public static void DefaultHtml(WebFonts fonts = null)
         {
-                string message = string.Empty;
+            var Css = new CssStyle();
+            string message = string.Empty;
 
-                if (fonts?.FontResponse?.Error == null)
-                {
-                    message = (Helper.IsInternetAvailable() || Helper.IsNetworkAvailable())
-                        ? new Header(3) { Class = "headers", Text = "Please select whether you want to download TTF or WOFF2 files" }.RenderElement()
-                        : new Header(1) { Class = "headers", Text = "Check your internet connection and restart the program" }.RenderElement()
-                          + new Header(2) { Text = "Click on the image to refresh" }.RenderElement();
-                }
-                else
-                {
-                    message = new Header(1) { Class = "headers", Text = fonts.FontResponse.Error.Message }.RenderElement();
-                }
+            if (fonts?.FontResponse?.Error == null)
+            {
+                message = (Helper.IsInternetAvailable() || Helper.IsNetworkAvailable())
+                    ? new Header(3) { Class = "headers", Text = "Please select whether you want to download TTF or WOFF2 files" }.RenderElement()
+                    : new Header(1) { Class = "headers", Text = "Check your internet connection and restart the program" }.RenderElement()
+                      + new Header(2) { Text = "Click on the image to refresh" }.RenderElement();
+            }
+            else
+            {
+                message = new Header(1) { Class = "headers", Text = fonts.FontResponse.Error.Message }.RenderElement();
+            }
 
-                var headerFontsLink = "<link href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap\" rel=\"stylesheet\">";
+            var headerFontsLink = "<link href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap\" rel=\"stylesheet\">";
 
-                var css = new CssStyle();
-                css.Properties["body"] = new Dictionary<string, string>
+            Css.Properties["body"] = new Dictionary<string, string>
                         {
                             { "font-family", "'Roboto', 'sans-serif'" },
                             { "color", "#b9b9b9" },
                             { "text-align", "center !important" }
                         };
-            css.Properties[".headers"] = new Dictionary<string, string>
+            Css.Properties[".headers"] = new Dictionary<string, string>
                         {
                             { "color", "#9b2b22" },
                         };
             using StreamWriter writer = new(HtmlPath, false);
-                message = new Header(1) { Text = "Google Fonts Downloader" }.RenderElement() + message;
+            message = new Header(1) { Text = "Google Fonts Downloader" }.RenderElement() + message;
 
 #if DEBUG
-                writer.Write(RenderBody(message, css.Render(), headerFontsLink));
+            writer.Write(RenderBody(message, Css.Render(), headerFontsLink));
+
 #else
-                writer.WriteLine(Uglify.HtmlToText(message));
+                writer.Write(Uglify.HtmlToText(RenderBody(message, Css.Render(), headerFontsLink)));
 #endif
 
         }
         public static void CreateHtml(Item selectedFont)
         {
+            var Css = new CssStyle();
             if (selectedFont is null || selectedFont.Variants is null || selectedFont.Variants.Count == 0)
             {
                 return;
@@ -72,25 +74,55 @@ namespace Fonts_Downloader
                                           .ToArray();
             var weights = string.Join(";", allVariants);
             var GoogleFontLink = string.Format(GoogleFontLinkTemplate, selectedFont.Family, $"ital,wght@{weights.Replace(" ", "")}");
+            Css.Properties["::-webkit-scrollbar"] = new Dictionary<string, string>
+            {
+                {"width", "10px" }
+            };
+            Css.Properties["::-webkit-scrollbar-thumb"] = new Dictionary<string, string>
+            {
+                { "background" , "#003f5b" },
+                {"border-radius", "100vw" }
+
+            };
+            Css.Properties["::-webkit-scrollbar-track"] = new Dictionary<string, string>
+            {
+                { "background" , "#28292a" },
+                {"border-radius", "100vw" },
+                {"margin-block", ".5em" }
+            };
+            Styles.AppendLine(Css.Render());
             using StreamWriter writer = new(HtmlPath, false);
-            CreateHtmlContent(selectedFont, Tags, Styles);
+            CreateHtmlContent(selectedFont, Tags, Styles, Css);
 
 #if DEBUG
             writer.Write(RenderBody(Tags.ToString(), Styles.ToString(), GoogleFontLink));
 #else
-            writer.WriteLine(Uglify.Html(HtmlContent.ToString()));
+           writer.Write(Uglify.Html(RenderBody(Tags.ToString(), Styles.ToString(), GoogleFontLink)));
 #endif
         }
 
-        private static void CreateHtmlContent(Item selectedFont, StringBuilder tags, StringBuilder styles)
+        private static void CreateHtmlContent(Item selectedFont, StringBuilder tags, StringBuilder styles, CssStyle css)
         {
             var counter = 0;
             var Colors = new List<string> { "#58A399", "#77B0AA", "#144272", "#1F6E8C", "#5C8374", "#183D3D", "#03C988", "#1E5128", "#A12568", "#3B185F", "#78A083", "#346751", "#7B113A", "#003F5C", "#363062", "#3E3232", "#83142C", "#005B41" };
             Colors = Shuffle(Colors);
-            var css = new CssStyle();
             string FontName = WebUtility.UrlEncode(selectedFont.Family).Replace("%20", "+");
+            css.Properties["a"] = new Dictionary<string, string>
+            {
+                { "text-align","center" },
+                { "width", "100%" },
+                { "display", "block" },
+                { "color","#b9b9b9" },
+                { "text-decoration","none" },
+                { "font-family", selectedFont.Family }
+            };
             tags.AppendLine(new Header(1) { Text = selectedFont.Family }.RenderElement())
-                .AppendLine($"<a style=\"text-align: center; width: 100%; display: block; color: #b9b9b9;text-decoration: none; font-family: {selectedFont.Family}\" href =  \"{$"https://fonts.google.com/specimen/{FontName}?query={FontName.ToLower()}"}\">Click Here to See it on Google Fonts</a>");
+                .AppendLine(new Aanker
+                {
+                    Href = $"https://fonts.google.com/specimen/{FontName}?query={FontName.ToLower()}",
+                    Text = "Click Here to See it on Google Fonts"
+                }.RenderElement()
+                );
             foreach (var variant in selectedFont.Variants)
             {
                 var Color = Colors[0];
@@ -104,48 +136,50 @@ namespace Fonts_Downloader
                 container.Children.Add(new Paragraph { Class = ClassName, Text = LoremIpsum });
                 tags.AppendLine(container.RenderElement())
                     .AppendLine(counter < selectedFont.Variants.Count - 1 ? new Div { Class = "separator" }.RenderElement() : "");
-                if(counter == 0)
+                if (counter == 0)
                 {
                     css.Properties["h1"] = new Dictionary<string, string>
-                                {
+                    {
 
-                                    { "font-family", selectedFont.Family },
-                                    { "font-style", VariantType },
-                                    { "font-weight", variant.Replace("italic", "") },
-                                    { "font-stretch", " 100%" },
-                                    { "color", " white" },
-                                    {"text-align", "center" }
-                                };
+                        { "font-family", selectedFont.Family },
+                        { "font-style", VariantType },
+                        { "font-weight", variant.Replace("italic", "") },
+                        { "font-stretch", " 100%" },
+                        { "color", " white" },
+                        { "text-align", "center" },
+                        { "margin-bottom", "0px" }
+                    };
                 }
 
                 css.Properties[$".{ClassName}"] = new Dictionary<string, string>
-                                {
-                                    { "font-family", selectedFont.Family },
-                                    { "font-style", VariantType },
-                                    { "font-weight", variant.Replace("italic", "") },
-                                    { "font-stretch", " 100%" },
-                                    { "color", " white" }
-                                };
+                {
+                    { "font-family", selectedFont.Family },
+                    { "font-style", VariantType },
+                    { "font-weight", variant.Replace("italic", "") },
+                    { "font-stretch", " 100%" },
+                    { "color", " white" }
+                };
 
                 css.Properties[$".container{counter}"] = new Dictionary<string, string>
-                                {
-                                    { "background", Color },
-                                    { "padding", "10px 15px" },
-                                    { "border-radius", "15px" },
-                                    { "font-stretch", " 100%" },
-                                    { "margin", " 10px 0" }
-                                };
+                {
+                    { "background", Color },
+                    { "padding", "10px 15px" },
+                    { "border-radius", "15px" },
+                    { "font-stretch", " 100%" },
+                    { "margin", " 10px 0" }
+                };
                 css.Properties[$".separator"] = new Dictionary<string, string>
-                                {
-                                    { "background", "#b9b9b9" },
-                                    { "height", "5px" },
-                                    { "border-radius", "5px" },
-                                    { "font-stretch", " 100%" },
-                                    { "margin", " 10px 0" }
-                                };
-                styles.AppendLine(css.Render());
+                {
+                    { "background", "#b9b9b9" },
+                    { "height", "5px" },
+                    { "border-radius", "5px" },
+                    { "font-stretch", " 100%" },
+                    { "margin", " 10px 0" }
+                };
+
                 counter++;
             }
+            styles.AppendLine(css.Render());
         }
         private static List<T> Shuffle<T>(List<T> list)
         {
