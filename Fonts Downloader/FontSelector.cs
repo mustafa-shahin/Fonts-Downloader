@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Fonts_Downloader
 {
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public class FontSelector
     {
         private string PreviousFont;
@@ -11,6 +12,7 @@ namespace Fonts_Downloader
             Action<string, IEnumerable<string>, IEnumerable<string>> updateUIComponents)
         {
             var selectedFontItem = new Item();
+            var html = new HtmlFile();
             if (!string.IsNullOrEmpty(selectedFontFamily) && selectedFontFamily != PreviousFont)
             {
                 selectedFontItem = items.FirstOrDefault(m => m.Family == selectedFontFamily);
@@ -25,7 +27,7 @@ namespace Fonts_Downloader
                     .OrderBy(variant => variant.EndsWith(" italic"))
                     .ThenBy(variant => variant)];
 
-                    HtmlFile.CreateHtml(selectedFontItem);
+                    html.CreateHtml(selectedFontItem);
 
                     updateUIComponents(selectedFontFamily, subsets, selectedFontItem.Variants);
                 }

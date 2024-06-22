@@ -20,6 +20,7 @@ namespace Fonts_Downloader
         private readonly WebFonts Fonts = new();
         private static readonly string HtmlPath = AppDomain.CurrentDomain.BaseDirectory + "/FontsWebView.html";
         private Error Error;
+        private HtmlFile Html = new();
 
 
 
@@ -115,7 +116,7 @@ namespace Fonts_Downloader
             if (NoInternet.Visible)
             {
                 NoInternet.Visible = false;
-                HtmlFile.DefaultHtml();
+                Html.DefaultHtml();
                 webView.Reload();
             }
             try
@@ -129,14 +130,14 @@ namespace Fonts_Downloader
                     TTF.Checked = true;
                     FontBox1.Enabled = true;
                     Minify.Visible = true;
-                    HtmlFile.DefaultHtml();
+                    Html.DefaultHtml();
                     if (Error == null)
                         webView.Reload();
                 }
                 else
                 {
                     Error = Fonts.FontResponse.Error;
-                    HtmlFile.DefaultHtml(Fonts);
+                    Html.DefaultHtml(Fonts);
                     webView.Reload();
                     Error = null;
                 }
@@ -306,7 +307,7 @@ namespace Fonts_Downloader
         private void NoInternetAvailable()
         {
             NoInternet.Visible = true;
-            HtmlFile.DefaultHtml();
+            Html.DefaultHtml();
             MessageBox.Show("Check your internet connection");
         }
 
@@ -315,14 +316,14 @@ namespace Fonts_Downloader
             if (Helper.IsInternetAvailable() || Helper.IsNetworkAvailable())
             {
                 if (SelectedFontItem is not null)
-                    HtmlFile.CreateHtml(SelectedFontItem);
+                    Html.CreateHtml(SelectedFontItem);
                 else
-                    HtmlFile.DefaultHtml();
+                    Html.DefaultHtml();
 
                 NoInternet.Visible = false;
             }
             else
-                HtmlFile.DefaultHtml(Fonts);
+                Html.DefaultHtml(Fonts);
 
             webView.Reload();
         }

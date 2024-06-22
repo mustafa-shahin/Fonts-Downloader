@@ -12,11 +12,11 @@ namespace Fonts_Downloader
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     internal class HtmlFile
     {
-        private static readonly string HtmlPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FontsWebView.html");
+        private readonly string HtmlPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FontsWebView.html");
         private const string LoremIpsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua";
         private const string GoogleFontLinkTemplate = "<link href=\"https://fonts.googleapis.com/css2?family={0}:{1}&display=swap\" rel=\"stylesheet\">";
 
-        public static void DefaultHtml(WebFonts fonts = null)
+        public void DefaultHtml(WebFonts fonts = null)
         {
             var Css = new CssStyle();
             string message = string.Empty;
@@ -56,15 +56,13 @@ namespace Fonts_Downloader
 #endif
 
         }
-        public static void CreateHtml(Item selectedFont)
+        public void CreateHtml(Item selectedFont)
         {
-            var Css = new CssStyle();
+            var css = new CssStyle();
             if (selectedFont is null || selectedFont.Variants is null || selectedFont.Variants.Count == 0)
             {
                 return;
             }
-            var Tags = new StringBuilder();
-            var Styles = new StringBuilder();
             var allVariants = selectedFont.Variants
                                           .Select(m => m == "regular" || m == "italic" ? Helper.MapVariant(m) : m)
                                           .GroupBy(v => v.Contains("italic"))
@@ -73,42 +71,41 @@ namespace Fonts_Downloader
                                                               : g.Select(v => $"0,{v}"))
                                           .ToArray();
             var weights = string.Join(";", allVariants);
-            var GoogleFontLink = string.Format(GoogleFontLinkTemplate, selectedFont.Family, $"ital,wght@{weights.Replace(" ", "")}");
-            Css.Properties["::-webkit-scrollbar"] = new Dictionary<string, string>
+            var googleFontLink = string.Format(GoogleFontLinkTemplate, selectedFont.Family, $"ital,wght@{weights.Replace(" ", "")}");
+            css.Properties["::-webkit-scrollbar"] = new Dictionary<string, string>
             {
                 {"width", "10px" }
             };
-            Css.Properties["::-webkit-scrollbar-thumb"] = new Dictionary<string, string>
+            css.Properties["::-webkit-scrollbar-thumb"] = new Dictionary<string, string>
             {
                 { "background" , "#003f5b" },
                 {"border-radius", "100vw" }
 
             };
-            Css.Properties["::-webkit-scrollbar-track"] = new Dictionary<string, string>
+            css.Properties["::-webkit-scrollbar-track"] = new Dictionary<string, string>
             {
                 { "background" , "#28292a" },
                 {"border-radius", "100vw" },
                 {"margin-block", ".5em" }
             };
-            Styles.AppendLine(Css.Render());
             using StreamWriter writer = new(HtmlPath, false);
-            CreateHtmlContent(selectedFont, Tags, Styles, Css);
+            string htmlContent = string.Concat(CreateHtmlContents(selectedFont, css).SelectMany(m => m.RenderElement()));
 
 #if DEBUG
-            writer.Write(RenderBody(Tags.ToString(), Styles.ToString(), GoogleFontLink));
+            writer.Write(RenderBody(htmlContent, css.Render(), googleFontLink));
 #else
-           writer.Write(Uglify.Html(RenderBody(Tags.ToString(), Styles.ToString(), GoogleFontLink)));
+           writer.Write(Uglify.Html(RenderBody(htmlContent, css.Render(), googleFontLink)));
 #endif
         }
 
-        private static void CreateHtmlContent(Item selectedFont, StringBuilder tags, StringBuilder styles, CssStyle css)
+        private List<HtmlElement> CreateHtmlContents(Item selectedFont, CssStyle css)
         {
+            var htmlElments = new List<HtmlElement>();
             var counter = 0;
-            var Colors = new List<string> { "#58A399", "#77B0AA", "#144272", "#1F6E8C", "#5C8374", "#183D3D", "#03C988", "#1E5128", "#A12568", "#3B185F", "#78A083", "#346751", "#7B113A", "#003F5C", "#363062", "#3E3232", "#83142C", "#005B41" };
-            Colors = Shuffle(Colors);
+            var Colors = new List<string> { "#005B41", "#1E5128", "#144272", "#1F6E8C", "#5C8374", "#183D3D", "#03C988", "#77B0AA", "#A12568", "#3B185F", "#78A083", "#346751", "#7B113A", "#003F5C", "#363062", "#3E3232", "#83142C", "#77B0AA" };
             string FontName = WebUtility.UrlEncode(selectedFont.Family).Replace("%20", "+");
             css.Properties["a"] = new Dictionary<string, string>
-            {
+                 {
                 { "text-align","center" },
                 { "width", "100%" },
                 { "display", "block" },
@@ -116,13 +113,14 @@ namespace Fonts_Downloader
                 { "text-decoration","none" },
                 { "font-family", selectedFont.Family }
             };
-            tags.AppendLine(new Header(1) { Text = selectedFont.Family }.RenderElement())
-                .AppendLine(new Aanker
-                {
-                    Href = $"https://fonts.google.com/specimen/{FontName}?query={FontName.ToLower()}",
-                    Text = "Click Here to See it on Google Fonts"
-                }.RenderElement()
-                );
+            var header = new Header(1) { Text = selectedFont.Family };
+            var anker = new Aanker
+            {
+                Href = $"https://fonts.google.com/specimen/{FontName}?query={FontName.ToLower()}",
+                Text = "Click Here to See it on Google Fonts"
+            };
+            htmlElments.Add(header);
+            htmlElments.Add(anker);
             foreach (var variant in selectedFont.Variants)
             {
                 var Color = Colors[0];
@@ -134,13 +132,11 @@ namespace Fonts_Downloader
                 var container = new Div { Class = $"container{counter}" };
                 container.Children.Add(new Header(1) { Class = ClassName, Text = Title });
                 container.Children.Add(new Paragraph { Class = ClassName, Text = LoremIpsum });
-                tags.AppendLine(container.RenderElement())
-                    .AppendLine(counter < selectedFont.Variants.Count - 1 ? new Div { Class = "separator" }.RenderElement() : "");
+                htmlElments.Add(container);
                 if (counter == 0)
                 {
                     css.Properties["h1"] = new Dictionary<string, string>
                     {
-
                         { "font-family", selectedFont.Family },
                         { "font-style", VariantType },
                         { "font-weight", variant.Replace("italic", "") },
@@ -179,20 +175,9 @@ namespace Fonts_Downloader
 
                 counter++;
             }
-            styles.AppendLine(css.Render());
+            return htmlElments;
         }
-        private static List<T> Shuffle<T>(List<T> list)
-        {
-            var rng = new Random();
-            int n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                (list[n], list[k]) = (list[k], list[n]);
-            }
-            return list;
-        }
+        
         private static string RenderBody(string body, string styles = null, string headerFontsLink = null)
         {
             return $@"<!DOCTYPE html>
