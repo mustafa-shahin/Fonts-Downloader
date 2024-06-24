@@ -52,7 +52,7 @@ namespace Fonts_Downloader
             writer.Write(RenderBody(message, Css.Render(), headerFontsLink));
 
 #else
-                writer.Write(Uglify.HtmlToText(RenderBody(message, Css.Render(), headerFontsLink)));
+                writer.Write(Uglify.Html(RenderBody(message, Css.Render(), headerFontsLink)));
 #endif
 
         }
