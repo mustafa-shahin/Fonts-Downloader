@@ -65,8 +65,8 @@ namespace Fonts_Downloader
             var result = new StringBuilder();
             foreach (var style in Properties)
             {
-                var properties = string.Join("; ", style.Value.Select(p => $"{p.Key}: {p.Value}"));
-                result.AppendLine($"{style.Key} {{ {properties} }}");
+                var properties = string.Join(";\n", style.Value.Select(p => $"{p.Key}: {p.Value}"));
+                result.AppendLine($"{style.Key} {{\n{properties}\n}}");
             }
             return result.ToString();
         }
