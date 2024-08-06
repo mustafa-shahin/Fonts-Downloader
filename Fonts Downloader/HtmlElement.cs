@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -6,7 +7,7 @@ namespace Fonts_Downloader
 {
     public abstract class HtmlElement
     {
-        public string Class { get; set; } = "class";
+        public string Class { get; set; }
         public string Style { get; set; }
         public string Text { get; set; }
         public List<HtmlElement> Children { get; set; } = [];
@@ -30,17 +31,21 @@ namespace Fonts_Downloader
             return $"<p  class='{Class}'>{Text}</p>";
         }
     }
-    public class Header(int level) : HtmlElement
+    public class Header : HtmlElement
     {
+        public int Level { get; }
+
+        public Header(int level)
+        {
+            if (level < 1 || level > 6)
+            {
+                throw new ArgumentOutOfRangeException(nameof(level), "Header level must be between 1 and 6.");
+            }
+            Level = level;
+        }
         public override string RenderElement()
         {
-            if (level == 1)
-                return $"<h1 style = '{Style}' class='{Class}'>{Text}</h1>";
-            else if (level == 2)
-                return $"<h2 style = '{Style}' class='{Class}'>{Text}</h2>";
-            else if (level == 3)
-                return $"<h3 style = '{Style}' class='{Class}'>{Text}</h3>";
-            else return string.Empty;
+            return $"<h{Level} style='{Style}' class='{Class}'>{Text}</h{Level}>";
         }
     }
 
@@ -58,7 +63,7 @@ namespace Fonts_Downloader
     public class CssStyle
     {
         public string Selector { get; set; }
-        public Dictionary<string, Dictionary<string, string>> Properties { get; set; } = new Dictionary<string, Dictionary<string, string>>();
+        public Dictionary<string, Dictionary<string, string>> Properties { get; set; } = [];
 
         public string Render()
         {
