@@ -14,7 +14,7 @@ namespace Fonts_Downloader
 
         public FontFilesDownloader()
         {
-            this.httpClient = new HttpClient();
+            httpClient = new HttpClient();
         }
 
         public async Task DownloadAsync(Item selectedFont, string folderName, bool woff2)
@@ -26,20 +26,21 @@ namespace Fonts_Downloader
 
                 if (!string.IsNullOrEmpty(propertyValue))
                 {
-                    string FileName = Path.Combine(folderName, selectedFont.Family.Replace(" ", ""), $"{Helper.FontFileName(selectedFont.Family, woff2, variant)}");
+                    string fileName = Path.Combine(folderName, selectedFont.Family.Replace(" ", ""), $"{Helper.FontFileName(selectedFont.Family, woff2, variant)}");
                     Uri url = new(propertyValue);
 
-                    if (!File.Exists(FileName))
+                    if (!File.Exists(fileName))
                     {
-                        await DownloadFileAsync(url, FileName);
+                        await DownloadFileAsync(url, fileName);
                     }
                 }
                 else
-                {  
-                    Console.WriteLine("Download link is empty");
+                {
+                    Logger.HandleError("Download link is empty", new Exception("The download link is empty or invalid."));
                 }
             }
         }
+
         private async Task DownloadFileAsync(Uri url, string fileName)
         {
             try
@@ -53,13 +54,15 @@ namespace Fonts_Downloader
             }
             catch (HttpRequestException ex)
             {
-                MessageBox.Show($"Error downloading font file: {ex.Message}");
+                Logger.HandleError("Error downloading font file.", ex);
             }
             catch (IOException ex)
             {
-                MessageBox.Show($"Error saving font file: {ex.Message}");
+                Logger.HandleError("Error saving font file.", ex);
             }
         }
+
         public void Dispose() => httpClient?.Dispose();
     }
+
 }

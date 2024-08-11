@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.NetworkInformation;
+using System.Text;
+using System.Windows.Forms;
 
 namespace Fonts_Downloader
 {
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public  class Helper
     {
         private static readonly Dictionary<string, string> FontWeights = new()
@@ -40,21 +44,9 @@ namespace Fonts_Downloader
             var format = woff2 ? "woff2" : "ttf";
             return $"{fontName.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle[1..]}-{fontFileStyle}.{format}";
         }
-        public static bool IsInternetAvailable()
-        {
-            try
-            {
-                using var Ping = new Ping();
-                var result = Ping.Send("www.google.com");
-                return (result.Status == IPStatus.Success);
-            }
-            catch
-            {
-                return false;
-            }
-        }
         public static bool IsNetworkAvailable()
         {
+            var isConnected = false;
             try
             {
                 NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
@@ -66,17 +58,22 @@ namespace Fonts_Downloader
                          networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet) &&
                         networkInterface.Supports(NetworkInterfaceComponent.IPv4))
                     {
+                        isConnected = true;
                         return true;
                     }
                 }
 
-                return false;
+                using var ping = new Ping();
+                var result = ping.Send("www.google.com");
+                return (result.Status == IPStatus.Success);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                var html = new HtmlFile();
+                html.DefaultHtml(isConnected);
+                Logger.HandleError("Network check failed", ex);
                 return false;
             }
         }
-
     }
 }

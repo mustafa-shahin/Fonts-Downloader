@@ -10,7 +10,20 @@ namespace Fonts_Downloader
         public string Class { get; set; }
         public string Style { get; set; }
         public string Text { get; set; }
-        public List<HtmlElement> Children { get; set; } = [];
+        public List<HtmlElement> Children { get; set; } = new List<HtmlElement>();
+
+        protected string RenderAttributes()
+        {
+            var attributes = new StringBuilder();
+            if (!string.IsNullOrEmpty(Class))
+                attributes.Append($" class='{Class}'");
+
+            if (!string.IsNullOrEmpty(Style))
+                attributes.Append($" style='{Style}'");
+
+            return attributes.ToString();
+        }
+
         public abstract string RenderElement();
     }
 
@@ -19,50 +32,59 @@ namespace Fonts_Downloader
         public override string RenderElement()
         {
             var childrenHtml = string.Join("", Children.Select(c => c.RenderElement()));
-            return $"<div class='{Class}'>{childrenHtml}</div>";
+            return $"<div{RenderAttributes()}>{childrenHtml}</div>";
         }
     }
 
     public class Paragraph : HtmlElement
     {
-
         public override string RenderElement()
         {
-            return $"<p  class='{Class}'>{Text}</p>";
+            return $"<p{RenderAttributes()}>{Text}</p>";
         }
     }
+
     public class Header : HtmlElement
     {
-        public int Level { get; }
+        private int _level;
+
+        public int Level
+        {
+            get => _level;
+            set
+            {
+                if (value < 1 || value > 6)
+                    throw new ArgumentOutOfRangeException(nameof(Level), "Header level must be between 1 and 6.");
+                _level = value;
+            }
+        }
 
         public Header(int level)
         {
-            if (level < 1 || level > 6)
-            {
-                throw new ArgumentOutOfRangeException(nameof(level), "Header level must be between 1 and 6.");
-            }
-            Level = level;
+            Level = level;  
         }
+
         public override string RenderElement()
         {
-            return $"<h{Level} style='{Style}' class='{Class}'>{Text}</h{Level}>";
+            return $"<h{Level}{RenderAttributes()}>{Text}</h{Level}>";
         }
     }
 
-    public class Aanker : HtmlElement
+    public class Anchor : HtmlElement
     {
         public string Href { get; set; }
 
         public override string RenderElement()
         {
-            return $"<a href='{Href}' class='{Class}'>{Text}</a>";
+            if (string.IsNullOrEmpty(Href))
+                throw new InvalidOperationException("Href cannot be null or empty for an anchor element.");
+
+            return $"<a href='{Href}'{RenderAttributes()}>{Text}</a>";
         }
     }
 
-
     public class CssStyle
     {
-        public string Selector { get; set; }
         public Dictionary<string, Dictionary<string, string>> Properties { get; set; } = [];
 
         public string Render()
@@ -71,7 +93,7 @@ namespace Fonts_Downloader
             foreach (var style in Properties)
             {
                 var properties = string.Join(";\n", style.Value.Select(p => $"{p.Key}: {p.Value}"));
-                result.AppendLine($"{style.Key} {{\n{properties}\n}}");
+                result.AppendLine($"{style.Key} {{\n{properties};\n}}");
             }
             return result.ToString();
         }
