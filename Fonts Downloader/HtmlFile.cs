@@ -16,14 +16,14 @@ namespace Fonts_Downloader
         private const string LoremIpsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua";
         private const string GoogleFontLinkTemplate = "<link href=\"https://fonts.googleapis.com/css2?family={0}:{1}&display=swap\" rel=\"stylesheet\">";
 
-        public void DefaultHtml(WebFonts fonts = null)
+        public void DefaultHtml(bool isConnected = false,WebFonts fonts = null)
         {
             var Css = new CssStyle();
             string message = string.Empty;
 
             if (fonts?.FontResponse?.Error == null)
             {
-                message = (Helper.IsInternetAvailable() || Helper.IsNetworkAvailable())
+                message = (isConnected)
                     ? new Header(3) { Class = "headers", Text = "Please select whether you want to download TTF or WOFF2 files" }.RenderElement()
                     : new Header(1) { Class = "headers", Text = "Check your internet connection and restart the program" }.RenderElement()
                       + new Header(2) { Text = "Click on the image to refresh" }.RenderElement();
@@ -114,13 +114,13 @@ namespace Fonts_Downloader
                 { "font-family", selectedFont.Family }
             };
             var header = new Header(1) { Text = selectedFont.Family };
-            var anker = new Aanker
+            var anchor = new Anchor
             {
                 Href = $"https://fonts.google.com/specimen/{FontName}?query={FontName.ToLower()}",
                 Text = "Click Here to See it on Google Fonts"
             };
             htmlElments.Add(header);
-            htmlElments.Add(anker);
+            htmlElments.Add(anchor);
             foreach (var variant in selectedFont.Variants)
             {
                 var Color = Colors[0];

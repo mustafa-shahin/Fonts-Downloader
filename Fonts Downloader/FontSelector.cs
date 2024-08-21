@@ -8,18 +8,19 @@ namespace Fonts_Downloader
     public class FontSelector
     {
         private string PreviousFont;
+
         public Item FontSelection(string selectedFontFamily, IEnumerable<Item> items,
             Action<string, IEnumerable<string>, IEnumerable<string>> updateUIComponents)
         {
-            var selectedFontItem = new Item();
-            var html = new HtmlFile();
-            if (!string.IsNullOrEmpty(selectedFontFamily) && selectedFontFamily != PreviousFont)
+            if (string.IsNullOrEmpty(selectedFontFamily) || selectedFontFamily == PreviousFont)
+                return null;
+
+            var selectedFontItem = items.FirstOrDefault(m => m.Family == selectedFontFamily);
+            if (selectedFontItem != null && selectedFontItem.Variants.Count != 0)
             {
-                selectedFontItem = items.FirstOrDefault(m => m.Family == selectedFontFamily);
-                if (selectedFontItem != null && selectedFontItem.Variants.Any())
-                {
-                    var subsets = selectedFontItem.Subsets.Select(m => char.ToUpper(m[0]) + m[1..]);
-                    selectedFontItem.Variants = [.. selectedFontItem.Variants.Select(variant =>
+                var subsets = selectedFontItem.Subsets.Select(m => char.ToUpper(m[0]) + m[1..]);
+                selectedFontItem.Variants = [.. selectedFontItem.Variants
+                    .Select(variant =>
                     {
                         string mappedVariant = (variant == "regular" || variant == "italic") ? Helper.MapVariant(variant) : variant;
                         return mappedVariant.EndsWith("italic") && !mappedVariant.Contains(' ') ? mappedVariant.Replace("italic", " italic") : mappedVariant;
@@ -27,13 +28,14 @@ namespace Fonts_Downloader
                     .OrderBy(variant => variant.EndsWith(" italic"))
                     .ThenBy(variant => variant)];
 
-                    html.CreateHtml(selectedFontItem);
-
-                    updateUIComponents(selectedFontFamily, subsets, selectedFontItem.Variants);
-                }
-                PreviousFont = selectedFontFamily;
+                var html = new HtmlFile();
+                html.CreateHtml(selectedFontItem);
+                updateUIComponents(selectedFontFamily, subsets, selectedFontItem.Variants);
             }
+
+            PreviousFont = selectedFontFamily;
             return selectedFontItem;
         }
     }
+
 }
