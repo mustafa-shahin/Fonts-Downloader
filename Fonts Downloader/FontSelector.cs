@@ -19,15 +19,14 @@ namespace Fonts_Downloader
             if (selectedFontItem != null && selectedFontItem.Variants.Count != 0)
             {
                 var subsets = selectedFontItem.Subsets.Select(m => char.ToUpper(m[0]) + m[1..]);
-                selectedFontItem.Variants = selectedFontItem.Variants
+                selectedFontItem.Variants = [.. selectedFontItem.Variants
                     .Select(variant =>
                     {
                         string mappedVariant = (variant == "regular" || variant == "italic") ? Helper.MapVariant(variant) : variant;
                         return mappedVariant.EndsWith("italic") && !mappedVariant.Contains(' ') ? mappedVariant.Replace("italic", " italic") : mappedVariant;
                     })
                     .OrderBy(variant => variant.EndsWith(" italic"))
-                    .ThenBy(variant => variant)
-                    .ToList();
+                    .ThenBy(variant => variant)];
 
                 var html = new HtmlFile();
                 html.CreateHtml(selectedFontItem);

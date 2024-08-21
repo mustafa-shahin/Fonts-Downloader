@@ -10,7 +10,7 @@ namespace Fonts_Downloader
         public string Class { get; set; }
         public string Style { get; set; }
         public string Text { get; set; }
-        public List<HtmlElement> Children { get; set; } = new List<HtmlElement>();
+        public List<HtmlElement> Children { get; set; } = [];
 
         protected string RenderAttributes()
         {

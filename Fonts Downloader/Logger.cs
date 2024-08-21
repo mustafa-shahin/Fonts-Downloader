@@ -15,7 +15,7 @@ namespace Fonts_Downloader
         {
             var logMessage = CreateLogMessage(userMessage, ex);
             AppendLogToFile(logMessage);
-            ShowErrorMessage(userMessage);
+            MessageBox.Show(userMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private static LogMessage CreateLogMessage(string message, Exception ex)
@@ -57,14 +57,6 @@ namespace Fonts_Downloader
             File.WriteAllText(LogFilePath, json);
         }
 
-        private static void ShowErrorMessage(string userMessage)
-        {
-#if WINDOWS
-            MessageBox.Show(userMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-#else
-            Console.Error.WriteLine($"Error: {userMessage}");
-#endif
-        }
     }
 
     public class LogMessage
