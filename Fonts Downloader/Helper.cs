@@ -1,14 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.NetworkInformation;
-using System.Text;
-using System.Windows.Forms;
 
 namespace Fonts_Downloader
 {
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-    public  class Helper
+    public class Helper
     {
         private static readonly Dictionary<string, string> FontWeights = new()
         {
@@ -24,7 +23,7 @@ namespace Fonts_Downloader
         };
         public static string GetFontFileStyles(string weight)
         {
-            FontWeights.TryGetValue(weight.Replace(" italic","").Replace("italic", ""), out string FontFileStyle);
+            FontWeights.TryGetValue(weight.Replace(" italic", "").Replace("italic", ""), out string FontFileStyle);
             return FontFileStyle;
         }
         public static string MapVariant(string variant)
@@ -39,7 +38,7 @@ namespace Fonts_Downloader
         }
         public static string FontFileName(string fontName, bool woff2, string weight)
         {
-            var fontFileStyle = GetFontFileStyles(MapVariant(weight).Replace(" italic","").Replace("italic", ""));
+            var fontFileStyle = GetFontFileStyles(MapVariant(weight).Replace(" italic", "").Replace("italic", ""));
             var fontStyle = weight.Contains("italic") ? "italic" : "normal";
             var format = woff2 ? "woff2" : "ttf";
             return $"{fontName.Replace(" ", "")}-{char.ToUpper(fontStyle[0]) + fontStyle[1..]}-{fontFileStyle}.{format}";
@@ -74,6 +73,13 @@ namespace Fonts_Downloader
                 Logger.HandleError("Network check failed", ex);
                 return false;
             }
+        }
+        public static string GetAPIKey()
+        {
+            string configFile =  "appsettings.json";
+            var json = File.ReadAllText(configFile);
+            var data = JObject.Parse(json);
+            return data["APIKey"]?.ToString();
         }
     }
 }

@@ -52,13 +52,13 @@ namespace Fonts_Downloader
                 FontBox1.Enabled = false;
                 Minify.Visible = false;
 #if DEBUG
-
-                string keyPath = "C:/Users/musta/Desktop/key.txt";
-                if (File.Exists(keyPath))
+                string apiKey = Helper.GetAPIKey();
+                if (!string.IsNullOrEmpty(apiKey))
                 {
-                    ApiKeyBox.Text = File.ReadAllText(keyPath);
+                    ApiKeyBox.Text = apiKey;
                 }
-                FolderName = "C:\\Users\\musta\\Desktop\\GoogleFonts";
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                FolderName = Path.Combine(desktopPath, "GoogleFonts");
                 SelectedFolder.Text = FolderName;
 #endif
             }
