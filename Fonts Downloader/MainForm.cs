@@ -44,6 +44,7 @@ namespace Fonts_Downloader
                     Logger.HandleError("An error occurred: ", ex);
                 }
             }
+            Html.DefaultHtml(Helper.IsNetworkAvailable());
             webView.Source = new Uri(HtmlPath);
             if (Helper.IsNetworkAvailable())
             {
@@ -123,7 +124,6 @@ namespace Fonts_Downloader
                     TTF.Checked = true;
                     FontBox1.Enabled = true;
                     Minify.Visible = true;
-                    await Task.Run(() => Html.DefaultHtml(true));
                     if (Error == null)
                         webView.Reload();
                 }
@@ -319,13 +319,9 @@ namespace Fonts_Downloader
         {
             try
             {
-                // Check if the navigation target is not "FontsWebView.html"
                 if (!e.Uri.Contains("FontsWebView.html"))
                 {
-                    // Cancel the WebView2 navigation
                     e.Cancel = true;
-
-                    // Open the URL in the default browser
                     Process.Start(new ProcessStartInfo
                     {
                         FileName = e.Uri,

@@ -50,10 +50,10 @@ namespace Fonts_Downloader
 #if DEBUG
             writer.Write(RenderBody(message, Css.Render(), headerFontsLink));
 
-#else
-                writer.Write(Uglify.Html(RenderBody(message, Css.Render(), headerFontsLink)));
+#elif !DEBUGs
+            writer.Write(Uglify.Html(RenderBody(message, Css.Render(), headerFontsLink)));
 #endif
-
+            writer.Close();
         }
         public void CreateHtml(Item selectedFont)
         {
