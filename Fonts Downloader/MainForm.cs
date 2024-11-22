@@ -59,8 +59,8 @@ namespace Fonts_Downloader
                 }
                 string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 FolderName = Path.Combine(desktopPath, "GoogleFonts");
-                SelectedFolder.Text = FolderName;
 #endif
+                SelectedFolder.Text = FolderName;
             }
             else
             {
@@ -315,13 +315,31 @@ namespace Fonts_Downloader
 
             webView.Reload();
         }
-
         private void WebView_NavigationStarting(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs e)
         {
-            if (!e.Uri.Contains("FontsWebView.html"))
-                e.Cancel = true;
-            Process.Start(new ProcessStartInfo(e.Uri) { UseShellExecute = true });
+            try
+            {
+                // Check if the navigation target is not "FontsWebView.html"
+                if (!e.Uri.Contains("FontsWebView.html"))
+                {
+                    // Cancel the WebView2 navigation
+                    e.Cancel = true;
+
+                    // Open the URL in the default browser
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = e.Uri,
+                        UseShellExecute = true
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle any exceptions
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
     }
 }
