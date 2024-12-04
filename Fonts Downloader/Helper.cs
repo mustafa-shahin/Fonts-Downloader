@@ -68,7 +68,7 @@ namespace Fonts_Downloader
             }
             catch (Exception ex)
             {
-                var html = new HtmlFile();
+                var html = new HtmlBuilder();
                 html.DefaultHtml(isConnected);
                 Logger.HandleError("Network check failed", ex);
                 return false;

@@ -9,7 +9,7 @@ using System.Net;
 namespace Fonts_Downloader
 {
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-    internal class HtmlFile
+    internal class HtmlBuilder
     {
         private readonly string HtmlPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FontsWebView.html");
         private const string LoremIpsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua";
@@ -97,9 +97,9 @@ namespace Fonts_Downloader
 #endif
         }
 
-        private List<HtmlElement> CreateHtmlContents(Item selectedFont, CssStyle css)
+        private List<HtmlElements> CreateHtmlContents(Item selectedFont, CssStyle css)
         {
-            var htmlElments = new List<HtmlElement>();
+            var htmlElments = new List<HtmlElements>();
             var counter = 0;
             var Colors = new List<string> { "#005B41", "#1E5128", "#144272", "#1F6E8C", "#5C8374", "#183D3D", "#03C988", "#77B0AA", "#A12568", "#3B185F", "#78A083", "#346751", "#7B113A", "#003F5C", "#363062", "#3E3232", "#83142C", "#77B0AA" };
             string FontName = WebUtility.UrlEncode(selectedFont.Family).Replace("%20", "+");

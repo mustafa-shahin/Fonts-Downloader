@@ -5,12 +5,12 @@ using System.Text;
 
 namespace Fonts_Downloader
 {
-    public abstract class HtmlElement
+    public abstract class HtmlElements
     {
         public string Class { get; set; }
         public string Style { get; set; }
         public string Text { get; set; }
-        public List<HtmlElement> Children { get; set; } = [];
+        public List<HtmlElements> Children { get; set; } = [];
 
         protected string RenderAttributes()
         {
@@ -27,7 +27,7 @@ namespace Fonts_Downloader
         public abstract string RenderElement();
     }
 
-    public class Div : HtmlElement
+    public class Div : HtmlElements
     {
         public override string RenderElement()
         {
@@ -36,7 +36,7 @@ namespace Fonts_Downloader
         }
     }
 
-    public class Paragraph : HtmlElement
+    public class Paragraph : HtmlElements
     {
         public override string RenderElement()
         {
@@ -44,7 +44,7 @@ namespace Fonts_Downloader
         }
     }
 
-    public class Header : HtmlElement
+    public class Header : HtmlElements
     {
         private int _level;
 
@@ -70,7 +70,7 @@ namespace Fonts_Downloader
         }
     }
 
-    public class Anchor : HtmlElement
+    public class Anchor : HtmlElements
     {
         public string Href { get; set; }
 

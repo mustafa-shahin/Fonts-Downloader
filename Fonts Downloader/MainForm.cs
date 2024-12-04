@@ -20,7 +20,7 @@ namespace Fonts_Downloader
         private readonly WebFonts Fonts = new();
         private static readonly string HtmlPath = AppDomain.CurrentDomain.BaseDirectory + "/FontsWebView.html";
         private Error Error;
-        private HtmlFile Html = new();
+        private HtmlBuilder Html = new();
         public MainForm()
         {
             InitializeComponent();

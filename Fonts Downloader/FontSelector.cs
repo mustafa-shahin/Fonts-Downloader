@@ -28,7 +28,7 @@ namespace Fonts_Downloader
                     .OrderBy(variant => variant.EndsWith(" italic"))
                     .ThenBy(variant => variant)];
 
-                var html = new HtmlFile();
+                var html = new HtmlBuilder();
                 html.CreateHtml(selectedFontItem);
                 updateUIComponents(selectedFontFamily, subsets, selectedFontItem.Variants);
             }
