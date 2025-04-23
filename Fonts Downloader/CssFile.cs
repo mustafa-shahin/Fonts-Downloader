@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using System.Text;
 
 namespace Fonts_Downloader
 {
@@ -14,6 +14,9 @@ namespace Fonts_Downloader
         {
             try
             {
+                if (selectedFont == null || string.IsNullOrEmpty(folderName))
+                    throw new ArgumentException("Font or folder name cannot be null");
+
                 var cssEntries = GenerateCssEntries(selectedFont, includeWoff2, subsets);
                 if (cssEntries.Any())
                 {
@@ -39,8 +42,9 @@ namespace Fonts_Downloader
             }
             catch (Exception ex)
             {
+                Logger.HandleError("Failed to create CSS file", ex);
                 throw new InvalidOperationException("Failed to create CSS file", ex);
-            }          
+            }
         }
 
         private IEnumerable<string> GenerateCssEntries(Item selectedFont, bool includeWoff2, IEnumerable<string> subsets = null)
@@ -48,7 +52,7 @@ namespace Fonts_Downloader
             return selectedFont.Variants.SelectMany(variant =>
                                             subsets != null && subsets.Any()
                                             ? subsets.Select(subset => GenerateFontFace(selectedFont.Family, variant, includeWoff2, subset))
-                                            : [GenerateFontFace(selectedFont.Family, variant, includeWoff2)]);
+                                            : new[] { GenerateFontFace(selectedFont.Family, variant, includeWoff2) });
         }
 
         private string GenerateFontFace(string fontFamily, string fontWeight, bool woff2, string subset = null)
@@ -58,16 +62,18 @@ namespace Fonts_Downloader
             string fontFileName = Helper.FontFileName(fontFamily, woff2, fontWeight);
             string formatAttribute = woff2 ? " format('woff2')" : string.Empty;
             string fontVariant = Helper.MapVariant(fontWeight).TrimEnd("italic".ToCharArray());
-            CssStyle styles = new();
+
+            var styles = new CssStyle();
             styles.Properties[$"{subsetComment}@font-face"] = new Dictionary<string, string>
             {
-                {"font-family",$"'{fontFamily}'"},
-                {"font-style",fontStyle},
+                {"font-family", $"'{fontFamily}'"},
+                {"font-style", fontStyle},
                 {"font-weight", fontVariant},
                 {"font-display", "swap"},
-                { "font-stretch", "normal"},
+                {"font-stretch", "normal"},
                 {"src", $"url('{fontFileName}'){formatAttribute}"}
             };
+
             return styles.Render();
         }
     }

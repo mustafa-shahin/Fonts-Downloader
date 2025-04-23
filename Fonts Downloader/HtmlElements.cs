@@ -29,10 +29,16 @@ namespace Fonts_Downloader
 
     public class Div : HtmlElements
     {
+        public string Id { get; set; }
+
         public override string RenderElement()
         {
+            var attributes = new StringBuilder(RenderAttributes());
+            if (!string.IsNullOrEmpty(Id))
+                attributes.Append($" id='{Id}'");
+
             var childrenHtml = string.Join("", Children.Select(c => c.RenderElement()));
-            return $"<div{RenderAttributes()}>{childrenHtml}</div>";
+            return $"<div{attributes}>{childrenHtml}</div>";
         }
     }
 
@@ -61,7 +67,7 @@ namespace Fonts_Downloader
 
         public Header(int level)
         {
-            Level = level;  
+            Level = level;
         }
 
         public override string RenderElement()
@@ -73,13 +79,24 @@ namespace Fonts_Downloader
     public class Anchor : HtmlElements
     {
         public string Href { get; set; }
+        public string Target { get; set; }
+        public string Rel { get; set; }
 
         public override string RenderElement()
         {
             if (string.IsNullOrEmpty(Href))
                 throw new InvalidOperationException("Href cannot be null or empty for an anchor element.");
 
-            return $"<a href='{Href}'{RenderAttributes()}>{Text}</a>";
+            var attributes = new StringBuilder(RenderAttributes());
+            attributes.Append($" href='{Href}'");
+
+            if (!string.IsNullOrEmpty(Target))
+                attributes.Append($" target='{Target}'");
+
+            if (!string.IsNullOrEmpty(Rel))
+                attributes.Append($" rel='{Rel}'");
+
+            return $"<a{attributes}>{Text}</a>";
         }
     }
 

@@ -7,35 +7,42 @@ namespace Fonts_Downloader
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public class FontSelector
     {
-        private string PreviousFont;
+        private string _previousFont;
 
         public Item FontSelection(string selectedFontFamily, IEnumerable<Item> items,
             Action<string, IEnumerable<string>, IEnumerable<string>> updateUIComponents)
         {
-            if (string.IsNullOrEmpty(selectedFontFamily) || selectedFontFamily == PreviousFont)
+            if (string.IsNullOrEmpty(selectedFontFamily) || selectedFontFamily == _previousFont || items == null)
                 return null;
 
             var selectedFontItem = items.FirstOrDefault(m => m.Family == selectedFontFamily);
-            if (selectedFontItem != null && selectedFontItem.Variants.Count != 0)
+            if (selectedFontItem != null && selectedFontItem.Variants?.Count > 0)
             {
-                var subsets = selectedFontItem.Subsets.Select(m => char.ToUpper(m[0]) + m[1..]);
-                selectedFontItem.Variants = [.. selectedFontItem.Variants
+                // Process the variants into a more user-friendly format
+                var subsets = selectedFontItem.Subsets?
+                    .Select(m => string.IsNullOrEmpty(m) ? m : char.ToUpper(m[0]) + m[1..])
+                    .ToList() ?? new List<string>();
+
+                selectedFontItem.Variants = selectedFontItem.Variants
                     .Select(variant =>
                     {
                         string mappedVariant = (variant == "regular" || variant == "italic") ? Helper.MapVariant(variant) : variant;
                         return mappedVariant.EndsWith("italic") && !mappedVariant.Contains(' ') ? mappedVariant.Replace("italic", " italic") : mappedVariant;
                     })
-                    .OrderBy(variant => variant.EndsWith(" italic"))
-                    .ThenBy(variant => variant)];
+                    .OrderBy(variant => variant.EndsWith(" italic")) // Regular weights first, then italics
+                    .ThenBy(variant => variant)
+                    .ToList();
 
+                // Generate HTML preview
                 var html = new HtmlBuilder();
                 html.CreateHtml(selectedFontItem);
+
+                // Update UI components
                 updateUIComponents(selectedFontFamily, subsets, selectedFontItem.Variants);
             }
 
-            PreviousFont = selectedFontFamily;
+            _previousFont = selectedFontFamily;
             return selectedFontItem;
         }
     }
-
 }

@@ -1,27 +1,40 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System;
 
 namespace Fonts_Downloader
 {
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public class WebFonts
     {
-        public Root FontResponse { private set; get; }
-        public bool Succeeded { private set; get; }
+        public Root FontResponse { get; private set; }
+        public bool Succeeded { get; private set; }
+        private readonly HttpClient _httpClient;
+
+        public WebFonts()
+        {
+            _httpClient = new HttpClient();
+            _httpClient.Timeout = TimeSpan.FromSeconds(30);
+        }
 
         public async Task<List<Item>> GetWebFontsAsync(string apiKey, bool woff2)
         {
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                MessageBox.Show("Please enter a valid Google Fonts API key", "API Key Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return [];
+            }
+
             try
             {
                 var woffQuery = woff2 ? "capability=WOFF2" : "";
                 var link = $"https://www.googleapis.com/webfonts/v1/webfonts?{woffQuery}&sort=alpha&key={apiKey}";
                 var result = await GetAsync(link);
 
-                if (!Succeeded) // Check if the request was unsuccessful
+                if (!Succeeded)
                 {
                     return [];
                 }
@@ -35,32 +48,27 @@ namespace Fonts_Downloader
                     return [];
                 }
 
-                return FontResponse.Items;
+                return FontResponse.Items ?? [];
             }
             catch (HttpRequestException httpRequestException)
             {
                 Logger.HandleError("Network error occurred.", httpRequestException);
-#if DEBUG
                 MessageBox.Show("Network error occurred. Please check your internet connection.", "Network Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-#endif                
                 return [];
             }
             catch (Exception ex)
             {
                 Logger.HandleError("An error occurred while fetching web fonts.", ex);
-#if DEBUG
-                MessageBox.Show("An unexpected error occurred.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-#endif
+                MessageBox.Show("An unexpected error occurred while fetching fonts.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return [];
             }
         }
 
         private async Task<string> GetAsync(string url)
         {
-            using var client = new HttpClient();
             try
             {
-                var response = await client.GetAsync(url);
+                var response = await _httpClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -78,18 +86,31 @@ namespace Fonts_Downloader
                 else
                 {
                     // Handle other HTTP errors
-                    Logger.HandleError($"HTTP Error: {response.StatusCode} - {response.ReasonPhrase}", new Exception(response.ReasonPhrase));                 
+                    Logger.HandleError($"HTTP Error: {response.StatusCode} - {response.ReasonPhrase}", new Exception(response.ReasonPhrase));
+                    MessageBox.Show($"HTTP Error: {response.StatusCode} - {response.ReasonPhrase}", "Network Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
                 Succeeded = false;
                 return string.Empty;
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
                 Succeeded = false;
-                throw; // Re-throw to be caught in the calling method
+                Logger.HandleError("HTTP Request Error", ex);
+                throw;
             }
+            catch (TaskCanceledException ex)
+            {
+                Succeeded = false;
+                Logger.HandleError("Request timeout", ex);
+                MessageBox.Show("The request to Google Fonts API timed out. Please try again later.", "Timeout Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return string.Empty;
+            }
+        }
+
+        public void Dispose()
+        {
+            _httpClient?.Dispose();
         }
     }
 }
-
