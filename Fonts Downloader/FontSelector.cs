@@ -21,17 +21,16 @@ namespace Fonts_Downloader
                 // Process the variants into a more user-friendly format
                 var subsets = selectedFontItem.Subsets?
                     .Select(m => string.IsNullOrEmpty(m) ? m : char.ToUpper(m[0]) + m[1..])
-                    .ToList() ?? new List<string>();
+                    .ToList() ?? [];
 
-                selectedFontItem.Variants = selectedFontItem.Variants
+                selectedFontItem.Variants = [.. selectedFontItem.Variants
                     .Select(variant =>
                     {
                         string mappedVariant = (variant == "regular" || variant == "italic") ? Helper.MapVariant(variant) : variant;
                         return mappedVariant.EndsWith("italic") && !mappedVariant.Contains(' ') ? mappedVariant.Replace("italic", " italic") : mappedVariant;
                     })
                     .OrderBy(variant => variant.EndsWith(" italic")) // Regular weights first, then italics
-                    .ThenBy(variant => variant)
-                    .ToList();
+                    .ThenBy(variant => variant)];
 
                 // Generate HTML preview
                 var html = new HtmlBuilder();

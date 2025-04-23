@@ -18,8 +18,8 @@ namespace Fonts_Downloader
         private Item SelectedFontItem;
         private readonly WebFonts Fonts = new();
         private static readonly string HtmlPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FontsWebView.html");
-        private HtmlBuilder Html = new();
-        private bool isInitialized = false;
+        private readonly HtmlBuilder Html = new();
+        private readonly bool isInitialized = false;
 
         public MainForm()
         {
@@ -97,7 +97,7 @@ namespace Fonts_Downloader
             }
         }
 
-        private async void SelectFolder_Click(object sender, EventArgs e)
+        private void SelectFolder_Click(object sender, EventArgs e)
         {
             using var folderBrowserDialog = new FolderBrowserDialog
             {
@@ -136,8 +136,8 @@ namespace Fonts_Downloader
                 SizeAndStyle.Items.Clear();
 
                 SelectedFontLabel.Text = selectedFontLabel;
-                SubsetsLists.Items.AddRange(subsets.ToArray());
-                SizeAndStyle.Items.AddRange(variants.ToArray());
+                SubsetsLists.Items.AddRange([.. subsets]);
+                SizeAndStyle.Items.AddRange([.. variants]);
 
                 // Ensure WebView is navigated to the correct HTML file
                 try

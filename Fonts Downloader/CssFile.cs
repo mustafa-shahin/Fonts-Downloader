@@ -52,7 +52,7 @@ namespace Fonts_Downloader
             return selectedFont.Variants.SelectMany(variant =>
                                             subsets != null && subsets.Any()
                                             ? subsets.Select(subset => GenerateFontFace(selectedFont.Family, variant, includeWoff2, subset))
-                                            : new[] { GenerateFontFace(selectedFont.Family, variant, includeWoff2) });
+                                            : [GenerateFontFace(selectedFont.Family, variant, includeWoff2)]);
         }
 
         private string GenerateFontFace(string fontFamily, string fontWeight, bool woff2, string subset = null)

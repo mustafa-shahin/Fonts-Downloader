@@ -16,7 +16,7 @@ namespace Fonts_Downloader
         {
             httpClient = new HttpClient
             {
-                Timeout = TimeSpan.FromMinutes(5)
+                Timeout = TimeSpan.FromMinutes(5) // Increase timeout for larger downloads
             };
         }
 
